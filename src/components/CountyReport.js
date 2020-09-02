@@ -468,7 +468,7 @@ export default function CountyReport() {
                 </Header>
                 <Grid.Row style={{ paddingTop: '1em' }}>
                   <Grid.Column width={16} style={{ paddingLeft: '0', paddingRight: '0' }}>
-                    <Table called fixed>
+                    <Table fixed>
                       <Table.Header>
                         <Table.Row textAlign='center'>
                           <Table.HeaderCell colSpan='1' style={{ width: 150 }}> </Table.HeaderCell>
@@ -1012,7 +1012,7 @@ export default function CountyReport() {
                       </Grid.Column>
                       <Grid.Column>
                         <BarChart
-                          title="Race"
+                          title="Race-Ethnicity"
                           keyv={["Other", "Hispanic", "Black", "White"]}
                           var={["otherNH_rateD", "hispanic_rateD", "black_rateD", "white_rateD"]}
                           width={400}

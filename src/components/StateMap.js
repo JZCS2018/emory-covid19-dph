@@ -8,16 +8,10 @@ import {
     VictoryChart,
     VictoryTooltip,
     VictoryVoronoiContainer,
-    VictoryContainer,
-    VictoryGroup,
     VictoryBar,
     VictoryTheme,
     VictoryAxis,
-    VictoryLegend,
     VictoryLine,
-    VictoryLabel,
-    VictoryScatter,
-    VictoryPie,
 } from 'victory';
 import Slider from "@material-ui/core/Slider";
 
@@ -29,7 +23,7 @@ import _ from 'lodash';
 import { scaleQuantile, scaleLinear } from "d3-scale";
 import { quantile, ascending } from 'd3';
 import fips2county from './fips2county.json'
-import configscounty from "./county_config.json";
+// import configscounty from "./county_config.json";
 
 import configs from "./state_config.json";
 
@@ -80,7 +74,7 @@ function valuetext(value) {
 }
 
 function SvgMap(props) {
-    var lengthSplit1 = props.lengthSplit1;
+    // var lengthSplit1 = props.lengthSplit1;
     if (props.name === 'casescum') {
         return (
             <svg width="500" height="55">
@@ -165,6 +159,7 @@ function ChartGraph(props) {
     var metric = props.metric;
     var stateFips = props.stateFips;
     var countyFips = props.countyFips;
+    var countyname = props.countyname;
 
     if (props.metric === "casescum14dayR") {
         dataTS = props.data1;
@@ -173,13 +168,8 @@ function ChartGraph(props) {
             <VictoryChart theme={VictoryTheme.material}
                 containerComponent={
                     <VictoryVoronoiContainer
-                        voronoiBlacklist={["Line1", "Line14"]}
-                        labels={({ datum }) => `${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: 
-                    ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
-                        labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                                style={{ fontSize: 15 }} />
-                        }
+                    responsive={false}
+                    flyoutStyle={{fill: "white"}}                    
                     />
                 }
                 width={730}
@@ -206,9 +196,19 @@ function ChartGraph(props) {
                 />
                 <VictoryBar style={{ data: { fill: stateColor } }} barWidth={8} alignment="start" data={dataTS ? dataTS : props.data2["99999"]}
                     x='t' y={varGraphPair[metric]['name'][0]}
+                    labels={({ datum }) => `${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
+                        labelComponent={
+                            <VictoryTooltip dy={-7} constrainToVisibleArea
+                                style={{ fontSize: 15 }}  />
+                        }
                 />
-                <VictoryLine name="Line1" style={{ data: { stroke: countyColor, strokeWidth: 5 } }} data={dataTS ? dataTS : props.data2["99999"]}
+                <VictoryLine name="Line1" style={{ data: { stroke: countyColor, strokeWidth: ({ active }) => active ? 7 : 5 } }} data={dataTS ? dataTS : props.data2["99999"]}
                     x='t' y={varGraphPair[metric]['name'][1]}
+                    labels={({ datum }) => `${countyname}\n`+`${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
+                        labelComponent={
+                            <VictoryTooltip dy={-7} constrainToVisibleArea
+                                style={{ fontSize: 15 }} />
+                        }
                 />
                 {varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
                     <VictoryAxis dependentAxis tickCount={5}
@@ -217,8 +217,14 @@ function ChartGraph(props) {
                         }}
                         tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
                     /> :
-                    <VictoryLine name="Line11" style={{ data: { stroke: '#71c7ec', strokeWidth: 3 } }} data={_.takeRight(props.data2[stateFips], 14) ? _.takeRight(props.data2[stateFips], 14) : props.data2["99999"]}
-                        x='t' y={varGraphPair[metric]['name'][1]} />}
+                    <VictoryLine name="Line11" style={{ data: { stroke: '#007dba', strokeWidth: ({ active }) => active ? 5 : 3 } }} data={_.takeRight(props.data2[stateFips], 14) ? _.takeRight(props.data2[stateFips], 14) : props.data2["99999"]}
+                        x='t' y={varGraphPair[metric]['name'][1]} 
+                        labels={({ datum }) => 'Georgia\n'+`${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
+                        labelComponent={
+                            <VictoryTooltip dy={-7} constrainToVisibleArea
+                                style={{ fontSize: 15 }} />
+                        }
+                        />}
             </VictoryChart>)
     }
     else {
@@ -227,12 +233,8 @@ function ChartGraph(props) {
             <VictoryChart theme={VictoryTheme.material}
                 containerComponent={
                     <VictoryVoronoiContainer
-                        voronoiBlacklist={["Line1", "Line14"]}
-                        labels={({ datum }) => `${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
-                        labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                                style={{ fontSize: 15 }} />
-                        }
+                    responsive={false}
+                    flyoutStyle={{fill: "white"}}
                     />
                 }
                 width={730}
@@ -246,12 +248,6 @@ function ChartGraph(props) {
                     tickValues={[
                         1583035200, 1585713600, 1588305600, 1590984000, 1593576000
                     ]}
-                // tickValues={[
-                //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 3 - 1].t,
-                //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 2 - 1].t,
-                //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) - 1].t,
-                //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - 1].t]} 
-
 
                 />
                 <VictoryAxis dependentAxis tickCount={5}
@@ -262,9 +258,19 @@ function ChartGraph(props) {
                 />
                 <VictoryBar style={{ data: { fill: stateColor } }} barWidth={4} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                     x='t' y={varGraphPair[metric]['name'][0]}
+                    labels={({ datum }) => `${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
+                        labelComponent={
+                            <VictoryTooltip dy={-7} constrainToVisibleArea
+                                style={{ fontSize: 15 }}  />
+                        }
                 />
-                <VictoryLine name="Line1" style={{ data: { stroke: countyColor, strokeWidth: 5 } }} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
+                <VictoryLine name="Line1" style={{ data: { stroke: countyColor, strokeWidth: ({ active }) => active ? 7 : 5 } }} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                     x='t' y={varGraphPair[metric]['name'][1]}
+                    labels={({ datum }) => `${countyname}\n`+`${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
+                        labelComponent={
+                            <VictoryTooltip dy={-7} constrainToVisibleArea
+                                style={{ fontSize: 15 }} />
+                        }
                 />
                 {varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
                     <VictoryAxis dependentAxis tickCount={5}
@@ -273,14 +279,14 @@ function ChartGraph(props) {
                         }}
                         tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
                     /> :
-                    <VictoryLine name="Line11" style={{ data: { stroke: '#71c7ec', strokeWidth: 3 } }} data={dataTS[stateFips] ? dataTS[stateFips] : dataTS["99999"]}
-                        x='t' y={varGraphPair[metric]['name'][1]} />}
-                {/* <VictoryLine name="Line14" style={{ data: { stroke: 'red', strokeDasharray: "5,5" } }} data={[{ x: covidMetric14.t, y: 0 }, { x: covidMetric14.t, y: legendMax_graph[stateFips + countyFips] }]}
-                          /> */}
-                {/* <VictoryLine name="Line14"
-                            style={{ data: { stroke: 'red', strokeDasharray: "5,5" } }}
-                            x={() => covidMetric14.t}
-                          /> */}
+                    <VictoryLine name="Line11" style={{ data: { stroke: '#007dba', strokeWidth: ({ active }) => active ? 5 : 3 } }} data={dataTS[stateFips] ? dataTS[stateFips] : dataTS["99999"]}
+                        x='t' y={varGraphPair[metric]['name'][1]} 
+                        labels={({ datum }) => 'Georgia\n'+`${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
+                        labelComponent={
+                            <VictoryTooltip dy={-7} constrainToVisibleArea
+                                style={{ fontSize: 15 }} />
+                        }
+                        />}
             </VictoryChart>)
     }
 }
@@ -535,7 +541,7 @@ export default function StateMap(props) {
                         temp_Data_metric.sort(function (a, b) {
                             return a - b;
                         });
-                        console.log(temp_Data_metric);
+                        // console.log(temp_Data_metric);
                         //   console.log(quantile(temp_Data_metric, 0.75));
                         //   console.log(quantile(temp_Data_metric, 0.25));
                         //   console.log(3*quantile(temp_Data_metric, 0.75)-2*quantile(temp_Data_metric, 0.25));
@@ -553,7 +559,7 @@ export default function StateMap(props) {
                             )),
                             d => d[metric]);
 
-                        console.log(IQR3);
+                        // console.log(IQR3);
 
                         const csUs = {};
                         var indexColor;
@@ -567,7 +573,7 @@ export default function StateMap(props) {
                             else {
                                 indexColor = Math.round(interV / 100) * 100;
                             }
-                            console.log(indexColor);
+                            // console.log(indexColor);
                             csUs[d] = colorPalette[Math.floor(d / indexColor)];
                         })
 
@@ -585,10 +591,10 @@ export default function StateMap(props) {
 
                         var max = _.takeRight(temp_Data_metric)[0];
                         var min = temp_Data_metric[0];
-                        console.log(max);
+                        // console.log(max);
                         if (max > 999) {
                             max = (max / 1000).toFixed(0) + "K";
-                            console.log(max);
+                            // console.log(max);
                             setLegendMax(max);
                         } else {
                             setLegendMax(max.toFixed(0));
@@ -602,7 +608,7 @@ export default function StateMap(props) {
                         }
 
                         setLegendSplit(split);
-                        console.log(split);
+                        // console.log(split);
 
                     }
                 });
@@ -829,6 +835,7 @@ export default function StateMap(props) {
                                                     countyFips={countyFips}
                                                     data1={covidMetric14}
                                                     data2={dataTS}
+                                                    countyname = {countyName}
 
                                                 />
 
