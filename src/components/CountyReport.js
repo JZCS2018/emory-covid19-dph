@@ -940,7 +940,7 @@ export default function CountyReport() {
                     </Grid.Column>
                     <Grid.Column>
                       <BarChart
-                        title="Race"
+                        title="Race-Ethnicity"
                         keyv={["Other", "Hispanic", "Black", "White"]}
                         var={["otherNH_rateC", "hispanic_rateC", "black_rateC", "white_rateC"]}
                         width={400}
