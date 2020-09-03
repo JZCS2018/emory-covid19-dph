@@ -1,6 +1,6 @@
 .auth-main {
     height: 100vh;
-    background-color: #eaeaea;
+    background-color: #ffffff;
   }
   
   .auth-content {
@@ -21,8 +21,9 @@
     text-align: center;
   }
   .auth-logo {
-    width: 118px;
+    width: 110px;
     margin-bottom: -10px;
+    margin-top: 15px;
   }
   .auth-form {
     margin-top: 35px;

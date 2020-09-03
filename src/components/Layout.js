@@ -8,7 +8,7 @@ import "./auth.css";
         <div className="auth-main">
           <div className="auth-content">
             <div className="auth-card">
-              {/* <img src={logo} alt="Logo" className="auth-logo" /> */}
+            <img size='mini' src='https://dph.georgia.gov/themes/custom/ga_forest/orchard/assets/images/icons/logo/ga-logo--gold.svg' alt="Logo" className="auth-logo"/>
               <Header as="h2" color="black" textAlign="center">
                 {props.header}
               </Header>

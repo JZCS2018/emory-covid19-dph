@@ -342,7 +342,7 @@ export default function CountyReport() {
             .range(colorPalette);
 
           setLegendSplit(split.quantiles());
-          console.log(split.quantiles());
+          // console.log(split.quantiles());
         });
 
 
@@ -386,7 +386,7 @@ export default function CountyReport() {
             (d['deathscum'] > max && d.fips.length === 5 && Number(d.fips) >= 39800 && Number(d.fips) <= 39999)
           ) {
             max = d['deathscum'];
-            console.log(max)
+            // console.log(max)
           } else if ((d.fips.length === 5 && d['deathscum'] < min && d['deathscum'] >= 0 && Number(d.fips) >= 30001 && Number(d.fips) <= 31999) ||
             (d.fips.length === 5 && d['deathscum'] < min && d['deathscum'] >= 0 && Number(d.fips) >= 39800 && Number(d.fips) <= 39999)
           ) {
@@ -899,9 +899,14 @@ export default function CountyReport() {
                       The pie chart shows the proportion of confirmed COVID-19 cases in <b>{countyName}</b> who
                   presented with an underlying medical condition. Underlying medical conditions
                   increase the risk of experiencing severe disease which may lead to hospitalization
-                  and death. Of the {datades_cases[stateFips + countyFips]['cdc_underlying2_N'] ? datades_cases[stateFips + countyFips]['cdc_underlying2_N'] : "N/A"} confirmed cases, {datades_cases[stateFips + countyFips]['cdc_underlying2Percent'] ? datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2) : "N/A"}% had an underlying comorbidity using the CDC definition. The chart excludes data from {datades_cases[stateFips + countyFips]['cdc_underlying2Pmiss'] ? datades_cases[stateFips + countyFips]['cdc_underlying2Pmiss'].toFixed(2) : "N/A"}% of confirmed COVID-19 cases whose medical history was unknown.
+                  and death. Of the {datades_cases[stateFips + countyFips]['cdc_underlying2_N'] ? datades_cases[stateFips + countyFips]['cdc_underlying2_N'] : "N/A"} confirmed cases with data available, {datades_cases[stateFips + countyFips]['cdc_underlying2Percent'] ? datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2) : "N/A"}% had an underlying medical condition that increases risk of severe outcomes according to the CDC. These underlying medical conditions include: lung disease, diabetes, cardiovascular disease, renal disease, and/or an immunocompromised state. The chart excludes data from {datades_cases[stateFips + countyFips]['cdc_underlying2Pmiss'] ? datades_cases[stateFips + countyFips]['cdc_underlying2Pmiss'].toFixed(2) : "N/A"}% of confirmed COVID-19 cases whose medical history was unknown.
                     </small>
                   </Grid.Column>
+                  {/* <Grid.Row style={{ paddingTop: 0 }}>
+                  <small style={{ fontWeight: 300, color: 'black' }}>
+                    Note: For comorbidities, we include lung disease, diabetes, CVD, renal disease, Immunocompromised state. 
+                    </small>
+                </Grid.Row> */}
 
                 </Grid.Row>
               </Grid>

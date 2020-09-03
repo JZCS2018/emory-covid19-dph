@@ -12,6 +12,7 @@ import {
     VictoryTheme,
     VictoryAxis,
     VictoryLine,
+    VictoryLabel
 } from 'victory';
 import Slider from "@material-ui/core/Slider";
 
@@ -152,6 +153,19 @@ function SvgMap(props) {
         )
     }
 }
+class CustomFlyout extends React.Component {
+    render() {
+      const {x, y, orientation} = this.props;
+      const newY = orientation === "bottom" ? y - 35 : y + 35;
+      return (
+        <g>
+          <circle cx={x} cy={newY} r="20" stroke="tomato" fill="none"/>
+          <circle cx={x} cy={newY} r="25" stroke="orange" fill="none"/>
+          <circle cx={x} cy={newY} r="30" stroke="gold" fill="none"/>
+        </g>
+      );
+    }
+  }
 
 function ChartGraph(props) {
     var varGraphPair = props.name;
@@ -168,12 +182,12 @@ function ChartGraph(props) {
             <VictoryChart theme={VictoryTheme.material}
                 containerComponent={
                     <VictoryVoronoiContainer
-                    responsive={false}
-                    flyoutStyle={{fill: "white"}}                    
+                        responsive={false}
+                        flyoutStyle={{ fill: "white" }}
                     />
                 }
                 width={730}
-                height={550}
+                height={500}
                 padding={{ left: 55, right: 70, top: 10, bottom: 50 }}>
                 <VictoryAxis
                     style={{
@@ -196,19 +210,24 @@ function ChartGraph(props) {
                 />
                 <VictoryBar style={{ data: { fill: stateColor } }} barWidth={8} alignment="start" data={dataTS ? dataTS : props.data2["99999"]}
                     x='t' y={varGraphPair[metric]['name'][0]}
-                    labels={({ datum }) => `${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
-                        labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                                style={{ fontSize: 15 }}  />
-                        }
+
                 />
                 <VictoryLine name="Line1" style={{ data: { stroke: countyColor, strokeWidth: ({ active }) => active ? 7 : 5 } }} data={dataTS ? dataTS : props.data2["99999"]}
                     x='t' y={varGraphPair[metric]['name'][1]}
-                    labels={({ datum }) => `${countyname}\n`+`${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
-                        labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                                style={{ fontSize: 15 }} />
-                        }
+                    labels={({ datum }) => `${countyname}\n` + 
+                    `Date: ${new Date(datum.t * 1000).toLocaleDateString()}\n` + 
+                    `${varGraphPair[metric]['legend'][1]}: ${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}\n` +
+                    `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}`
+                    }
+                    labelComponent={
+                        <VictoryTooltip 
+                        orientation="top"
+                        style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'white' }} 
+                        constrainToVisibleArea 
+                        labelComponent={<VictoryLabel dx={-100} textAnchor = 'start'/>}
+                        flyoutStyle={{ fill: "black", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }} 
+                        />
+                    }
                 />
                 {varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
                     <VictoryAxis dependentAxis tickCount={5}
@@ -218,13 +237,22 @@ function ChartGraph(props) {
                         tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
                     /> :
                     <VictoryLine name="Line11" style={{ data: { stroke: '#007dba', strokeWidth: ({ active }) => active ? 5 : 3 } }} data={_.takeRight(props.data2[stateFips], 14) ? _.takeRight(props.data2[stateFips], 14) : props.data2["99999"]}
-                        x='t' y={varGraphPair[metric]['name'][1]} 
-                        labels={({ datum }) => 'Georgia\n'+`${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
-                        labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                                style={{ fontSize: 15 }} />
+                        x='t' y={varGraphPair[metric]['name'][1]}
+                        labels={({ datum }) => [`Georgia\n` ,
+                            `Date: ${new Date(datum.t * 1000).toLocaleDateString()}\n` ,
+                            `${varGraphPair[metric]['legend'][1]}: ${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}\n`,
+                            `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}`
+                            ]}
+                            labelComponent={
+                            <VictoryTooltip 
+                            orientation="top"
+                            style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'white' }} 
+                            constrainToVisibleArea 
+                            labelComponent={<VictoryLabel dx={-100} textAnchor = 'start'/>}
+                            flyoutStyle={{ fill: "black", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }} 
+                            />
                         }
-                        />}
+                    />}
             </VictoryChart>)
     }
     else {
@@ -233,12 +261,13 @@ function ChartGraph(props) {
             <VictoryChart theme={VictoryTheme.material}
                 containerComponent={
                     <VictoryVoronoiContainer
-                    responsive={false}
-                    flyoutStyle={{fill: "white"}}
+
+                        responsive={false}
+                        flyoutStyle={{ fill: "black" }}
                     />
                 }
                 width={730}
-                height={550}
+                height={500}
                 padding={{ left: 55, right: 70, top: 10, bottom: 50 }}>
                 <VictoryAxis
                     style={{
@@ -258,19 +287,24 @@ function ChartGraph(props) {
                 />
                 <VictoryBar style={{ data: { fill: stateColor } }} barWidth={4} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                     x='t' y={varGraphPair[metric]['name'][0]}
-                    labels={({ datum }) => `${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
-                        labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                                style={{ fontSize: 15 }}  />
-                        }
+
                 />
                 <VictoryLine name="Line1" style={{ data: { stroke: countyColor, strokeWidth: ({ active }) => active ? 7 : 5 } }} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                     x='t' y={varGraphPair[metric]['name'][1]}
-                    labels={({ datum }) => `${countyname}\n`+`${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
-                        labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                                style={{ fontSize: 15 }} />
-                        }
+                    labels={({ datum }) => `${countyname}\n` + 
+                    `Date: ${new Date(datum.t * 1000).toLocaleDateString()}\n` + 
+                    `${varGraphPair[metric]['legend'][1]}: ${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}\n` +
+                    `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}`
+                    }
+                    labelComponent={
+                        <VictoryTooltip 
+                        orientation="top"
+                        style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'white' }} 
+                        constrainToVisibleArea 
+                        labelComponent={<VictoryLabel dx={-75} textAnchor = 'start'/>}
+                        flyoutStyle={{ fill: "black", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }} 
+                        />
+                    }
                 />
                 {varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
                     <VictoryAxis dependentAxis tickCount={5}
@@ -280,13 +314,23 @@ function ChartGraph(props) {
                         tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
                     /> :
                     <VictoryLine name="Line11" style={{ data: { stroke: '#007dba', strokeWidth: ({ active }) => active ? 5 : 3 } }} data={dataTS[stateFips] ? dataTS[stateFips] : dataTS["99999"]}
-                        x='t' y={varGraphPair[metric]['name'][1]} 
-                        labels={({ datum }) => 'Georgia\n'+`${new Date(datum.t * 1000).toLocaleDateString()}\n` + `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}\n` + `${varGraphPair[metric]['legend'][1]}:${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}`}
+                        x='t' y={varGraphPair[metric]['name'][1]}
+                        labels={({ datum }) => [`Georgia\n` ,
+                            `Date: ${new Date(datum.t * 1000).toLocaleDateString()}    \n` ,
+                            `${varGraphPair[metric]['legend'][1]}: ${Math.round(datum[varGraphPair[metric]['name'][1]], 2)}\n`,
+                            `${varGraphPair[metric]['legend'][0]}: ${Math.round(datum[varGraphPair[metric]['name'][0]], 2)}`
+                            ]}
                         labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                                style={{ fontSize: 15 }} />
+                            <VictoryTooltip 
+                            // orientation="top"
+                            style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'white' }} 
+                            constrainToVisibleArea 
+                            // flyoutComponent={<CustomFlyout/>}
+                            labelComponent={<VictoryLabel dx={-80} textAnchor = 'start'/>}
+                            flyoutStyle={{ fill: "black", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }} 
+                            />
                         }
-                        />}
+                    />}
             </VictoryChart>)
     }
 }
@@ -357,11 +401,11 @@ export default function StateMap(props) {
     };
     const [metricName, setMetricName] = useState('COVID-19 cases per 100,000 population');
     const varNameMap = {
-        "casescum": { "name": 'cases', "text": "The map shows the total number of confirmed COVID-19 cases in each county as of ","cat":'case' },
-        "casescum14dayR": { "name": 'cases per 100,000 residents', "text": "The map shows the number of confirmed COVID-19 cases for past two weeks in each county as of ","cat":'case' },
-        "deathscum": { "name": 'deaths', "text": "The map shows the total number of confirmed COVID-19 deaths in each county as of " ,"cat":'death'},
-        "casescumR": { "name": 'cases per 100,000 residents', "text": "The map shows the total number of confirmed COVID-19 cases per 100,000 residents in each county as of " ,"cat":'case'},
-        "deathscumR": { "name": 'deaths per 100,000 residents', "text": "The map shows the total number of confirmed COVID-19 deaths per 100,000 residents in each county as of ","cat":'death' }
+        "casescum": { "name": 'cases', "text": "The map shows the total number of confirmed COVID-19 cases in each county as of ", "cat": 'case' },
+        "casescum14dayR": { "name": 'cases per 100,000 residents', "text": "The map shows the number of confirmed COVID-19 cases for past two weeks in each county as of ", "cat": 'case' },
+        "deathscum": { "name": 'deaths', "text": "The map shows the total number of confirmed COVID-19 deaths in each county as of ", "cat": 'death' },
+        "casescumR": { "name": 'cases per 100,000 residents', "text": "The map shows the total number of confirmed COVID-19 cases per 100,000 residents in each county as of ", "cat": 'case' },
+        "deathscumR": { "name": 'deaths per 100,000 residents', "text": "The map shows the total number of confirmed COVID-19 deaths per 100,000 residents in each county as of ", "cat": 'death' }
     };
     const varMap = { "cacum": metricOptions2[0], "decum": metricOptions2[1], "cacumr": metricOptions2[2], "decumr": metricOptions1[1] };
     const [delayHandler, setDelayHandler] = useState(null)
@@ -674,9 +718,9 @@ export default function StateMap(props) {
                                     <Header as='h2' style={{ fontWeight: 600 }}>
                                         <Header.Content>
                                             <Dropdown
-                                                icon=''
                                                 style={{
                                                     background: '#fff',
+                                                    fontSize: "17pt",
                                                     fontWeight: 600,
                                                     theme: '#000000',
                                                     width: '520px',
@@ -686,20 +730,19 @@ export default function StateMap(props) {
                                                     borderTop: 'none',
                                                     borderLeft: '1px solid #FFFFFF',
                                                     borderRight: 'none',
-                                                    borderBottom: '0.5px solid #bdbfc1',
+                                                    borderBottom: '0.9px solid #bdbfc1',
                                                     borderRadius: 0,
                                                     minHeight: '1.0em',
-                                                    paddingBottom: '0.1em'
+                                                    paddingBottom: '0.2em'
                                                 }}
                                                 text={metricName}
                                                 inline
                                                 search
+                                                
                                                 pointing='top'
                                                 options={metricOptions1}
                                                 onChange={(e, { value }) => {
                                                     setMetric(value);
-                                                    // console.log(varNameMap);
-                                                    // console.log(varMap['cs'].text);
                                                     setMetricName(dropdownopt[value]);
                                                 }}
                                             />
@@ -719,7 +762,7 @@ export default function StateMap(props) {
                                     <ComposableMap projection="geoAlbersUsa"
                                         projectionConfig={{ scale: `${config.scale}` }}
                                         width={500}
-                                        height={580}
+                                        height={550}
                                         data-tip=""
                                         offsetX={config.offsetX}
                                         offsetY={config.offsetY}>
@@ -739,14 +782,7 @@ export default function StateMap(props) {
                                                             strokeWidth: 0.95,
                                                             outline: "none",
                                                         },
-                                                        // hover: {
-                                                        //    fill: "#CFD8DC",
-                                                        //    stroke: "#607D8B",
-                                                        //    strokeWidth: 1,
-                                                        //    outline: "none",
-                                                        // },
                                                         pressed: {
-
                                                             outline: "none",
                                                         }
                                                     }}
@@ -782,7 +818,7 @@ export default function StateMap(props) {
                                         max={40}
                                     />
                                     </div> */}
-                                    
+
 
 
                                     <Grid.Row style={{ paddingTop: 0, paddingLeft: '0em', paddingRight: '2em' }} centered>
@@ -835,7 +871,7 @@ export default function StateMap(props) {
                                                     countyFips={countyFips}
                                                     data1={covidMetric14}
                                                     data2={dataTS}
-                                                    countyname = {countyName}
+                                                    countyname={countyName}
 
                                                 />
 
