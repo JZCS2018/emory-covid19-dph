@@ -105,7 +105,7 @@ function SvgMap(props) {
                     }
                     return <text key={i} x={220 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit1[i].toFixed(0)}</text>
                 })}
-
+                <text x={325} y={15} style={{ fontSize: '0.7em' }}>{props.legendMax}</text>
                 <text x={50} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin / 100).toFixed(0)} </text>
                 <rect x={5} y={20} width="25" height="20" style={{ fill: "#FFFFFF", strokeWidth: 0.5, stroke: "#000000" }} />
                 <text x={8} y={52} style={{ fontSize: '0.7em' }}> N/A </text>
@@ -275,11 +275,19 @@ function ChartGraph(props) {
                     }}
                     tickFormat={(t) => new Date(t * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
                     tickValues={[
-                        1583035200, 1585713600, 1588305600, 1590984000, 1593576000
+                        // 1583035200, 1585713600, 1588305600, 1590984000, 1593576000
+                        dataTS['13001'][0].t,
+                      dataTS["13001"][32].t,
+                      dataTS["13001"][62].t,
+                      dataTS["13001"][93].t,
+                      dataTS["13001"][123].t,
+                      dataTS["13001"][154].t,
+                      dataTS["13001"][dataTS["13001"].length-1].t
                     ]}
+         
 
                 />
-                <VictoryAxis dependentAxis tickCount={5}
+                <VictoryAxis dependentAxis tickCount={6}
                     style={{
                         tickLabels: { fontSize: 25, padding: 5 }
                     }}
@@ -370,6 +378,7 @@ export default function StateMap(props) {
     const [colorScale, setColorScale] = useState();
 
     const [legendMax, setLegendMax] = useState([]);
+    const [legendMax1, setLegendMax1] = useState([]);
     const [legendMin, setLegendMin] = useState([]);
     const [legendMax_graph, setLegendMaxGraph] = useState({});
     const [legendSplit, setLegendSplit] = useState([]);
@@ -468,8 +477,8 @@ export default function StateMap(props) {
                             .domain(belowIqr).range(colorPalette);
                         var split1 = scaleQuantile()
                             .domain(upIqr).range(colorPalette1);
-                        console.log(split.quantiles())
-                        console.log(split1.quantiles())
+                        // console.log(split.quantiles())
+                        // console.log(split1.quantiles())
 
 
                         var thr = [];
@@ -484,7 +493,7 @@ export default function StateMap(props) {
                         }
                         thr.push(Math.round(countIqr / 100) * 100);
 
-                        console.log(thr1);
+                        // console.log(thr1);
                         var i;
                         for (i = 0; i < thr.length; i++) {
                             if (thr[i] < 100) {
@@ -503,7 +512,7 @@ export default function StateMap(props) {
                             }
 
                         }
-                        console.log(thr1)
+                        // console.log(thr1)
 
                         const csUs = {};
                         var indexColor;
@@ -551,10 +560,10 @@ export default function StateMap(props) {
 
                         var max = _.takeRight(temp_Data_metric)[0];
                         var min = temp_Data_metric[0];
-                        console.log(max);
+                        // console.log(max);
                         if (max > 999) {
                             max = (max / 1000).toFixed(0) + "K";
-                            console.log(max);
+                            // console.log(max);
                             setLegendMax(max);
                         } else {
                             setLegendMax(max.toFixed(0));
@@ -563,7 +572,9 @@ export default function StateMap(props) {
                         setLegendMin(min.toFixed(0));
 
                         setLegendSplit(thr);
-                        setLegendSplit1(thr1);
+                        // console.log(thr1[4])
+                        setLegendSplit1(thr1.slice(0,4));
+                        setLegendMax1(thr1[4]);
 
                     }
                     else {

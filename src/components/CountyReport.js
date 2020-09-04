@@ -654,8 +654,15 @@ export default function CountyReport() {
                         }}
                         tickFormat={(t) => new Date(t * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
                         tickValues={[
-                          1583035200, 1585713600, 1588305600, 1590984000, 1593576000
-                        ]}
+                          // 1583035200, 1585713600, 1588305600, 1590984000, 1593576000
+                          dataTS['13001'][0].t,
+                        dataTS["13001"][32].t,
+                        dataTS["13001"][62].t,
+                        dataTS["13001"][93].t,
+                        dataTS["13001"][123].t,
+                        dataTS["13001"][154].t,
+                        dataTS["13001"][dataTS["13001"].length-1].t
+                      ]}
                       // tickValues={[
                       //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 3 - 1].t,
                       //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 2 - 1].t,
@@ -732,8 +739,15 @@ export default function CountyReport() {
                         }}
                         tickFormat={(t) => new Date(t * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
                         tickValues={[
-                          1583035200, 1585713600, 1588305600, 1590984000, 1593576000
-                        ]}
+                          // 1583035200, 1585713600, 1588305600, 1590984000, 1593576000
+                          dataTS['13001'][0].t,
+                        dataTS["13001"][32].t,
+                        dataTS["13001"][62].t,
+                        dataTS["13001"][93].t,
+                        dataTS["13001"][123].t,
+                        dataTS["13001"][154].t,
+                        dataTS["13001"][dataTS["13001"].length-1].t
+                      ]}
                       // tickValues={[
                       //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 3 - 1].t,
                       //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 2 - 1].t,
@@ -925,8 +939,8 @@ export default function CountyReport() {
                     <Grid.Column>
                       <BarChart
                         title="Age Group"
-                        keyv={["< 18", "18-44", "45-64", "65+"]}
-                        var={["rate017ageC", "rate1844ageC", "rate4564ageC", "rate65ageC"]}
+                        keyv={["< 20", "20-44", "45-64", "65+"]}
+                        var={["rate019ageC", "rate2044ageC", "rate4564ageC", "rate65ageC"]}
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
@@ -997,8 +1011,8 @@ export default function CountyReport() {
                       <Grid.Column>
                         <BarChart
                           title="Age Group"
-                          keyv={["< 18", "18-44", "45-64", "65+"]}
-                          var={["rate017ageD", "rate1844ageD", "rate4564ageC", "rate65ageD"]}
+                          keyv={["< 20", "20-44", "45-64", "65+"]}
+                          var={["rate019ageD", "rate2044ageD", "rate4564ageD", "rate65ageD"]}
                           width={400}
                           stateFips={stateFips}
                           countyFips={countyFips}
