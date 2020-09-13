@@ -101,65 +101,143 @@ function BarChart(props) {
     "1": '#024174',
     '2':'grey'
   };
+  if (props.var_num===4) {
+    return (
+      <VictoryChart
+        theme={VictoryTheme.material}
+        width={props.width || 560}
+        height={180}
+        domainPadding={props.pad || 10}
+        scale={{ y: props.ylog ? 'log' : 'linear' }}
+        minDomain={{ y: props.ylog ? 1 : 0 }}
+        padding={{ left: 79, right: 40, top: 40, bottom: 50 }}
+        containerComponent={<VictoryContainer responsive={false} />}
+      >
+        <VictoryLabel style={{
+          fontSize: 20, paddingBottom: '0.5em'
+        }} text={props.title} x={(props.width || 560) / 2} y={26} textAnchor="middle" />
+        <VictoryAxis style={{
+          tickLabels: { fontSize: 18, padding: 2 }
+        }} />
+        <VictoryAxis dependentAxis style={{
+          tickLabels: { fontSize: 18, padding: 2 }
+        }}
+          tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))} />
+        <VictoryBar
+          horizontal
+          barRatio={0.8}
+          // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
+          labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
+          data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': '1' },
+          { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': '1' },
+          { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var[2]] || 0, 'colors': '1' },
+          { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var[3]] || 0, 'colors': '1' }]}
+          labelComponent={<VictoryLabel dx={5} style={{ fontWeight: 300, fontSize: 18, fill: ({ datum }) => colors[datum.key] }} />}
+          style={{
+            data: {
+              fill: ({ datum }) => colors[datum.colors],
+              fillOpacity: 2
+            }
+          }}
+          x="key"
+          y="value"
+        />
+        <VictoryBar
+          horizontal
+          barRatio={1.2}
+          data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var1[0]] || 0, 'colors': '2' },
+          { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var1[1]] || 0, 'colors': '2' },
+          { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var1[2]] || 0, 'colors': '2' },
+          { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var1[3]] || 0, 'colors': '2' }]}
+          labels={({ datum }) => 
+          `Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2))}`
+      }
+          labelComponent={<VictoryTooltip
+            orientation="top"
+            style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+            constrainToVisibleArea
+            labelComponent={<VictoryLabel dx={-50} textAnchor='start' />}
+            flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+        />}
+          style={{
+            data: {
+              fill: ({ datum }) => colors[datum.colors],
+              fillOpacity: 0.7
+            }
+          }}
+          x="key"
+          y="value"
+        />
+      </VictoryChart>);
+  }
+  else{
+    return (
+      <VictoryChart
+        theme={VictoryTheme.material}
+        width={props.width || 560}
+        height={180}
+        domainPadding={props.pad || 10}
+        scale={{ y: props.ylog ? 'log' : 'linear' }}
+        minDomain={{ y: props.ylog ? 1 : 0 }}
+        padding={{ left: 79, right: 40, top: 40, bottom: 50 }}
+        containerComponent={<VictoryContainer responsive={false} />}
+      >
+        <VictoryLabel style={{
+          fontSize: 20, paddingBottom: '0.5em'
+        }} text={props.title} x={(props.width || 560) / 2} y={26} textAnchor="middle" />
+        <VictoryAxis style={{
+          tickLabels: { fontSize: 18, padding: 2 }
+        }} />
+        <VictoryAxis dependentAxis style={{
+          tickLabels: { fontSize: 18, padding: 2 }
+        }}
+          tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))} />
+        <VictoryBar
+          horizontal
+          barRatio={0.5}
+          // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
+          labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
+          data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': '1' },
+          { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': '1' }]}
+          labelComponent={<VictoryLabel dx={5} style={{ fontWeight: 300, fontSize: 18, fill: ({ datum }) => colors[datum.key] }} />}
+          style={{
+            data: {
+              fill: ({ datum }) => colors[datum.colors],
+              fillOpacity: 2
+            }
+          }}
+          x="key"
+          y="value"
+        />
+        <VictoryBar
+          horizontal
+          barRatio={0.9}
+          data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var1[0]] || 0, 'colors': '2' },
+          { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var1[1]] || 0, 'colors': '2' }]}
+          
+          labels={({ datum }) => 
+          `Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2))}`
+      }
+          labelComponent={<VictoryTooltip
+            orientation="top"
+            style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+            constrainToVisibleArea
+            labelComponent={<VictoryLabel dx={-50} textAnchor='start' />}
+            flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+        />}
+          style={{
+            data: {
+              fill: ({ datum }) => colors[datum.colors],
+              fillOpacity: 0.7
+            }
+          }}
+          x="key"
+          y="value"
+        />
+      </VictoryChart>);
+  }
   // console.log(props.data)
-  return (
-    <VictoryChart
-      theme={VictoryTheme.material}
-      width={props.width || 560}
-      height={180}
-      domainPadding={props.pad || 10}
-      scale={{ y: props.ylog ? 'log' : 'linear' }}
-      minDomain={{ y: props.ylog ? 1 : 0 }}
-      padding={{ left: 79, right: 40, top: 40, bottom: 50 }}
-      containerComponent={<VictoryContainer responsive={false} />}
-    >
-      <VictoryLabel style={{
-        fontSize: 20, paddingBottom: '0.5em'
-      }} text={props.title} x={(props.width || 560) / 2} y={26} textAnchor="middle" />
-      <VictoryAxis style={{
-        tickLabels: { fontSize: 18, padding: 2 }
-      }} />
-      <VictoryAxis dependentAxis style={{
-        tickLabels: { fontSize: 18, padding: 2 }
-      }}
-        tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))} />
-      <VictoryBar
-        horizontal
-        barRatio={0.8}
-        // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-        data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': '1' },
-        { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': '1' },
-        { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var[2]] || 0, 'colors': '1' },
-        { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var[3]] || 0, 'colors': '1' }]}
-        labelComponent={<VictoryLabel dx={5} style={{ fontWeight: 300, fontSize: 18, fill: ({ datum }) => colors[datum.key] }} />}
-        style={{
-          data: {
-            fill: ({ datum }) => colors[datum.colors],
-            fillOpacity: 2
-          }
-        }}
-        x="key"
-        y="value"
-      />
-      <VictoryBar
-        horizontal
-        barRatio={1.2}
-        // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-        data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var1[0]] || 0, 'colors': '2' },
-        { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var1[1]] || 0, 'colors': '2' },
-        { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var1[2]] || 0, 'colors': '2' },
-        { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var1[3]] || 0, 'colors': '2' }]}
-        labelComponent={<VictoryLabel dx={5} style={{ fontWeight: 300, fontSize: 18, fill: ({ datum }) => colors[datum.key] }} />}
-        style={{
-          data: {
-            fill: ({ datum }) => colors[datum.colors],
-            fillOpacity: 0.7
-          }
-        }}
-        x="key"
-        y="value"
-      />
-    </VictoryChart>);
+  
 }
 
 export default function CountyReport() {
@@ -931,6 +1009,7 @@ export default function CountyReport() {
                   <Grid.Row columns={3} style={{ paddingTop: 0 }}>
                     <Grid.Column>
                       <BarChart
+                        var_num={4}
                         title="Age Group"
                         keyv={["< 20", "20-44", "45-64", "65+"]}
                         var={["019ageC_P", "2044ageC_P", "4564ageC_P", "65ageC_P"]}
@@ -943,6 +1022,7 @@ export default function CountyReport() {
                     </Grid.Column>
                     <Grid.Column>
                       <BarChart
+                      var_num={2}
                         title="Sex"
                         keyv={["Female", "Male"]}
                         var={["femaleC_P", "maleC_P"]}
@@ -955,6 +1035,7 @@ export default function CountyReport() {
                     </Grid.Column>
                     <Grid.Column>
                       <BarChart
+                      var_num={4}
                         title="Race-Ethnicity"
                         keyv={["Other", "Hispanic", "Black", "White"]}
                         var={["otherNHC_P", "hispanicC_P", "blackC_P", "whiteC_P"]}
@@ -1007,6 +1088,7 @@ export default function CountyReport() {
                     <Grid.Row columns={3} style={{ paddingTop: 0 }}>
                       <Grid.Column>
                         <BarChart
+                        var_num={4}
                           title="Age Group"
                           keyv={["< 20", "20-44", "45-64", "65+"]}
                           var={["019ageC_P", "2044ageC_P", "4564ageC_P", "65ageC_P"]}
@@ -1018,6 +1100,7 @@ export default function CountyReport() {
                       </Grid.Column>
                       <Grid.Column>
                         <BarChart
+                        var_num={2}
                           title="Sex"
                           keyv={["Female", "Male"]}
                           var={["femaleC_P", "maleC_P"]}
@@ -1030,6 +1113,7 @@ export default function CountyReport() {
                       </Grid.Column>
                       <Grid.Column>
                         <BarChart
+                        var_num={4}
                           title="Race-Ethnicity"
                           keyv={["Other", "Hispanic", "Black", "White"]}
                           var={["otherNHC_P", "hispanicC_P", "blackC_P", "whiteC_P"]}
