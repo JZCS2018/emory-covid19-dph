@@ -98,8 +98,10 @@ function numberWithCommas(x) {
 
 function BarChart(props) {
   const colors = {
-    "1": '#778899',
+    "1": '#024174',
+    '2':'grey'
   };
+  // console.log(props.data)
   return (
     <VictoryChart
       theme={VictoryTheme.material}
@@ -132,7 +134,26 @@ function BarChart(props) {
         labelComponent={<VictoryLabel dx={5} style={{ fontWeight: 300, fontSize: 18, fill: ({ datum }) => colors[datum.key] }} />}
         style={{
           data: {
-            fill: ({ datum }) => colors[datum.colors]
+            fill: ({ datum }) => colors[datum.colors],
+            fillOpacity: 2
+          }
+        }}
+        x="key"
+        y="value"
+      />
+      <VictoryBar
+        horizontal
+        barRatio={1.2}
+        // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
+        data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var1[0]] || 0, 'colors': '2' },
+        { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var1[1]] || 0, 'colors': '2' },
+        { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var1[2]] || 0, 'colors': '2' },
+        { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var1[3]] || 0, 'colors': '2' }]}
+        labelComponent={<VictoryLabel dx={5} style={{ fontWeight: 300, fontSize: 18, fill: ({ datum }) => colors[datum.key] }} />}
+        style={{
+          data: {
+            fill: ({ datum }) => colors[datum.colors],
+            fillOpacity: 0.7
           }
         }}
         x="key"
@@ -235,7 +256,8 @@ export default function CountyReport() {
       fetch('/data/data.json').then(res => res.json())
         .then(x => setDateCur(x));
       fetch('/data/data_cases_ga.json').then(res => res.json())
-        .then(x => setDataCG(x));
+        .then(x => setDataCG(x)
+        );
       fetch('/data/data_deaths_ga.json').then(res => res.json())
         .then(x => setDataDG(x));
       fetch('/data/data_describe_cases.json').then(res => res.json())
@@ -622,32 +644,14 @@ export default function CountyReport() {
                     <VictoryChart theme={VictoryTheme.material}
                       containerComponent={
                         <VictoryVoronoiContainer
-                          voronoiBlacklist={["Line14", "Line"]}
-                          labels={({ datum }) => `${new Date(datum.t * 1000).toLocaleDateString()}\n` + `Daily new cases: ${Math.round(datum.casesdaily, 2)}\n` + `7-d Rolling average of daily new cases: ${Math.round(datum.casesdailymean7, 2)}`}
-                          labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                              style={{ fontSize: 15 }} />
-                          }
+                        responsive={false}
+                        flyoutStyle={{ fill: "black" }}
+                          
                         />
                       }
                       width={550}
                       height={450}
                       padding={{ left: 40, right: 60, top: 10, bottom: 60 }}>
-                      {/* <VictoryLabel style={{
-                        textAnchor: "start",
-                        verticalAnchor: "end", fontFamily: "inherit",
-                        fontSize: "27px", fontWeight: "bold"
-                      }} text={" Daily new cases in " + countyName} x={15} y={28} textAnchor="middle" /> */}
-                      {/* <VictoryLegend
-                        style={{ labels: { fontSize: 16 } }}
-                        x={30} y={35}
-                        orientation="vertical"
-                        colorScale={[stateColor, countyColor]}
-                        data={[
-                          { name: "Daily new cases",symbol: {type: "square" } }, { name: "7-D Rolling average",symbol: {type: "minus" } }
-                        ]}
-                      /> */}
-
                       <VictoryAxis
                         style={{
                           tickLabels: { fontSize: 20, padding: 5 }
@@ -663,11 +667,6 @@ export default function CountyReport() {
                         dataTS["13001"][154].t,
                         dataTS["13001"][dataTS["13001"].length-1].t
                       ]}
-                      // tickValues={[
-                      //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 3 - 1].t,
-                      //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 2 - 1].t,
-                      //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) - 1].t,
-                      //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - 1].t]} 
                       />
                       <VictoryAxis dependentAxis tickCount={5}
                         style={{
@@ -681,14 +680,22 @@ export default function CountyReport() {
                       />
                       <VictoryLine name="Line" style={{ data: { stroke: countyColor } }} data={dataTS[stateFips + countyFips] ? _.take(dataTS[stateFips + countyFips], 141) : dataTS["99999"]}
                         x='t' y='casesdailymean7'
+                        labels={({ datum }) => `${countyName}\n` + 
+                    `Date: ${new Date(datum.t * 1000).toLocaleDateString()}\n` + 
+                    `Daily new cases: ${Math.round(datum.casesdaily, 2)}\n` +
+                    `7-d Rolling average of daily new cases: ${Math.round(datum.casesdailymean7, 2)}`
+                    }
+                    labelComponent={
+                        <VictoryTooltip 
+                        orientation="top"
+                        style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'white' }} 
+                        constrainToVisibleArea 
+                        labelComponent={<VictoryLabel dx={-130} textAnchor = 'start'/>}
+                        flyoutStyle={{ fill: "black", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }} 
+                        />
+                    }
                       />
-                      {/* <VictoryLine name="Line14"
-                        style={{ data: { stroke: 'red', strokeDasharray: "5,5" } }}
-                        x={() => covidMetric14.t}
-                        samples={1}
-                        labelComponent={<VictoryLabel renderInPortal dx={20} dy={-20} />} /> */}
-                      {/* <VictoryLine name="Line14" style={{ data: { stroke: 'red' , strokeDasharray:"5,5"} }} data={[{x:covidMetric14.t, y:0},{x:covidMetric14.t, y:Math.round(legendMax_graph)}] }
-                      /> */}
+                    
                     </VictoryChart>
                   </Grid.Column>
                   <Grid.Column width={8}>
@@ -708,38 +715,20 @@ export default function CountyReport() {
                     <VictoryChart theme={VictoryTheme.material}
                       containerComponent={
                         <VictoryVoronoiContainer
-                          voronoiBlacklist={["Line", "Line14"]}
-                          labels={({ datum }) => `${new Date(datum.t * 1000).toLocaleDateString()}\n` + `Daily new deaths: ${Math.round(datum.deathsdaily, 2)}\n` + `7-d Rolling average of daily new deaths: ${Math.round(datum.deathsdailymean7, 2)}`}
-                          labelComponent={
-                            <VictoryTooltip dy={-7} constrainToVisibleArea
-                              style={{ fontSize: 15 }} />
-                          }
+                        responsive={false}
+                        flyoutStyle={{ fill: "black" }}                          
                         />
                       }
                       width={550}
                       height={450}
                       padding={{ left: 30, right: 60, top: 10, bottom: 60 }}>
-                      {/* <VictoryLabel style={{
-                        textAnchor: "start",
-                        verticalAnchor: "end", fill: "#000000", fontFamily: "inherit",
-                        fontSize: "28px", fontWeight: "bold"
-                      }} text={"Daily new deaths in " + countyName} x={15} y={28} textAnchor="middle" /> */}
-                      {/* <VictoryLegend
-                        style={{ labels: { fontSize: 16 } }}
-                        x={30} y={35}
-                        orientation="vertical"
-                        colorScale={[stateColor, countyColor]}
-                        data={[
-                          { name: "Daily new deaths" }, { name: "7-d Rolling average" }
-                        ]}
-                      /> */}
+
                       <VictoryAxis
                         style={{
                           tickLabels: { fontSize: 20, padding: 5 }
                         }}
                         tickFormat={(t) => new Date(t * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
                         tickValues={[
-                          // 1583035200, 1585713600, 1588305600, 1590984000, 1593576000
                           dataTS['13001'][0].t,
                         dataTS["13001"][32].t,
                         dataTS["13001"][62].t,
@@ -747,12 +736,7 @@ export default function CountyReport() {
                         dataTS["13001"][123].t,
                         dataTS["13001"][154].t,
                         dataTS["13001"][dataTS["13001"].length-1].t
-                      ]}
-                      // tickValues={[
-                      //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 3 - 1].t,
-                      //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) * 2 - 1].t,
-                      //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - Math.round(dataTS[stateFips + countyFips].length / 4) - 1].t,
-                      //   dataTS[stateFips + countyFips][dataTS[stateFips + countyFips].length - 1].t]} 
+                      ]} 
                       />
                       <VictoryAxis dependentAxis tickCount={5}
                         style={{
@@ -766,14 +750,22 @@ export default function CountyReport() {
                       />
                       <VictoryLine name="Line" style={{ data: { stroke: countyColor } }} data={dataTS[stateFips + countyFips] ? _.take(dataTS[stateFips + countyFips], 141) : dataTS["99999"]}
                         x='t' y='deathsdailymean7'
+                        labels={({ datum }) => 
+                        `${countyName}\n` +
+                        `Date: ${new Date(datum.t * 1000).toLocaleDateString()}\n` + 
+                        `Daily new deaths: ${Math.round(datum.deathsdaily, 2)}\n` + 
+                        `7-d Rolling average of daily new deaths: ${Math.round(datum.deathsdailymean7, 2)}`}
+                        labelComponent={
+                          <VictoryTooltip 
+                          orientation="top"
+                          style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'white' }} 
+                          constrainToVisibleArea 
+                          labelComponent={<VictoryLabel dx={-130} textAnchor = 'start'/>}
+                          flyoutStyle={{ fill: "black", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }} 
+                          />
+                      }
                       />
-                      {/* <VictoryLine name="Line14"
-                        style={{ data: { stroke: 'red', strokeDasharray: "5,5" } }}
-                        x={() => covidMetric14.t}
-                        samples={1}
-                        labelComponent={<VictoryLabel renderInPortal dx={20} dy={-20} />} /> */}
-                      {/* <VictoryLine name="Line14" style={{ data: { stroke: 'red' , strokeDasharray:"5,5"} }} data={[{x:covidMetric14.t, y:0},{x:covidMetric14.t, y:Math.round(legendMax_graph)}] }
-                      /> */}
+
                     </VictoryChart>
                   </Grid.Column>
                 </Grid.Row>
@@ -933,6 +925,7 @@ export default function CountyReport() {
                         Rates broken down by age, sex, and race are not shown for {countyName} because there are fewer than 50 confirmed COVID-19 cases with complete information.
                 </Header.Subheader>
                     </Header.Content>
+
                   </Header>
                   :
                   <Grid.Row columns={3} style={{ paddingTop: 0 }}>
@@ -940,17 +933,20 @@ export default function CountyReport() {
                       <BarChart
                         title="Age Group"
                         keyv={["< 20", "20-44", "45-64", "65+"]}
-                        var={["rate019ageC", "rate2044ageC", "rate4564ageC", "rate65ageC"]}
+                        var={["019ageC_P", "2044ageC_P", "4564ageC_P", "65ageC_P"]}
+                        var1 ={["019ageP", "2044ageP", "4564ageP", "65ageP"]}
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
                         data={data_cases} />
+                        
                     </Grid.Column>
                     <Grid.Column>
                       <BarChart
                         title="Sex"
                         keyv={["Female", "Male"]}
-                        var={["female_rateC", "male_rateC"]}
+                        var={["femaleC_P", "maleC_P"]}
+                        var1 = {["femaleP", "maleP"]}
                         pad={25}
                         width={400}
                         stateFips={stateFips}
@@ -961,7 +957,8 @@ export default function CountyReport() {
                       <BarChart
                         title="Race-Ethnicity"
                         keyv={["Other", "Hispanic", "Black", "White"]}
-                        var={["otherNH_rateC", "hispanic_rateC", "black_rateC", "white_rateC"]}
+                        var={["otherNHC_P", "hispanicC_P", "blackC_P", "whiteC_P"]}
+                        var1 = {["otherNHP", "hispanicP", "blackP", "whiteP"]}
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
@@ -1012,7 +1009,8 @@ export default function CountyReport() {
                         <BarChart
                           title="Age Group"
                           keyv={["< 20", "20-44", "45-64", "65+"]}
-                          var={["rate019ageD", "rate2044ageD", "rate4564ageD", "rate65ageD"]}
+                          var={["019ageC_P", "2044ageC_P", "4564ageC_P", "65ageC_P"]}
+                          var1 ={["019ageP", "2044ageP", "4564ageP", "65ageP"]}
                           width={400}
                           stateFips={stateFips}
                           countyFips={countyFips}
@@ -1022,7 +1020,8 @@ export default function CountyReport() {
                         <BarChart
                           title="Sex"
                           keyv={["Female", "Male"]}
-                          var={["female_rateD", "male_rateD"]}
+                          var={["femaleC_P", "maleC_P"]}
+                          var1 = {["femaleP", "maleP"]}
                           width={400}
                           pad={25}
                           stateFips={stateFips}
@@ -1033,7 +1032,8 @@ export default function CountyReport() {
                         <BarChart
                           title="Race-Ethnicity"
                           keyv={["Other", "Hispanic", "Black", "White"]}
-                          var={["otherNH_rateD", "hispanic_rateD", "black_rateD", "white_rateD"]}
+                          var={["otherNHC_P", "hispanicC_P", "blackC_P", "whiteC_P"]}
+                        var1 = {["otherNHP", "hispanicP", "blackP", "whiteP"]}
                           width={400}
                           stateFips={stateFips}
                           countyFips={countyFips}
