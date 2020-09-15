@@ -243,6 +243,7 @@ function BarChart(props) {
 export default function CountyReport() {
 
   let { stateFips, countyFips } = useParams();
+  const allZero = arr => arr.every( v => Math.round(v,2) === 0.00 )
   // const [countyFips, setCountyFips] = useState('121');
   const [configsCounty, setConfig] = useState();
   const [stateName, setStateName] = useState('Georgia');
@@ -753,10 +754,10 @@ export default function CountyReport() {
                         tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
                       />
 
-                      <VictoryBar style={{ data: { fill: stateColor } }} barWidth={4} data={dataTS[stateFips + countyFips] ? _.take(dataTS[stateFips + countyFips], 141) : dataTS["99999"]}
+                      <VictoryBar style={{ data: { fill: stateColor } }} barWidth={4} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                         x='t' y='casesdaily'
                       />
-                      <VictoryLine name="Line" style={{ data: { stroke: countyColor } }} data={dataTS[stateFips + countyFips] ? _.take(dataTS[stateFips + countyFips], 141) : dataTS["99999"]}
+                      <VictoryLine name="Line" style={{ data: { stroke: countyColor } }} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                         x='t' y='casesdailymean7'
                         labels={({ datum }) => `${countyName}\n` + 
                     `Date: ${new Date(datum.t * 1000).toLocaleDateString()}\n` + 
@@ -799,7 +800,7 @@ export default function CountyReport() {
                       }
                       width={550}
                       height={450}
-                      padding={{ left: 30, right: 60, top: 10, bottom: 60 }}>
+                      padding={{ left: 50, right: 60, top: 10, bottom: 60 }}>
 
                       <VictoryAxis
                         style={{
@@ -820,13 +821,13 @@ export default function CountyReport() {
                         style={{
                           tickLabels: { fontSize: 20, padding: 5 }
                         }}
-                        tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
+                        tickFormat={(y) => (y < 1000 ? (Math.round(y,2)===0.00? " ": y) : (y / 1000 + 'k'))}
                       />
 
-                      <VictoryBar style={{ data: { fill: stateColor } }} barWidth={4} data={dataTS[stateFips + countyFips] ? _.take(dataTS[stateFips + countyFips], 141) : dataTS["99999"]}
+                      <VictoryBar style={{ data: { fill: stateColor } }} barWidth={4} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                         x='t' y='deathsdaily'
                       />
-                      <VictoryLine name="Line" style={{ data: { stroke: countyColor } }} data={dataTS[stateFips + countyFips] ? _.take(dataTS[stateFips + countyFips], 141) : dataTS["99999"]}
+                      <VictoryLine name="Line" style={{ data: { stroke: countyColor } }} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                         x='t' y='deathsdailymean7'
                         labels={({ datum }) => 
                         `${countyName}\n` +

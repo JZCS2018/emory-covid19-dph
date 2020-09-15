@@ -210,7 +210,7 @@ function ChartGraph(props) {
                     style={{
                         tickLabels: { fontSize: 25, padding: 5 }
                     }}
-                    tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
+                    tickFormat={(y) => (y < 1000 ? (Math.round(y,2)===0.00? " ": y) : (y / 1000 + 'k'))}
                 />
                 <VictoryBar style={{ data: { fill: stateColor } }} barWidth={8} alignment="start" data={dataTS ? dataTS : props.data2["99999"]}
                     x='t' y={varGraphPair[metric]['name'][0]}
@@ -238,7 +238,7 @@ function ChartGraph(props) {
                         style={{
                             tickLabels: { fontSize: 25, padding: 5 }
                         }}
-                        tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
+                        tickFormat={(y) => (y < 1000 ? (Math.round(y,2)===0.00? " ": y) : (y / 1000 + 'k'))}
                     /> :
                     <VictoryLine name="Line11" style={{ data: { stroke: '#007dba', strokeWidth: ({ active }) => active ? 5 : 3 } }} data={_.takeRight(props.data2[stateFips], 14) ? _.takeRight(props.data2[stateFips], 14) : props.data2["99999"]}
                         x='t' y={varGraphPair[metric]['name'][1]}
@@ -295,7 +295,7 @@ function ChartGraph(props) {
                     style={{
                         tickLabels: { fontSize: 25, padding: 5 }
                     }}
-                    tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
+                    tickFormat={(y) => (y < 1000 ? (Math.round(y,2)===0.00? " ": y) : (y / 1000 + 'k'))}
                 />
                 <VictoryBar style={{ data: { fill: stateColor } }} barWidth={4} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
                     x='t' y={varGraphPair[metric]['name'][0]}
@@ -323,7 +323,7 @@ function ChartGraph(props) {
                         style={{
                             tickLabels: { fontSize: 25, padding: 5 }
                         }}
-                        tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
+                        tickFormat={(y) => (y < 1000 ? (Math.round(y,2)===0.00? " ": y) : (y / 1000 + 'k'))}
                     /> :
                     <VictoryLine name="Line11" style={{ data: { stroke: '#007dba', strokeWidth: ({ active }) => active ? 5 : 3 } }} data={dataTS[stateFips] ? dataTS[stateFips] : dataTS["99999"]}
                         x='t' y={varGraphPair[metric]['name'][1]}
