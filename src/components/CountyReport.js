@@ -123,13 +123,13 @@ function BarChart(props) {
           tickLabels: { fontSize: 18, padding: 2 }
         }}
           tickFormat={(y) => (y < 1 ? y*100 : (y / 1000 + 'k'))} />
-          <VictoryLegend x={100} y={40}
+          <VictoryLegend x={90} y={40}
           orientation="horizontal"
-          gutter={20}
+          gutter={1}
           // style={{ border: { stroke: "black" } }}
           data={[
-            { name:  `${props.cate} Percent`, symbol: { fill: colors['1'], type: "square" } },
-            { name: "Population Percent", symbol: { fill: colors['2'], type: "square" }},
+            { name:  `Percentage of ${props.cate}`, symbol: { fill: colors['1'], type: "square" } },
+            { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" }},
           ]}
         />
         <VictoryGroup offset={20}
@@ -212,13 +212,13 @@ function BarChart(props) {
           tickLabels: { fontSize: 18, padding: 2 }
         }}
           tickFormat={(y) => (y < 1 ? y*100  : (y / 1000 + 'k'))} />
-        <VictoryLegend x={100} y={40}
+        <VictoryLegend x={90} y={40}
           orientation="horizontal"
-          gutter={20}
+          gutter={1}
           // style={{ border: { stroke: "black" } }}
           data={[
-            { name:  `${props.cate} Percent`, symbol: { fill: colors['1'], type: "square" } },
-            { name: "Population Percent", symbol: { fill: colors['2'], type: "square" }},
+            { name:  `Percentage of ${props.cate}`, symbol: { fill: colors['1'], type: "square" } },
+            { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" }},
           ]}
         />
         <VictoryGroup offset={20}

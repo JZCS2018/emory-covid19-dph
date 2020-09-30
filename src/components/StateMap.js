@@ -1,4 +1,4 @@
-import React, { useEffect, Component, useState, createRef } from 'react'
+import React, { useEffect, Component, useState, createRef,useRef } from 'react'
 import { Container, Grid, Breadcrumb, Dropdown, Header, Loader, Divider, Rail, Sticky, Popup, Button, Menu } from 'semantic-ui-react'
 import AppBar from './AppBar';
 import Geographies from './Geographies';
@@ -52,6 +52,14 @@ const colorPalette1 = [
     "#74182A",
     '#7d0707'
 ];
+const colorPalette2 = [
+    "#e1dce2",
+    "#d3b6cd",
+    "#bf88b5",
+    "#af5194",
+    "#99528c",
+
+];
 
 const colorOut = '#7d0707';
 const contextRef = createRef()
@@ -95,32 +103,33 @@ function StickyExampleAdjacentContext(props) {
     const [sTate, setsTate] = useState({ activeItem: 'summary' })
     const { activeItem } = sTate
     return (
+        
         <div >
-            <Rail  internal='true' position='left'>
+            <Rail  internal size='mini' position='left'>
                 <Sticky offset={150}>
                     <Menu
                         size='small'
                         compact
                         pointing secondary vertical>
-                        <Menu.Item as='a' href="#summary" name='summary' active={activeItem === 'summary'}
+                        <Menu.Item as='a' href="#summary" name='summary' active={props.activeCharacter == 'summary' || activeItem === 'summary'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                         <Menu.Item as='a' href="#cvi" name='Community Vulnerability Index' active={activeItem === 'Community Vulnerability Index'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                         <Menu.Item as='a' href="#si" name='Residential Segregation Index' active={activeItem === 'Residential Segregation Index'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' href="#male" name='Characteristics - Male Percentage' active={activeItem === 'Characteristics - Male Percentage'}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                         <Menu.Item as='a' href="#urbanrural" name='Characteristics - Metropolitan Status' active={activeItem === 'Characteristics - Metropolitan Status'}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' href="#age" name='Characteristics - Age over 65' active={activeItem === 'Characteristics - Age over 65'}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' href="#black" name='Characteristics - African American' active={activeItem === 'Characteristics - African American'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                         <Menu.Item as='a' href="#poverty" name='Characteristics - Poverty' active={activeItem === 'Characteristics - Poverty'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' href="#diabetes" name='Characteristics - Diabetes' active={activeItem === 'Characteristics - Diabetes'}
+                        <Menu.Item as='a' href="#black" name='Characteristics - African American' active={activeItem === 'Characteristics - African American'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                         <Menu.Item as='a' href="#hispanic" name='Characteristics - Hispanic' active={activeItem === 'Characteristics - Hispanic'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
+                        <Menu.Item as='a' href="#diabetes" name='Characteristics - Diabetes' active={activeItem === 'Characteristics - Diabetes'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
+                        <Menu.Item as='a' href="#age" name='Characteristics - Age over 65' active={activeItem === 'Characteristics - Age over 65'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
+                        <Menu.Item as='a' href="#male" name='Characteristics - Male Percentage' active={activeItem === 'Characteristics - Male Percentage'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                     </Menu>
                 </Sticky>
@@ -398,10 +407,16 @@ export default function StateMap(props) {
     const [stateName, setStateName] = useState('');
 
     const [countyFips, setCountyFips] = useState('121');
+    const [countyFipscvi, setCountyFipscvi] = useState('121');
+    const [countyFipssi, setCountyFipssi] = useState('121');
     const [countyName, setCountyName] = useState('Fulton County');
+    const [countyNamecvi, setCountyNamecvi] = useState('Fulton County');
+    const [countyNamesi, setCountyNamesi] = useState('Fulton County');
     const history = useHistory();
     const [fips, setFips] = useState('13');
-
+    const [activeCharacter, setActiveCharacter] = useState('')
+    const activeClass = 'character-block--active';
+    const characterRef = createRef();
     // const [dataFltrd, setDataFltrd] = useState();
     // const [dataFltrdUs, setDataFltrdUs] = useState();
 
@@ -467,6 +482,19 @@ export default function StateMap(props) {
     const varMap = { "cacum": metricOptions2[0], "decum": metricOptions2[1], "cacumr": metricOptions2[2], "decumr": metricOptions1[1] };
     const [delayHandler, setDelayHandler] = useState(null)
 
+    // useEffect(() => {
+    //     console.log(characterRef)
+    //     const handleIntersection = function(entries) {
+    //       entries.forEach((entry) => {
+    //         if (entry.target.id !== activeCharacter && entry.isIntersecting) {
+    //           setActiveCharacter(entry.target.id);
+    //         }
+    //       });
+    //     };
+    //     const observer = new IntersectionObserver(handleIntersection);
+    //     observer.observe(characterRef.current);
+    //     return () => observer.disconnect(); // Clenaup the observer if component unmount.
+    //   }, [activeCharacter, setActiveCharacter, characterRef]);
 
 
     useEffect(() => {
@@ -750,7 +778,7 @@ export default function StateMap(props) {
                             d => (
                                 d['cvi'] >= 0)),
                             d => d['cvi']))
-                        .range(colorPalette);
+                        .range(colorPalette2);
 
                     let scaleMap = {}
                     _.each(x, d => {
@@ -769,7 +797,7 @@ export default function StateMap(props) {
                             d => (
                                 d['si'] >= 0)),
                             d => d['si']))
-                        .range(colorPalette);
+                        .range(colorPalette2);
 
                     let scaleMapsi = {}
                     _.each(x, d => {
@@ -795,15 +823,17 @@ export default function StateMap(props) {
         if (dataTS && dataTS[stateFips + countyFips]) {
             setCovidMetric(_.takeRight(dataTS[stateFips + countyFips])[0]);
             setCovidMetric14(_.takeRight(dataTS[stateFips + countyFips], 14));
-            // console.log(data[stateFips+countyFips])
-            // setDateCur(data[stateFips+countyFips])
+
         }
     }, [dataTS, countyFips])
 
     if (dataTS && dataUs) {
-
+        
         return (
-            <div>
+            <div 
+            className={`character-block ${activeClass}`}
+            id = "mycontent"
+            ref={characterRef}>
                 <AppBar menu='countyReport' />
                 <Container style={{ marginTop: '6em', minWidth: '1260px' }}>
                     {config &&
@@ -818,8 +848,8 @@ export default function StateMap(props) {
                             <Divider id='summary' hidden />
 
                             <Grid columns={3}>
-                                
-                                    <StickyExampleAdjacentContext />
+
+                                <StickyExampleAdjacentContext activeCharacter/>
                                 <Grid.Row>
                                     <Grid.Column width={16}>
                                         <Header as='h2' style={{ fontWeight: 400, fontSize: "16pt", paddingRight: 0 }}>
@@ -834,7 +864,7 @@ export default function StateMap(props) {
                                         </Header>
                                     </Grid.Column>
                                 </Grid.Row>
-                                
+
 
                                 <Grid.Column width={7} data-tip='ga' data-for='ga' style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                     <Header as='h2' style={{ fontWeight: 600 }}>
@@ -980,15 +1010,92 @@ export default function StateMap(props) {
                                             </Grid.Row>
                                             <Grid.Row style={{ paddingTop: '2em', paddingLeft: '2.9em', paddingRight: '2.9em' }} centered>
                                                 <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                                                    This chart shows the daily number of new confirmed COVID-19 {varNameMap[metric].name} in <b>{countyName}</b> as of {dataTS[stateFips + countyFips][0].todaydate === 'n/a' ? 'N/A' : (new Date(dataTS[stateFips + countyFips][0].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}. The daily number reflects the date the {varNameMap[metric].cat} was first reported to DPH.
+                                                    This chart shows the daily number of new confirmed COVID-19 {varNameMap[metric].name} in <b>{countyName}</b> as of {dataTS[stateFips + countyFips][0].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dataTS[stateFips + countyFips][0].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}. The daily number reflects the date the {varNameMap[metric].cat} was first reported to DPH.
                         The vertical bars show the number of new daily {varNameMap[metric].name} while the line shows the 7-day moving average of new daily {varNameMap[metric].name}.
                         </small>
                                             </Grid.Row>
                                         </Grid.Column>
                                     </Grid>
                                 </Grid.Column>
-
                             </Grid>
+
+                            {/* <center> <Divider id="her" hidden style={{ paddingBottom: 50 }} /> </center>
+                            <Grid.Column width={8}>
+                                <Header as='h2' style={{ fontWeight: "bold", fontSize: "27px", paddingLeft: ".5em" }}>
+                                    <Header.Content>
+                                        Daily cases in {countyName}
+                                        <Header.Subheader style={{ fontWeight: 300 }}>
+                                        </Header.Subheader>
+                                    </Header.Content>
+                                </Header>
+                                <svg width="550" height="90">
+                                    <rect x={50} y={50} width="15" height="15" style={{ fill: stateColor, strokeWidth: 1, stroke: stateColor }} />
+                                    <rect x={50} y={22} width="15" height="1" style={{ fill: countyColor, strokeWidth: 1, stroke: countyColor }} />
+                                    <text x={75} y={64} style={{ fontSize: 18 }}> Daily new cases </text>
+                                    <text x={75} y={30} style={{ fontSize: 18 }}>7-D Rolling average</text>
+                                </svg>
+                                <VictoryChart theme={VictoryTheme.material}
+                                    containerComponent={
+                                        <VictoryVoronoiContainer
+                                            responsive={false}
+                                            flyoutStyle={{ fill: "black" }}
+
+                                        />
+                                    }
+                                    width={550}
+                                    height={450}
+                                    padding={{ left: 40, right: 60, top: 10, bottom: 60 }}>
+                                    <VictoryAxis
+                                        style={{
+                                            tickLabels: { fontSize: 20, padding: 5 }
+                                        }}
+                                        tickFormat={(t) => new Date(t * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
+                                        tickValues={[
+                                            // 1583035200, 1585713600, 1588305600, 1590984000, 1593576000
+                                            dataTS['13001'][0].t,
+                                            dataTS["13001"][32].t,
+                                            dataTS["13001"][62].t,
+                                            dataTS["13001"][93].t,
+                                            dataTS["13001"][123].t,
+                                            dataTS["13001"][154].t,
+                                            dataTS["13001"][dataTS["13001"].length - 1].t
+                                        ]}
+                                    />
+                                    <VictoryAxis dependentAxis tickCount={5}
+                                        style={{
+                                            tickLabels: { fontSize: 17, paddingLeft: '0em' }
+                                        }}
+                                        tickFormat={(y) => (y < 1000 ? y : (y / 1000 + 'k'))}
+                                    />
+
+                                    <VictoryBar style={{ data: { fill: stateColor } }} barWidth={4} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
+                                        x='t' y='casesdaily'
+                                    />
+                                    <VictoryLine name="Line" style={{ data: { stroke: countyColor } }} data={dataTS[stateFips + countyFips] ? dataTS[stateFips + countyFips] : dataTS["99999"]}
+                                        x='t' y='casesdailymean7'
+                                        labels={({ datum }) => `${countyName}\n` +
+                                            `Date: ${new Date(datum.t * 1000).toLocaleDateString()}\n` +
+                                            `Daily new cases: ${Math.round(datum.casesdaily, 2)}\n` +
+                                            `7-d Rolling average of daily new cases: ${Math.round(datum.casesdailymean7, 2)}`
+                                        }
+                                        labelComponent={
+                                            <VictoryTooltip
+                                                orientation="top"
+                                                style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'white' }}
+                                                constrainToVisibleArea
+                                                labelComponent={<VictoryLabel dx={-130} textAnchor='start' />}
+                                                flyoutStyle={{ fill: "black", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                            />
+                                        }
+                                    />
+
+                                </VictoryChart>
+                            </Grid.Column> */}
+
+
+
+
                             <center> <Divider id="cvi" hidden style={{ paddingBottom: 50 }} /> </center>
                             {/* cvi */}
                             <center> <Divider /> </center>
@@ -998,11 +1105,10 @@ export default function StateMap(props) {
                                     COVID-19 by Community Vulnerability Index
                                 <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0 }}>
 
-                                        Some communities are limited in their ability to prevent, manage, and mitigate the spread of a pandemic disease,
-                                        and its economic and social impacts, rendering them more vulnerable to COVID-19 than others. CVI incorporates
-                                        the SVI’s sociodemographic variables, along with risk factors specific to COVID-19 and variables measuring the
-                                        capacity of public health systems. It considers six core themes that together account for 34 factors that make
-                                        a community vulnerable to the COVID-19 pandemic.
+                                        Some communities are limited in their ability to prevent, manage, and mitigate the spread of a pandemic disease, and its economic and social impacts,
+                                        rendering them more vulnerable to COVID-19 than others. The COVID-19 Community vulnerability index (CCVI) incorporates 34 county characteristics that make a
+                                        community vulnerable to the COVID-19 pandemic. These characteristics include sociodemographic factors, risk factors specific to COVID-19, and indicators of the
+                                        capacity of public health systems.
 
                 <br />
                                         <br />
@@ -1019,25 +1125,24 @@ export default function StateMap(props) {
                                         </Header.Content>
                                         </Header>
                                     </Grid.Row>
-                                    <Grid.Row data-tip='cvi' data-for='cvi' style={{ paddingTop: "0" }}>
-                                        <svg width="260" height="80">
-                                            {_.map(colorPalette, (color, i) => {
-                                                return <rect key={i} x={50 + 20 * i} y={40} width="20" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
+                                    <Grid.Row data-tip='cvi' data-for='cvi' style={{ paddingTop: "0", paddingBottom: '1em' }}>
+                                        <svg width="320" height="80">
+                                            {_.map(colorPalette2, (color, i) => {
+                                                return <rect key={i} x={110 + 20 * i} y={40} width="20" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
                                             })}
-                                            <text x={50} y={74} style={{ fontSize: '0.8em' }}>Low</text>
-                                            <text x={50 + 20 * (colorPalette.length - 1)} y={74} style={{ fontSize: '0.8em' }}>High</text>
-                                            <rect x={195} y={40} width="20" height="20" style={{ fill: "#FFFFFF", strokeWidth: 0.5, stroke: "#000000" }} />
-                                            <text x={217} y={50} style={{ fontSize: '0.7em' }}> None </text>
-                                            <text x={217} y={59} style={{ fontSize: '0.7em' }}> Reported </text>
+                                            <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
+                                            <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
+                                            <text x={140 + 20 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
+                                            <text x={140 + 20 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
 
                                         </svg>
                                         <ComposableMap projection="geoAlbersUsa"
-                                            projectionConfig={{ scale: `${config.scale}` }}
-                                            width={500}
-                                            height={550}
+                                            projectionConfig={{ scale: `${config.scale1}` }}
+                                            width={600}
+                                            height={600}
                                             data-tip=""
                                             offsetX={config.offsetX}
-                                            offsetY={config.offsetY}>
+                                            offsetY={config.offsetY1}>
                                             <Geographies geography={config.url}>
                                                 {({ geographies }) => geographies.map(geo =>
                                                     <Geography
@@ -1057,15 +1162,15 @@ export default function StateMap(props) {
                                                         }}
                                                         onMouseEnter={() => {
 
-                                                            setCountyFips(geo.properties.COUNTYFP);
-                                                            setCountyName(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                            setTooltipContentcvi(fips2county[stateFips + geo.properties.COUNTYFP] + "'s CVI: " + dataUs[stateFips + geo.properties.COUNTYFP]['cvi'].toFixed(2));
+                                                            setCountyFipscvi(geo.properties.COUNTYFP);
+                                                            setCountyNamecvi(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                            setTooltipContentcvi(fips2county[stateFips + geo.properties.COUNTYFP] + "'s CCVI: " + dataUs[stateFips + geo.properties.COUNTYFP]['cvi'].toFixed(2));
 
                                                         }}
                                                         onMouseLeave={() => {
                                                             setTooltipContent("")
                                                         }}
-                                                        fill={countyFips === geo.properties.COUNTYFP ? countyColor :
+                                                        fill={countyFipscvi === geo.properties.COUNTYFP ? countyColor :
                                                             ((colorCVI && dataUs[stateFips + geo.properties.COUNTYFP] &&
                                                                 dataUs[stateFips + geo.properties.COUNTYFP]['cvi'] && dataUs[stateFips + geo.properties.COUNTYFP]['cvi'] > 0) ?
                                                                 colorCVI[dataUs[stateFips + geo.properties.COUNTYFP]['cvi']] :
@@ -1075,87 +1180,114 @@ export default function StateMap(props) {
                                             </Geographies>
                                         </ComposableMap>
                                     </Grid.Row>
+                                    <Grid.Row style={{ paddingTop: 0, paddingLeft: '0em', paddingRight: '2em' }} centered>
+                                        <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
+                                            This map shows each Georgia county according to its Community Vulnerability ranking.
+                                            County rankings are based on CCVI quintile, which ranks each county in one of five
+                                            groups depending on CCVI score.
+                                            </small>
+                                    </Grid.Row>
                                 </Grid.Column>
                                 <Grid.Column width={9} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                     <Grid.Row columns={1}>
-                                        <Grid.Column style={{ paddingTop: 0, paddingBottom: 18 }}>
+                                        <Grid.Column style={{ paddingTop: 0, paddingBottom: 3 }}>
                                             <Header as='h2' style={{ textAlign: 'center', fontSize: "16pt", lineHeight: "16pt" }}>
                                                 <Header.Content>
-                                                    Cases per 100,000 residents by Community Vulnerability Index
+                                                    COVID-19 Case Rate by Community Vulnerability Index
                                                 </Header.Content>
                                             </Header>
                                             <VictoryChart
                                                 theme={VictoryTheme.material}
                                                 width={730}
-                                                height={220}
+                                                height={270}
                                                 domainPadding={20}
                                                 minDomain={{ y: props.ylog ? 1 : 0 }}
-                                                padding={{ left: 200, right: 30, top: 10, bottom: -5 }}
+                                                padding={{ left: 200, right: 30, top: 10, bottom: 35 }}
                                                 style={{ fontSize: "14pt" }}
                                                 containerComponent={<VictoryContainer responsive={false} />}
                                             >
-                                                <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                                <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
+                                                <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                                <VictoryAxis dependentAxis
+                                                    label='COVID-19 Cases per 100,000 Residents'
+                                                    style={{
+                                                        ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' },
+                                                        labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                    }} />
                                                 <VictoryBar
                                                     horizontal
                                                     barRatio={0.75}
                                                     labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
                                                     data={[
-                                                        { key: "Lowest 20%", 'value': (data_index['cvi_index']["low20"]['casesdailymean7R'] / data_index['cvi_index']["low20"]['casesdailymean7R']) * data_index['cvi_index']["low20"]['casesdailymean7R'] || 0 },
-                                                        { key: "Q2", 'value': (data_index['cvi_index']["Q2"]['casesdailymean7R'] / data_index['cvi_index']["low20"]['casesdailymean7R']) * data_index['cvi_index']["low20"]['casesdailymean7R'] || 0 },
-                                                        { key: "Q3", 'value': (data_index['cvi_index']["Q3"]['casesdailymean7R'] / data_index['cvi_index']["low20"]['casesdailymean7R']) * data_index['cvi_index']["low20"]['casesdailymean7R'] || 0 },
-                                                        { key: "Q4", 'value': (data_index['cvi_index']["Q4"]['casesdailymean7R'] / data_index['cvi_index']["low20"]['casesdailymean7R']) * data_index['cvi_index']["low20"]['casesdailymean7R'] || 0 },
-                                                        { key: "Highest 20%", 'value': (data_index['cvi_index']["high20"]['casesdailymean7R'] / data_index['cvi_index']["low20"]['casesdailymean7R']) * data_index['cvi_index']["low20"]['casesdailymean7R'] || 0 }
+                                                        { key: "Least vulnerable\n counties", 'value': (data_index['cvi_index']["low20"]['casesdailymean7R'] / data_index['cvi_index']["low20"]['casesdailymean7R']) * data_index['cvi_index']["low20"]['casesdailymean7R'] || 0, 'ez': data_index['cvi_index']["low20"]['county_list'] },
+                                                        { key: "Q2", 'value': (data_index['cvi_index']["Q2"]['casesdailymean7R'] / data_index['cvi_index']["Q2"]['casesdailymean7R']) * data_index['cvi_index']["Q2"]['casesdailymean7R'] || 0, 'ez': data_index['cvi_index']["Q2"]['county_list'] },
+                                                        { key: "Q3", 'value': (data_index['cvi_index']["Q3"]['casesdailymean7R'] / data_index['cvi_index']["Q3"]['casesdailymean7R']) * data_index['cvi_index']["Q3"]['casesdailymean7R'] || 0, 'ez': data_index['cvi_index']["Q3"]['county_list'] },
+                                                        { key: "Q4", 'value': (data_index['cvi_index']["Q4"]['casesdailymean7R'] / data_index['cvi_index']["Q4"]['casesdailymean7R']) * data_index['cvi_index']["Q4"]['casesdailymean7R'] || 0, 'ez': data_index['cvi_index']["Q4"]['county_list'] },
+                                                        { key: "Most vulnerable\n counties", 'value': (data_index['cvi_index']["high20"]['casesdailymean7R'] / data_index['cvi_index']["high20"]['casesdailymean7R']) * data_index['cvi_index']["high20"]['casesdailymean7R'] || 0, 'ez': data_index['cvi_index']["high20"]['county_list'] }
                                                     ]}
                                                     labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
                                                     style={{
                                                         data: {
-                                                            fill: casesColor[1]
+                                                            fill: ({ datum }) => datum.ez.includes(countyFipscvi) ? countyColor : casesColor[1]
                                                         }
                                                     }}
+                                                    // style={{
+                                                    //     data: {
+                                                    //         fill: casesColor[1]
+                                                    //     }
+                                                    // }}
                                                     x="key"
                                                     y="value"
                                                 />
                                             </VictoryChart>
                                         </Grid.Column>
                                     </Grid.Row>
+                                    <Grid.Row style={{ paddingTop: '0.1em', paddingLeft: '2.9em', paddingRight: '0.1em' }} centered>
+                                        <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
+                                            This chart shows the number of COVID-19 cases per 100,000 residents as of {dataTS[stateFips + countyFips][0].todaydate === 'n/a' ? 'N/A' :
+                                                (new Date(dataTS[stateFips + countyFips][0].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by CCVI ranking.
+                                                    The y-axis displays CCVI rankings based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each
+                                                    group of counties ranked by CCVI.
+                        </small>
+                                    </Grid.Row>
                                     <Grid.Row columns={1}>
-                                        <Grid.Column style={{ paddingTop: 60, paddingBottom: 18 }}>
+                                        <Grid.Column style={{ paddingTop: 15, paddingBottom: 3 }}>
                                             <Header as='h2' style={{ textAlign: 'center', fontSize: "16pt", lineHeight: "16pt", paddingLeft: "1em" }}>
                                                 <Header.Content>
-                                                    Deaths per 100,000 residents by Community Vulnerability Index
+                                                    COVID-19 Death Rate by Community Vulnerability Index
                                             </Header.Content>
                                             </Header>
                                             <VictoryChart
                                                 theme={VictoryTheme.material}
                                                 width={730}
-                                                height={220}
+                                                height={270}
                                                 domainPadding={20}
                                                 minDomain={{ y: props.ylog ? 1 : 0 }}
-                                                padding={{ left: 200, right: 30, top: 10, bottom: -5 }}
+                                                padding={{ left: 200, right: 30, top: 10, bottom: 35 }}
                                                 style={{ fontSize: "14pt" }}
                                                 containerComponent={<VictoryContainer responsive={false} />}
                                             >
-                                                <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                                <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
+                                                <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                                <VictoryAxis dependentAxis
+                                                    label='COVID-19 Deaths per 100,000 Residents'
+                                                    style={{
+                                                        ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' },
+                                                        labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                    }} />
                                                 <VictoryBar
                                                     horizontal
                                                     barRatio={0.75}
                                                     labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
                                                     data={[
-                                                        { key: "Lowest 20%", 'value': (data_index['cvi_index']["low20"]['deathsdailymean7R'] / data_index['cvi_index']["Q2"]['deathsdailymean7R']) * data_index['cvi_index']["Q2"]['deathsdailymean7R'] || 0 },
-                                                        { key: "Q2", 'value': (data_index['cvi_index']["Q2"]['deathsdailymean7R'] / data_index['cvi_index']["Q2"]['deathsdailymean7R']) * data_index['cvi_index']["Q2"]['deathsdailymean7R'] || 0 },
-                                                        { key: "Q3", 'value': (data_index['cvi_index']["Q3"]['deathsdailymean7R'] / data_index['cvi_index']["Q2"]['deathsdailymean7R']) * data_index['cvi_index']["Q2"]['deathsdailymean7R'] || 0 },
-                                                        { key: "Q4", 'value': (data_index['cvi_index']["Q4"]['deathsdailymean7R'] / data_index['cvi_index']["Q2"]['deathsdailymean7R']) * data_index['cvi_index']["Q2"]['deathsdailymean7R'] || 0 },
-                                                        { key: "Highest 20%", 'value': (data_index['cvi_index']["high20"]['deathsdailymean7R'] / data_index['cvi_index']["Q2"]['deathsdailymean7R']) * data_index['cvi_index']["Q2"]['deathsdailymean7R'] || 0 }
-
-
-
+                                                        { key: "Least vulnerable\n counties", 'value': data_index['cvi_index']["low20"]['deathsdailymean7R'] || 0, 'ez': data_index['cvi_index']["low20"]['county_list'] },
+                                                        { key: "Q2", 'value': data_index['cvi_index']["Q2"]['deathsdailymean7R'] || 0, 'ez': data_index['cvi_index']["Q2"]['county_list'] },
+                                                        { key: "Q3", 'value': data_index['cvi_index']["Q3"]['deathsdailymean7R'] || 0, 'ez': data_index['cvi_index']["Q3"]['county_list'] },
+                                                        { key: "Q4", 'value': data_index['cvi_index']["Q4"]['deathsdailymean7R'] || 0, 'ez': data_index['cvi_index']["Q4"]['county_list'] },
+                                                        { key: "Most vulnerable\n counties", 'value': data_index['cvi_index']["high20"]['deathsdailymean7R'] || 0, 'ez': data_index['cvi_index']["high20"]['county_list'] }
                                                     ]}
                                                     labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
                                                     style={{
                                                         data: {
-                                                            fill: mortalityColor[1]
+                                                            fill: ({ datum }) => datum.ez.includes(countyFipscvi) ? countyColor : mortalityColor[1]
                                                         }
                                                     }}
                                                     x="key"
@@ -1164,6 +1296,14 @@ export default function StateMap(props) {
                                             </VictoryChart>
 
                                         </Grid.Column>
+                                    </Grid.Row>
+                                    <Grid.Row style={{ paddingTop: '0.1em', paddingLeft: '2.9em', paddingRight: '0.1em' }} centered>
+                                        <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
+                                            This chart shows the number of COVID-19 deaths per 100,000 residents as of {dataTS[stateFips + countyFips][0].todaydate === 'n/a' ? 'N/A' :
+                                                (new Date(dataTS[stateFips + countyFips][0].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by CCVI ranking.
+                                                    The y-axis displays CCVI rankings based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 deaths per 100,000 that occurred in each
+                                                    group of counties ranked by CCVI.
+                        </small>
                                     </Grid.Row>
                                 </Grid.Column>
                             </Grid>
@@ -1172,7 +1312,6 @@ export default function StateMap(props) {
                             <center> <Divider id='si' hidden style={{ paddingBottom: 50 }} /> </center>
                             <center> <Divider /> </center>
                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 30 }}>
-
                                 <Header.Content>
                                     COVID-19 by Residential Segregation Index
                                 <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0 }}>
@@ -1191,102 +1330,127 @@ export default function StateMap(props) {
                             </Header>
 
                             <Grid columns={16}>
-                                <Grid.Column width={7} data-tip='si' data-for='si' style={{ paddingLeft: "2", paddingLeft: "1" }}>
-                                    <Header as='h2' style={{ fontWeight: 600, fontSize: "16pt", lineHeight: "16pt" }}>
-                                        <Header.Content>
-                                            Georgia Residential Segregation Index Map
+                                <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
+
+                                    <Grid.Row data-tip='si' data-for='si' style={{ paddingLeft: "2", paddingLeft: "1", paddingBottom: '1.5em' }}>
+                                        <Header as='h2' style={{ fontWeight: 600, fontSize: "16pt", lineHeight: "16pt" }}>
+                                            <Header.Content>
+                                                Georgia Residential Segregation Index Map
                                         </Header.Content>
-                                    </Header>
-                                    <svg width="260" height="80">
-                                        {_.map(colorPalette, (color, i) => {
-                                            return <rect key={i} x={50 + 20 * i} y={40} width="20" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
-                                        })}
-                                        <text x={50} y={74} style={{ fontSize: '0.8em' }}>Low</text>
-                                        <text x={50 + 20 * (colorPalette.length - 1)} y={74} style={{ fontSize: '0.8em' }}>High</text>
-                                        <rect x={195} y={40} width="20" height="20" style={{ fill: "#FFFFFF", strokeWidth: 0.5, stroke: "#000000" }} />
-                                        <text x={217} y={50} style={{ fontSize: '0.7em' }}> None </text>
-                                        <text x={217} y={59} style={{ fontSize: '0.7em' }}> Reported </text>
+                                        </Header>
+                                        <svg width="500" height="80">
+                                            {_.map(colorPalette2, (color, i) => {
+                                                return <rect key={i} x={110 + 20 * i} y={40} width="20" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
+                                            })}
+                                            <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
+                                            <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
+                                            <text x={140 + 20 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
+                                            <text x={140 + 20 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
+                                            <rect x={140 + 20 * (colorPalette2.length - 1) + 100} y={40} width="25" height="20" style={{ fill: "#FFFFFF", strokeWidth: 0.5, stroke: "#000000" }} />
+                                            <text x={140 + 20 * (colorPalette2.length - 1) + 130} y={52} style={{ fontSize: '0.7em' }}> N/A </text>
 
-                                    </svg>
-                                    <ComposableMap projection="geoAlbersUsa"
-                                        projectionConfig={{ scale: `${config.scale}` }}
-                                        width={500}
-                                        height={550}
-                                        data-tip=""
-                                        offsetX={config.offsetX}
-                                        offsetY={config.offsetY}>
-                                        <Geographies geography={config.url}>
-                                            {({ geographies }) => geographies.map(geo =>
-                                                <Geography
-                                                    key={geo.rsmKey}
-                                                    geography={geo}
+                                        </svg>
+                                        <ComposableMap projection="geoAlbersUsa"
+                                            projectionConfig={{ scale: `${config.scale1}` }}
+                                            width={600}
+                                            height={600}
+                                            data-tip=""
+                                            offsetX={config.offsetX}
+                                            offsetY={config.offsetY2}>
+                                            <Geographies geography={config.url}>
+                                                {({ geographies }) => geographies.map(geo =>
+                                                    <Geography
+                                                        key={geo.rsmKey}
+                                                        geography={geo}
 
-                                                    style={{
-                                                        default: {
-                                                            //  fill: "#ECEFF1",
-                                                            stroke: "#607D8B",
-                                                            strokeWidth: 0.95,
-                                                            outline: "none",
-                                                        },
-                                                        pressed: {
-                                                            outline: "none",
-                                                        }
-                                                    }}
-                                                    onMouseEnter={() => {
+                                                        style={{
+                                                            default: {
+                                                                //  fill: "#ECEFF1",
+                                                                stroke: "#607D8B",
+                                                                strokeWidth: 0.95,
+                                                                outline: "none",
+                                                            },
+                                                            pressed: {
+                                                                outline: "none",
+                                                            }
+                                                        }}
+                                                        onMouseEnter={() => {
 
-                                                        setCountyFips(geo.properties.COUNTYFP);
-                                                        setCountyName(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                        setTooltipContentsi(fips2county[stateFips + geo.properties.COUNTYFP] + "'s SI: " + dataUs[stateFips + geo.properties.COUNTYFP]['si'].toFixed(0));
+                                                            setCountyFipssi(geo.properties.COUNTYFP);
+                                                            setCountyNamesi(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                            setTooltipContentsi(fips2county[stateFips + geo.properties.COUNTYFP] + "'s SI: " + dataUs[stateFips + geo.properties.COUNTYFP]['si'].toFixed(0));
 
-                                                    }}
-                                                    onMouseLeave={() => {
-                                                        setTooltipContent("")
-                                                    }}
-                                                    fill={countyFips === geo.properties.COUNTYFP ? countyColor :
-                                                        ((colorSI && dataUs[stateFips + geo.properties.COUNTYFP] &&
-                                                            dataUs[stateFips + geo.properties.COUNTYFP]['si'] && dataUs[stateFips + geo.properties.COUNTYFP]['si'] > 0) ?
-                                                            colorSI[dataUs[stateFips + geo.properties.COUNTYFP]['si']] :
-                                                            (colorScale && dataUs[stateFips + geo.properties.COUNTYFP] && dataUs[stateFips + geo.properties.COUNTYFP][metric] === 0) ? '#e1dce2' : '#FFFFFF')}
-                                                />
-                                            )}
-                                        </Geographies>
-                                    </ComposableMap>
+                                                        }}
+                                                        onMouseLeave={() => {
+                                                            setTooltipContent("")
+                                                        }}
+                                                        fill={countyFipssi === geo.properties.COUNTYFP ? countyColor :
+                                                            ((colorSI && dataUs[stateFips + geo.properties.COUNTYFP] &&
+                                                                dataUs[stateFips + geo.properties.COUNTYFP]['si'] && dataUs[stateFips + geo.properties.COUNTYFP]['si'] > 0) ?
+                                                                colorSI[dataUs[stateFips + geo.properties.COUNTYFP]['si']] :
+                                                                (colorScale && dataUs[stateFips + geo.properties.COUNTYFP] && dataUs[stateFips + geo.properties.COUNTYFP][metric] === 0) ? '#e1dce2' : '#FFFFFF')}
+                                                    />
+                                                )}
+                                            </Geographies>
+                                        </ComposableMap>
+                                    </Grid.Row>
+                                    <Grid.Row style={{ paddingTop: 0, paddingLeft: '0em', paddingRight: '2em' }} centered>
+                                        <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
+                                            This map shows each Georgia county according to its residential segregation ranking.
+                                            County rankings are based on residential segregation quintile, which ranks each county
+                                            in one of five groups depending on residential segregation score.
+                                            </small>
+                                    </Grid.Row>
                                 </Grid.Column>
                                 <Grid.Column width={9} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                     <Grid.Row columns={1}>
-                                        <Grid.Column style={{ paddingTop: 0, paddingBottom: 18 }}>
+                                        <Grid.Column style={{ paddingTop: 0, paddingBottom: 3 }}>
                                             <Header as='h2' style={{ textAlign: 'center', fontSize: "16pt", lineHeight: "16pt" }}>
                                                 <Header.Content>
-                                                    Cases per 100,000 residents by Residential segregation
-                </Header.Content>
+                                                    COVID-19 Case Rate by Residential Segregation Index
+                                                    </Header.Content>
                                             </Header>
                                             <VictoryChart
                                                 theme={VictoryTheme.material}
                                                 width={730}
-                                                height={220}
+                                                height={270}
                                                 domainPadding={20}
                                                 minDomain={{ y: props.ylog ? 1 : 0 }}
-                                                padding={{ left: 200, right: 30, top: 10, bottom: -5 }}
+                                                padding={{ left: 220, right: 30, top: 10, bottom: 35 }}
                                                 style={{ fontSize: "14pt" }}
                                                 containerComponent={<VictoryContainer responsive={false} />}
                                             >
-                                                <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                                <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
+                                                <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                                <VictoryAxis dependentAxis
+                                                    label='COVID-19 Cases per 100,000 Residents'
+                                                    style={{
+                                                        ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' },
+                                                        labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                    }} />
                                                 <VictoryBar
                                                     horizontal
                                                     barRatio={0.75}
                                                     labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
                                                     data={[
-                                                        { key: "Lowest 20%", 'value': (data_index['s_index']["low20"]['casesdailymean7R'] / data_index['s_index']["low20"]['casesdailymean7R']) * data_index['s_index']["low20"]['casesdailymean7R'] || 0 },
-                                                        { key: "Q2", 'value': (data_index['s_index']["Q2"]['casesdailymean7R'] / data_index['s_index']["low20"]['casesdailymean7R']) * data_index['s_index']["low20"]['casesdailymean7R'] || 0 },
-                                                        { key: "Q3", 'value': (data_index['s_index']["Q3"]['casesdailymean7R'] / data_index['s_index']["low20"]['casesdailymean7R']) * data_index['s_index']["low20"]['casesdailymean7R'] || 0 },
-                                                        { key: "Q4", 'value': (data_index['s_index']["Q4"]['casesdailymean7R'] / data_index['s_index']["low20"]['casesdailymean7R']) * data_index['s_index']["low20"]['casesdailymean7R'] || 0 },
-                                                        { key: "Highest 20%", 'value': (data_index['s_index']["high20"]['casesdailymean7R'] / data_index['s_index']["low20"]['casesdailymean7R']) * data_index['s_index']["low20"]['casesdailymean7R'] || 0 }
+                                                        {
+                                                            key: "Counties with lowest\n residential segregation", 'value':
+                                                                data_index['s_index']["low20"]['casesdailymean7R'] || 0, 'ez': data_index['s_index']["low20"]['county_list']
+                                                        },
+                                                        { key: "Q2", 'value': data_index['s_index']["Q2"]['casesdailymean7R'] || 0, 'ez': data_index['s_index']["Q2"]['county_list'] },
+                                                        {
+                                                            key: "Q3", 'value': data_index['s_index']["Q3"]['casesdailymean7R']
+                                                                || 0, 'ez': data_index['s_index']["Q3"]['county_list']
+                                                        },
+                                                        { key: "Q4", 'value': data_index['s_index']["Q4"]['casesdailymean7R'] || 0, 'ez': data_index['s_index']["Q4"]['county_list'] },
+                                                        {
+                                                            key: "Counties with highest\n residential segregation",
+                                                            'value': data_index['s_index']["high20"]['casesdailymean7R'] || 0, 'ez': data_index['s_index']["high20"]['county_list']
+                                                        }
                                                     ]}
                                                     labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
                                                     style={{
                                                         data: {
-                                                            fill: casesColor[1]
+                                                            fill: ({ datum }) => datum.ez.includes(countyFipssi) ? countyColor : casesColor[1]
                                                         }
                                                     }}
                                                     x="key"
@@ -1295,40 +1459,73 @@ export default function StateMap(props) {
                                             </VictoryChart>
                                         </Grid.Column>
                                     </Grid.Row>
+                                    <Grid.Row style={{ paddingTop: '0.1em', paddingLeft: '2.9em', paddingRight: '0.1em' }} centered>
+                                        <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
+                                            This chart shows the number of COVID-19 cases per 100,000 residents as of {dataTS[stateFips + countyFips][0].todaydate === 'n/a' ? 'N/A' :
+                                                (new Date(dataTS[stateFips + countyFips][0].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by residential segregation index.
+                                                    The y-axis displays residential segregation rankings based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each
+                                                    group of counties ranked by residential segregation.
+                        </small>
+                                    </Grid.Row>
                                     <Grid.Row columns={1}>
-                                        <Grid.Column style={{ paddingTop: 60, paddingBottom: 18 }}>
+                                        <Grid.Column style={{ paddingTop: 15, paddingBottom: 3 }}>
                                             <Header as='h2' style={{ textAlign: 'center', fontSize: "16pt", lineHeight: "16pt", paddingLeft: "1em" }}>
                                                 <Header.Content>
-                                                    Deaths per 100,000 residents by Residential segregation
-                </Header.Content>
+                                                    COVID-19 Death Rate by Residential Segregation Index
+                                                    </Header.Content>
                                             </Header>
                                             <VictoryChart
                                                 theme={VictoryTheme.material}
                                                 width={730}
-                                                height={220}
+                                                height={270}
                                                 domainPadding={20}
                                                 minDomain={{ y: props.ylog ? 1 : 0 }}
-                                                padding={{ left: 200, right: 30, top: 10, bottom: -5 }}
+                                                padding={{ left: 220, right: 30, top: 10, bottom: 35 }}
                                                 style={{ fontSize: "14pt" }}
                                                 containerComponent={<VictoryContainer responsive={false} />}
                                             >
-                                                <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                                <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
+                                                <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                                <VictoryAxis dependentAxis
+                                                    label='COVID-19 Deaths per 100,000 Residents'
+                                                    style={{
+                                                        ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' },
+                                                        labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                    }} />
                                                 <VictoryBar
                                                     horizontal
                                                     barRatio={0.75}
                                                     labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
                                                     data={[
-                                                        { key: "Lowest 20%", 'value': (data_index['s_index']["low20"]['deathsdailymean7R'] / data_index['s_index']["Q2"]['deathsdailymean7R']) * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0 },
-                                                        { key: "Q2", 'value': (data_index['s_index']["Q2"]['deathsdailymean7R'] / data_index['s_index']["Q2"]['deathsdailymean7R']) * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0 },
-                                                        { key: "Q3", 'value': (data_index['s_index']["Q3"]['deathsdailymean7R'] / data_index['s_index']["Q2"]['deathsdailymean7R']) * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0 },
-                                                        { key: "Q4", 'value': (data_index['s_index']["Q4"]['deathsdailymean7R'] / data_index['s_index']["Q2"]['deathsdailymean7R']) * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0 },
-                                                        { key: "Highest 20%", 'value': (data_index['s_index']["high20"]['deathsdailymean7R'] / data_index['s_index']["Q2"]['deathsdailymean7R']) * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0 }
+                                                        {
+                                                            key: "Counties with lowest\n residential segregation", 'value':
+                                                                (data_index['s_index']["low20"]['deathsdailymean7R'] / data_index['s_index']["Q2"]['deathsdailymean7R'])
+                                                                * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0, 'ez': data_index['s_index']["low20"]['county_list']
+                                                        },
+                                                        {
+                                                            key: "Q2", 'value': (data_index['s_index']["Q2"]['deathsdailymean7R']
+                                                                / data_index['s_index']["Q2"]['deathsdailymean7R']) *
+                                                                data_index['s_index']["Q2"]['deathsdailymean7R'] || 0, 'ez': data_index['s_index']["Q2"]['county_list']
+                                                        },
+                                                        {
+                                                            key: "Q3", 'value': (data_index['s_index']["Q3"]['deathsdailymean7R']
+                                                                / data_index['s_index']["Q2"]['deathsdailymean7R'])
+                                                                * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0, 'ez': data_index['s_index']["Q3"]['county_list']
+                                                        },
+                                                        {
+                                                            key: "Q4", 'value': (data_index['s_index']["Q4"]['deathsdailymean7R']
+                                                                / data_index['s_index']["Q2"]['deathsdailymean7R'])
+                                                                * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0, 'ez': data_index['s_index']["Q4"]['county_list']
+                                                        },
+                                                        {
+                                                            key: "Counties with highest\n residential segregation", 'value': (data_index['s_index']["high20"]['deathsdailymean7R']
+                                                                / data_index['s_index']["Q2"]['deathsdailymean7R'])
+                                                                * data_index['s_index']["Q2"]['deathsdailymean7R'] || 0, 'ez': data_index['s_index']["high20"]['county_list']
+                                                        }
                                                     ]}
                                                     labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
                                                     style={{
                                                         data: {
-                                                            fill: mortalityColor[1]
+                                                            fill: ({ datum }) => datum.ez.includes(countyFipssi) ? countyColor : mortalityColor[1]
                                                         }
                                                     }}
                                                     x="key"
@@ -1338,181 +1535,62 @@ export default function StateMap(props) {
 
                                         </Grid.Column>
                                     </Grid.Row>
+                                    <Grid.Row style={{ paddingTop: '0.1em', paddingLeft: '2.9em', paddingRight: '0.1em' }} centered>
+                                        <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
+                                            This chart shows the number of COVID-19 deaths per 100,000 residents as of {dataTS[stateFips + countyFips][0].todaydate === 'n/a' ? 'N/A' :
+                                                (new Date(dataTS[stateFips + countyFips][0].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by residential segregation index.
+                                                    The y-axis displays residential segregation rankings based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 deaths per 100,000 that occurred in each
+                                                    group of counties ranked by residential segregation.
+                        </small>
+                                    </Grid.Row>
+
                                 </Grid.Column>
                             </Grid>
 
 
                             {/* Charactor */}
-                            <center> <Divider id='male' /> </center>
-
+                            <center> <Divider id="urbanrural" hidden style={{ paddingBottom: 50 }} /> </center>
                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 30 }}>
                                 <Header.Content style={{ fontSize: "18pt", color: 'black' }}>
                                     COVID-19 by County Characteristics
               <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0 }}>
                                         {/* <center> <b style={{ fontSize: "18pt" }}>COVID-19 cases per 100,000 across the population characteristics of all the counties in the United States </b> </center> */}
 
-                                        COVID-19 is affecting communities very differently. Underlying medical conditions; racial,
-                                        gender, and age demographics; income levels; and population density are all contributing factors
-                                        that determine the rate of COVID-19 in different counties. Some of the many county characteristics
-                                        that may have a large impact on disparate rates of infection are displayed below, with counties divided
-                                        into quintiles based on each characteristic unless otherwise noted.
+                                        COVID-19 affects communities very differently. Underlying medical conditions;
+                                        racial, gender, and age demographics; income levels; and population density are
+                                        all contributing factors that determine the rate of COVID-19 in different counties.
+                                        Some of the many county characteristics that may have a large impact on disparate rates
+                                        of infection are displayed below, with counties divided into quintiles based on each characteristic,
+                                        unless otherwise noted.
               </Header.Subheader>
                                 </Header.Content>
                             </Header>
-                            {/* Male */}
-                            <Grid style={{ paddingLeft: "7em", paddingRight: "7em" }}>
-                                <Grid.Row columns={2} style={{ paddingTop: 11 }}>
-                                    <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
-                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
-                                            <Header.Content>
-                                                COVID-19 cases by percentage of <br /> male population
-            		                        </Header.Content>
-                                        </Header>
-
-                                        <VictoryChart
-                                            theme={VictoryTheme.material}
-                                            width={500}
-                                            height={220}
-                                            domainPadding={20}
-                                            minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
-                                            style={{ fontSize: "14pt" }}
-                                            containerComponent={<VictoryContainer responsive={false} />}
-                                        >
-
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
-                                                horizontal
-                                                barRatio={0.7}
-                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
-                                                data={[
-                                                    { key: "Lowest 20%", 'value': data_index['male']["low20"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q2", 'value': data_index['male']["Q2"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q3", 'value': data_index['male']["Q3"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q4", 'value': data_index['male']["Q4"]['casesdailymean7R'] || 0 },
-                                                    { key: "Highest 20%", 'value': data_index['male']["high20"]['casesdailymean7R'] || 0 }
-                                                ]}
-                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
-                                                style={{
-                                                    data: {
-                                                        fill: "#487f84"
-                                                    }
-                                                }}
-                                                x="key"
-                                                y="value"
-                                            />
-                                        </VictoryChart>
-
-                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
-                                            <center>
-                                                <br />
-                                                <b>Average Daily COVID-19 Cases per 100,000</b>
-                                            </center>
-                                        </Header.Content>
-
-                                    </Grid.Column>
-                                    <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
-                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
-                                            <Header.Content>
-                                                COVID-19 deaths by percentage of <br /> male population
-                </Header.Content>
-                                        </Header>
-                                        <VictoryChart
-                                            theme={VictoryTheme.material}
-                                            width={500}
-                                            height={220}
-                                            domainPadding={20}
-                                            minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
-                                            style={{ fontSize: "14pt" }}
-                                            containerComponent={<VictoryContainer responsive={false} />}
-                                        >
-
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
-                                                horizontal
-                                                barRatio={0.7}
-                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
-                                                data={[
-                                                    { key: "Lowest 20%", 'value': data_index['male']["low20"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q2", 'value': data_index['male']["Q2"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q3", 'value': data_index['male']["Q3"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q4", 'value': data_index['male']["Q4"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Highest 20%", 'value': data_index['male']["high20"]['deathsdailymean7R'] || 0 }
-                                                ]}
-                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
-                                                style={{
-                                                    data: {
-                                                        fill: mortalityColor[1]
-                                                    }
-                                                }}
-                                                x="key"
-                                                y="value"
-                                            />
-                                        </VictoryChart>
-                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
-                                            <center>
-                                                <br />
-                                                <b>Average Daily COVID-19 Deaths per 100,000</b>
-                                            </center>
-                                        </Header.Content>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                            <Grid>
-                                <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
-                                    <Grid.Column>
-                                        <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
-                                            <Header.Content style={{ fontSize: "14pt" }}>
-                                                <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
-                                                    This figure shows total cases of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Case rates are shown by proportion of county residents who are male. Georgia counties were grouped into 5 categories based on the proportion of male residents.
-                      We can see that in counties with the highest proportion of male residents (highest 20%), the rate is <b>{(data_index['male']["high20"]['casesdailymean7R']).toFixed(0)}</b> cases per 100,000.
-                      In counties with the lowest proportion of male residents (lowest 20%), the rate is <b>{(data_index['male']["low20"]['casesdailymean7R']).toFixed(0)}</b> COVID-19 cases per 100,000.
-					          </Header.Subheader>
-                                            </Header.Content>
-                                        </Header>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
-                                            <Header.Content style={{ fontSize: "14pt" }}>
-                                                <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
-                                                    This figure shows total deaths of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Death rates are shown by proportion of county residents who are male. Georgia counties were grouped into 5 categories based on the proportion of male residents.
-                      We can see that in counties with the highest proportion of male residents (highest 20%), the rate is <b>{(data_index['male']["high20"]['deathsdailymean7R']).toFixed(1)}</b> deaths per 100,000.
-                      In counties with the lowest proportion of male residents (lowest 20%), the rate is <b>{(data_index['male']["low20"]['deathsdailymean7R']).toFixed(1)}</b> COVID-19 deaths per 100,000.
-                    </Header.Subheader>
-                                            </Header.Content>
-                                        </Header>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                            <center> <Divider id="urbanrural" hidden style={{ paddingBottom: 50 }} /> </center>
                             {/* urbanrural */}
                             <Grid id='urbanrural' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
                                 <Grid.Row columns={2} style={{ paddingTop: 11 }}>
                                     <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
                                         <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
                                             <Header.Content>
-                                                COVID-19 cases by Metropolitan Status
-            		</Header.Content>
+                                                COVID-19 case rate by Metropolitan Status
+            		                        </Header.Content>
                                         </Header>
-
                                         <VictoryChart
                                             theme={VictoryTheme.material}
                                             width={500}
                                             height={220}
                                             domainPadding={20}
                                             minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 250, right: 30, top: 30, bottom: -5 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
                                             style={{ fontSize: "13pt" }}
                                             containerComponent={<VictoryContainer responsive={false} />}
                                         >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "transparent" }, grid: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Cases per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} /><VictoryBar
                                                 horizontal
                                                 barRatio={0.7}
                                                 labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
@@ -1546,7 +1624,7 @@ export default function StateMap(props) {
                                     <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
                                         <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
                                             <Header.Content>
-                                                COVID-19 cases by Metropolitan Status
+                                                COVID-19 death rate by Metropolitan Status
                 </Header.Content>
                                         </Header>
 
@@ -1556,12 +1634,17 @@ export default function StateMap(props) {
                                             height={220}
                                             domainPadding={20}
                                             minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 250, right: 40, top: 30, bottom: -5 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
                                             style={{ fontSize: "13pt" }}
                                             containerComponent={<VictoryContainer responsive={false} />}
                                         >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "transparent" }, grid: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
+                                             <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Deaths per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
                                             <VictoryBar
                                                 horizontal
                                                 barRatio={0.7}
@@ -1603,10 +1686,12 @@ export default function StateMap(props) {
                                         <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
                                             <Header.Content style={{ fontSize: "14pt" }}>
                                                 <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
-                                                    This figure shows total cases of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Case rates are shown by proportion of county residents who live in different types of metropolitan areas. Georgia counties were grouped into 6 categories based on metropolitan status. We can see that in small metro areas,
-                      the rate is <b>{(data_index['urbanrural']["NonCore(Nonmetro)"]['casesdailymean7R']).toFixed(0)}</b> cases per 100,000. In large central metros,
-                      the rate is <b>{(data_index['urbanrural']["LargeCentralMetro"]['casesdailymean7R']).toFixed(0)}</b> COVID-19 cases per 100,000.
+                                                    This chart shows the number of COVID-19 cases per 100,000 residents as of  {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by metropolitan status.
+                      The y-axis displays the metropolitan status categories to which counties were assigned. As classified by NCHS, Noncore counties are not in the micropolitan statistical areas; Micropolitan have
+                      10,000 - 49,999 population; small metro has {'<'} 250,000 population; medium metro has 250,000 - 999,999 population; Large fringe have population {'>'} 1 million, but do not qualify as large central; Large
+                          central metro have {'>'} 1 million population and (1) contain the entire population of the largest principle city, (2) the county is contained in the largest principle city, or (3) contain at
+                          least 250,000 residents of any principle city. The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each group of counties categorized by metropolitan status.
 					          </Header.Subheader>
                                             </Header.Content>
                                         </Header>
@@ -1615,279 +1700,12 @@ export default function StateMap(props) {
                                         <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
                                             <Header.Content style={{ fontSize: "14pt" }}>
                                                 <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
-                                                    This figure shows total deaths of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Death rates are shown by proportion of county residents who live in different types of metropolitan areas. Georgia counties were grouped into 6 categories based on metropolitan status. We can see that in small metro areas,
-                      the rate is <b>{(data_index['urbanrural']["NonCore(Nonmetro)"]['deathsdailymean7R']).toFixed(2)}</b> deaths per 100,000. In large central metros,
-                      the rate is <b>{(data_index['urbanrural']["LargeCentralMetro"]['deathsdailymean7R']).toFixed(2)}</b> COVID-19 deaths per 100,000.
-                    </Header.Subheader>
-                                            </Header.Content>
-                                        </Header>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-
-                            <center> <Divider id="age" hidden style={{ paddingBottom: 50 }} /> </center>
-                            {/* age */}
-                            <Grid id='age' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
-                                <Grid.Row columns={2} style={{ paddingTop: 11 }}>
-                                    <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
-                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
-                                            <Header.Content>
-                                                COVID-19 cases by percentage of <br />population over the age 65 years
-            		</Header.Content>
-                                        </Header>
-
-                                        <VictoryChart
-                                            theme={VictoryTheme.material}
-                                            width={500}
-                                            height={220}
-                                            domainPadding={20}
-                                            minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
-                                            style={{ fontSize: "14pt" }}
-                                            containerComponent={<VictoryContainer responsive={false} />}
-                                        >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "transparent" }, grid: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
-                                                horizontal
-                                                barRatio={0.7}
-                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
-                                                data={[
-                                                    { key: "Lowest 20%", 'value': data_index['age65over']["low20"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q2", 'value': data_index['age65over']["Q2"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q3", 'value': data_index['age65over']["Q3"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q4", 'value': data_index['age65over']["Q4"]['casesdailymean7R'] || 0 },
-                                                    { key: "Highest 20%", 'value': data_index['age65over']["high20"]['casesdailymean7R'] || 0 }
-                                                ]}
-                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
-                                                style={{
-                                                    data: {
-                                                        fill: casesColor[1]
-                                                    }
-                                                }}
-                                                x="key"
-                                                y="value"
-                                            />
-                                        </VictoryChart>
-
-                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
-                                            <center>
-                                                <br />
-                                                <b>Average Daily COVID-19 Cases per 100,000</b>
-                                            </center>
-                                        </Header.Content>
-                                    </Grid.Column>
-                                    <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
-                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
-                                            <Header.Content>
-                                                COVID-19 deaths by percentage of <br />population over the age 65 years
-                </Header.Content>
-                                        </Header>
-
-                                        <VictoryChart
-                                            theme={VictoryTheme.material}
-                                            width={500}
-                                            height={220}
-                                            domainPadding={20}
-                                            minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
-                                            style={{ fontSize: "14pt" }}
-                                            containerComponent={<VictoryContainer responsive={false} />}
-                                        >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "transparent" }, grid: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
-                                                horizontal
-                                                barRatio={0.7}
-                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
-                                                data={[
-                                                    { key: "Lowest 20%", 'value': data_index['age65over']["low20"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q2", 'value': data_index['age65over']["Q2"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q3", 'value': data_index['age65over']["Q3"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q4", 'value': data_index['age65over']["Q4"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Highest 20%", 'value': data_index['age65over']["high20"]['deathsdailymean7R'] || 0 }
-                                                ]}
-                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
-                                                style={{
-                                                    data: {
-                                                        fill: mortalityColor[1]
-                                                    }
-                                                }}
-                                                x="key"
-                                                y="value"
-                                            />
-                                        </VictoryChart>
-
-                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
-                                            <center>
-                                                <br />
-                                                <b>Average Daily COVID-19 Deaths per 100,000</b>
-                                            </center>
-                                        </Header.Content>
-
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                            <Grid>
-                                <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
-                                    <Grid.Column>
-                                        <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
-                                            <Header.Content style={{ fontSize: "14pt" }}>
-                                                <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
-                                                    This figure shows total cases of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Case rates are shown by proportion of county residents who are over the age of 65. Georgia counties were grouped into 5 categories based on the proportion of
-                      over the age of 65 residents. We can see that in counties with the highest proportion of residents over the age of 65 years (highest 20%),
-                      the rate is <b>{(data_index['age65over']["high20"]['casesdailymean7R']).toFixed(0)}</b> cases per 100,000. In counties with the lowest proportion of residents over the age of 65 years (lowest 20%),
-                      the rate is <b>{(data_index['age65over']["low20"]['casesdailymean7R']).toFixed(0)}</b> COVID-19 cases per 100,000.
-					          </Header.Subheader>
-                                            </Header.Content>
-                                        </Header>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
-                                            <Header.Content style={{ fontSize: "14pt" }}>
-                                                <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
-                                                    This figure shows total deaths of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Death rates are shown by proportion of county residents who are over the age of 65. Georgia counties were grouped into 5 categories based on the proportion of
-                      over the age of 65 residents. We can see that in counties with the highest proportion of residents over the age of 65 years (highest 20%),
-                      the rate is <b>{(data_index['age65over']["high20"]['deathsdailymean7R']).toFixed(2)}</b> deaths per 100,000. In counties with the lowest proportion of residents over the age of 65 years (lowest 20%),
-                      the rate is <b>{(data_index['age65over']["low20"]['deathsdailymean7R']).toFixed(2)}</b> COVID-19 deaths per 100,000.
-                    </Header.Subheader>
-                                            </Header.Content>
-                                        </Header>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                            <center> <Divider id="black" hidden style={{ paddingBottom: 50 }} /> </center>
-                            {/* black */}
-                            <Grid id='black' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
-                                <Grid.Row columns={2} style={{ paddingTop: '2em' }}>
-                                    <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
-                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
-                                            <Header.Content>
-                                                COVID-19 cases by percentage of <br />African American population
-            		</Header.Content>
-                                        </Header>
-
-                                        <VictoryChart
-                                            theme={VictoryTheme.material}
-                                            width={500}
-                                            height={220}
-                                            domainPadding={20}
-                                            minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
-                                            style={{ fontSize: "14pt" }}
-                                            containerComponent={<VictoryContainer responsive={false} />}
-                                        >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
-                                                horizontal
-                                                barRatio={0.7}
-                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
-                                                data={[
-                                                    { key: "Lowest 20%", 'value': data_index['black']["low20"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q2", 'value': data_index['black']["Q2"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q3", 'value': data_index['black']["Q3"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q4", 'value': data_index['black']["Q4"]['casesdailymean7R'] || 0 },
-                                                    { key: "Highest 20%", 'value': data_index['black']["high20"]['casesdailymean7R'] || 0 }
-                                                ]}
-                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
-                                                style={{
-                                                    data: {
-                                                        fill: "#487f84"
-                                                    }
-                                                }}
-                                                x="key"
-                                                y="value"
-                                            />
-                                        </VictoryChart>
-
-                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
-                                            <center>
-                                                <br />
-                                                <b>Average Daily COVID-19 Cases per 100,000</b>
-                                            </center>
-                                        </Header.Content>
-
-                                    </Grid.Column>
-                                    <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
-                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
-                                            <Header.Content>
-                                                COVID-19 deaths by percentage of <br />African American population
-                </Header.Content>
-                                        </Header>
-
-                                        <VictoryChart
-                                            theme={VictoryTheme.material}
-                                            width={500}
-                                            height={220}
-                                            domainPadding={20}
-                                            minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
-                                            style={{ fontSize: "14pt" }}
-                                            containerComponent={<VictoryContainer responsive={false} />}
-                                        >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
-                                                horizontal
-                                                barRatio={0.7}
-                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
-                                                data={[
-                                                    { key: "Lowest 20%", 'value': data_index['black']["low20"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q2", 'value': data_index['black']["Q2"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q3", 'value': data_index['black']["Q3"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q4", 'value': data_index['black']["Q4"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Highest 20%", 'value': data_index['black']["high20"]['deathsdailymean7R'] || 0 }
-                                                ]}
-                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
-                                                style={{
-                                                    data: {
-                                                        fill: mortalityColor[1]
-                                                    }
-                                                }}
-                                                x="key"
-                                                y="value"
-                                            />
-                                        </VictoryChart>
-
-
-                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
-                                            <center>
-                                                <br />
-                                                <b>Average Daily COVID-19 Deaths per 100,000</b>
-                                            </center>
-                                        </Header.Content>
-
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                            <Grid>
-                                <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
-                                    <Grid.Column>
-                                        <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 132 }}>
-                                            <Header.Content>
-                                                <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
-                                                    This figure shows total cases of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Case rates are shown by proportion of county residents who are African American. Georgia counties were grouped into 5 categories based on the proportion of
-                      African American residents. We can see that in counties with the highest proportion of African American residents (highest 20%),
-                      the rate is <b>{(data_index['black']["high20"]['casesdailymean7R']).toFixed(0)}</b> cases per 100,000. In counties with the lowest proportion of African American residents (lowest 20%),
-                      the rate is <b>{(data_index['black']["low20"]['casesdailymean7R']).toFixed(0)}</b> COVID-19 cases per 100,000.
-					          </Header.Subheader>
-                                            </Header.Content>
-                                        </Header>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
-                                            <Header.Content>
-                                                <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
-                                                    This figure shows total deaths of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Death rates are shown by proportion of county residents who are African American. Georgia counties were grouped into 5 categories based on the proportion of
-                      African American residents. We can see that in counties with the highest proportion of African American residents (highest 20%),
-                      the rate is <b>{(data_index['black']["high20"]['deathsdailymean7R']).toFixed(2)}</b> deaths per 100,000. In counties with the lowest proportion of African American residents (lowest 20%),
-                      the rate is <b>{(data_index['black']["low20"]['deathsdailymean7R']).toFixed(2)}</b> COVID-19 deaths per 100,000.
+                                                    This chart shows the number of COVID-19 cases per 100,000 residents as of  {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by metropolitan status.
+                      The y-axis displays the metropolitan status categories to which counties were assigned. As classified by NCHS, Noncore counties are not in the micropolitan statistical areas; Micropolitan have
+                      10,000 - 49,999 population; small metro has {'<'} 250,000 population; medium metro has 250,000 - 999,999 population; Large fringe have population {'>'} 1 million, but do not qualify as large central; Large
+                          central metro have {'>'} 1 million population and (1) contain the entire population of the largest principle city, (2) the county is contained in the largest principle city, or (3) contain at
+                          least 250,000 residents of any principle city. The x-axis displays the average number of COVID-19 deaths per 100,000 that occurred in each group of counties categorized by metropolitan status.
                     </Header.Subheader>
                                             </Header.Content>
                                         </Header>
@@ -1895,15 +1713,14 @@ export default function StateMap(props) {
                                 </Grid.Row>
                             </Grid>
                             <center> <Divider id="poverty" hidden style={{ paddingBottom: 50 }} /> </center>
-
                             {/* poverty */}
                             <Grid id='poverty' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
                                 <Grid.Row columns={2} style={{ paddingTop: '2em' }}>
                                     <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
                                         <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
                                             <Header.Content>
-                                                COVID-19 cases by percentage of <br />population in poverty
-            		</Header.Content>
+                                                COVID-19 case rate by percentage of <br />population in poverty
+</Header.Content>
                                         </Header>
                                         <VictoryChart
                                             theme={VictoryTheme.material}
@@ -1911,12 +1728,17 @@ export default function StateMap(props) {
                                             height={220}
                                             domainPadding={20}
                                             minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
                                             style={{ fontSize: "14pt" }}
                                             containerComponent={<VictoryContainer responsive={false} />}
                                         >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Cases per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
                                             <VictoryBar
                                                 horizontal
                                                 barRatio={0.7}
@@ -1950,8 +1772,8 @@ export default function StateMap(props) {
                                     <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
                                         <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
                                             <Header.Content>
-                                                COVID-19 deaths by percentage of <br />population in poverty
-                </Header.Content>
+                                                COVID-19 death rate by percentage of <br />population in poverty
+</Header.Content>
                                         </Header>
                                         <VictoryChart
                                             theme={VictoryTheme.material}
@@ -1959,12 +1781,17 @@ export default function StateMap(props) {
                                             height={220}
                                             domainPadding={20}
                                             minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
                                             style={{ fontSize: "14pt" }}
                                             containerComponent={<VictoryContainer responsive={false} />}
                                         >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Deaths per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
                                             <VictoryBar
                                                 horizontal
                                                 barRatio={0.7}
@@ -2003,12 +1830,11 @@ export default function StateMap(props) {
                                         <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 132 }}>
                                             <Header.Content>
                                                 <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
-                                                    This figure shows total cases of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Case rates are shown by proportion of county residents who are below the federal poverty line. Georgia counties were grouped into 5 categories based on the proportion of
-                      residents in poverty. We can see that in counties with the highest proportion of residents in poverty (highest 20%),
-                      the rate is <b>{(data_index['poverty']["high20"]['casesdailymean7R']).toFixed(0)}</b> cases per 100,000. In counties with the lowest proportion of residents in poverty (lowest 20%),
-                       the rate is <b>{(data_index['poverty']["low20"]['casesdailymean7R']).toFixed(0)}</b> COVID-19 cases per 100,000.
-					          </Header.Subheader>
+                                                    This chart shows the number of COVID-19 cases per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by
+                                                    county ranking on percentage of population in poverty. The y-axis displays percentage population in poverty rankings for counties based on quintiles
+                                                    (groups of 20%). The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each group of counties ranked by percentage population in poverty.
+  </Header.Subheader>
                                             </Header.Content>
                                         </Header>
                                     </Grid.Column>
@@ -2016,50 +1842,54 @@ export default function StateMap(props) {
                                         <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
                                             <Header.Content>
                                                 <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
-                                                    This figure shows total deaths of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Death rates are shown by proportion of county residents who are below the federal poverty line. Georgia counties were grouped into 5 categories based on the proportion of
-                      residents in poverty. We can see that in counties with the highest proportion of residents in poverty (highest 20%),
-                      the rate is <b>{(data_index['poverty']["high20"]['deathsdailymean7R']).toFixed(2)}</b> deaths per 100,000. In counties with the lowest proportion of residents in poverty (lowest 20%),
-                       the rate is <b>{(data_index['poverty']["low20"]['deathsdailymean7R']).toFixed(2)}</b> COVID-19 deaths per 100,000.
-                    </Header.Subheader>
+                                                    This chart shows the number of COVID-19 deaths per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by
+                                                    county ranking on percentage of population in poverty. The y-axis displays percentage population in poverty rankings for counties based on quintiles
+                                                    (groups of 20%). The x-axis displays the average number of COVID-19 deaths per 100,000 that occurred in each group of counties ranked by percentage population in poverty.
+</Header.Subheader>
                                             </Header.Content>
                                         </Header>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
-                            <center> <Divider id="diabetes" hidden style={{ paddingBottom: 50 }} /> </center>
-
-                            {/* diabetes */}
-                            <Grid id='diabetes' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
+                            <center> <Divider id="black" hidden style={{ paddingBottom: 50 }} /> </center>
+                            {/* black */}
+                            <Grid id='black' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
                                 <Grid.Row columns={2} style={{ paddingTop: '2em' }}>
                                     <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
-                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
+                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
                                             <Header.Content>
-                                                COVID-19 cases by percentage of <br />population with diabetes
+                                                COVID-19 case rate by percentage of <br />African American population
             		</Header.Content>
                                         </Header>
+
                                         <VictoryChart
                                             theme={VictoryTheme.material}
                                             width={500}
                                             height={220}
                                             domainPadding={20}
                                             minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
                                             style={{ fontSize: "14pt" }}
                                             containerComponent={<VictoryContainer responsive={false} />}
                                         >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Cases per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
                                                 horizontal
                                                 barRatio={0.7}
                                                 labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
                                                 data={[
-                                                    { key: "Lowest 20%", 'value': data_index['diabetes']["low20"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q2", 'value': data_index['diabetes']["Q2"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q3", 'value': data_index['diabetes']["Q3"]['casesdailymean7R'] || 0 },
-                                                    { key: "Q4", 'value': data_index['diabetes']["Q4"]['casesdailymean7R'] || 0 },
-                                                    { key: "Highest 20%", 'value': data_index['diabetes']["high20"]['casesdailymean7R'] || 0 }
+                                                    { key: "Lowest 20%", 'value': data_index['black']["low20"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q2", 'value': data_index['black']["Q2"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q3", 'value': data_index['black']["Q3"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q4", 'value': data_index['black']["Q4"]['casesdailymean7R'] || 0 },
+                                                    { key: "Highest 20%", 'value': data_index['black']["high20"]['casesdailymean7R'] || 0 }
                                                 ]}
                                                 labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
                                                 style={{
@@ -2083,31 +1913,37 @@ export default function StateMap(props) {
                                     <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
                                         <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
                                             <Header.Content>
-                                                COVID-19 deaths by percentage of <br />population with diabetes
+                                                COVID-19 death rate by percentage of <br />African American population
                 </Header.Content>
                                         </Header>
+
                                         <VictoryChart
                                             theme={VictoryTheme.material}
                                             width={500}
                                             height={220}
                                             domainPadding={20}
                                             minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
                                             style={{ fontSize: "14pt" }}
                                             containerComponent={<VictoryContainer responsive={false} />}
                                         >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Deaths per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
                                                 horizontal
                                                 barRatio={0.7}
                                                 labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
                                                 data={[
-                                                    { key: "Lowest 20%", 'value': data_index['diabetes']["low20"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q2", 'value': data_index['diabetes']["Q2"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q3", 'value': data_index['diabetes']["Q3"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Q4", 'value': data_index['diabetes']["Q4"]['deathsdailymean7R'] || 0 },
-                                                    { key: "Highest 20%", 'value': data_index['diabetes']["high20"]['deathsdailymean7R'] || 0 }
+                                                    { key: "Lowest 20%", 'value': data_index['black']["low20"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q2", 'value': data_index['black']["Q2"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q3", 'value': data_index['black']["Q3"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q4", 'value': data_index['black']["Q4"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Highest 20%", 'value': data_index['black']["high20"]['deathsdailymean7R'] || 0 }
                                                 ]}
                                                 labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
                                                 style={{
@@ -2119,6 +1955,7 @@ export default function StateMap(props) {
                                                 y="value"
                                             />
                                         </VictoryChart>
+
 
                                         <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
                                             <center>
@@ -2136,11 +1973,9 @@ export default function StateMap(props) {
                                         <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 132 }}>
                                             <Header.Content>
                                                 <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
-                                                    This figure shows total cases of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Case rates are shown by proportion of county residents who have diabetes. Georgia counties were grouped into 5 categories based on the proportion of
-                      residents with diabetes. We can see that in counties with the highest proportion of residents with diabetes (highest 20%),
-                      the rate is <b>{(data_index['diabetes']["high20"]['casesdailymean7R']).toFixed(0)}</b> cases per 100,000. In counties with the lowest proportion of residents with diabetes (lowest 20%),
-                      the rate is <b>{(data_index['diabetes']["low20"]['casesdailymean7R']).toFixed(0)}</b> COVID-19 cases per 100,000
+                                                    This chart shows the number of COVID-19 cases per 100,000 residents as of  {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by percentage African American population ranking. The y-axis displays percentage African American population rankings based on quintiles (groups of 20%).
+                                                The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each group of counties ranked by percentage African American.
 					          </Header.Subheader>
                                             </Header.Content>
                                         </Header>
@@ -2149,11 +1984,9 @@ export default function StateMap(props) {
                                         <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
                                             <Header.Content>
                                                 <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
-                                                    This figure shows total deaths of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Death rates are shown by proportion of county residents who have diabetes. Georgia counties were grouped into 5 categories based on the proportion of
-                      residents with diabetes. We can see that in counties with the highest proportion of residents with diabetes (highest 20%),
-                      the rate is <b>{(data_index['diabetes']["high20"]['deathsdailymean7R']).toFixed(2)}</b> deaths per 100,000. In counties with the lowest proportion of residents with diabetes (lowest 20%),
-                      the rate is <b>{(data_index['diabetes']["low20"]['deathsdailymean7R']).toFixed(2)}</b> COVID-19 deaths per 100,000
+                                                    This chart shows the number of COVID-19 deaths per 100,000 residents as of  {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by percentage African American population ranking. The y-axis displays percentage African American population rankings based on quintiles (groups of 20%).
+                                                The x-axis displays the average number of COVID-19 deaths per 100,000 that occurred in each group of counties ranked by percentage African American.
                     </Header.Subheader>
                                             </Header.Content>
                                         </Header>
@@ -2161,14 +1994,13 @@ export default function StateMap(props) {
                                 </Grid.Row>
                             </Grid>
                             <center> <Divider id="hispanic" hidden style={{ paddingBottom: 50 }} /> </center>
-
                             {/* Hispanic */}
                             <Grid id='hispanic' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
                                 <Grid.Row columns={2} style={{ paddingTop: '2em' }}>
                                     <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
                                         <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
                                             <Header.Content>
-                                                COVID-19 cases by percentage of <br /> Hispanic population
+                                                COVID-19 case rate by percentage of <br /> Hispanic population
             		</Header.Content>
                                         </Header>
 
@@ -2178,13 +2010,18 @@ export default function StateMap(props) {
                                             height={220}
                                             domainPadding={20}
                                             minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
                                             style={{ fontSize: "14pt" }}
                                             containerComponent={<VictoryContainer responsive={false} />}
                                         >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Cases per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
                                                 horizontal
                                                 barRatio={0.7}
                                                 labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
@@ -2217,7 +2054,7 @@ export default function StateMap(props) {
                                     <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
                                         <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
                                             <Header.Content>
-                                                COVID-19 deaths by percentage of <br /> Hispanic population
+                                                COVID-19 death rate by percentage of <br /> Hispanic population
                 </Header.Content>
                                         </Header>
 
@@ -2227,13 +2064,18 @@ export default function StateMap(props) {
                                             height={220}
                                             domainPadding={20}
                                             minDomain={{ y: props.ylog ? 1 : 0 }}
-                                            padding={{ left: 160, right: 30, top: 30, bottom: -5 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
                                             style={{ fontSize: "14pt" }}
                                             containerComponent={<VictoryContainer responsive={false} />}
                                         >
-                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
-                                            <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            <VictoryBar
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Deaths per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
                                                 horizontal
                                                 barRatio={0.7}
                                                 labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(3))}
@@ -2271,11 +2113,9 @@ export default function StateMap(props) {
                                         <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 132 }}>
                                             <Header.Content>
                                                 <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
-                                                    This figure shows total deaths of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Case rates are shown by proportion of county residents who are Hispanic. Georgia counties were grouped into 5 categories based on the proportion of
-                      Hispanic residents. We can see that in counties with the highest proportion of Hispanic residents (highest 20%),
-                      the rate is <b>{(data_index['hispanic']["high20"]['deathsdailymean7R']).toFixed(2)}</b> deaths per 100,000. In counties with the lowest proportion of Hispanic residents (lowest 20%),
-                      the rate is <b>{(data_index['hispanic']["low20"]['deathsdailymean7R']).toFixed(2)}</b> COVID-19 deaths per 100,000.
+                                                    This chart shows the number of COVID-19 cases per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by percentage Hispanic population ranking. The y-axis displays percentage Hispanic population rankings based on quintiles (groups of 20%).
+                                                The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each group of counties ranked by percentage Hispanic.
                     </Header.Subheader>
                                             </Header.Content>
                                         </Header>
@@ -2284,11 +2124,287 @@ export default function StateMap(props) {
                                         <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
                                             <Header.Content>
                                                 <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
-                                                    This figure shows total deaths of COVID-19 per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}.
-                      Death rates are shown by proportion of county residents who are Hispanic. Georgia counties were grouped into 5 categories based on the proportion of
-                      Hispanic residents. We can see that in counties with the highest proportion of Hispanic residents (highest 20%),
-                      the rate is <b>{(data_index['hispanic']["high20"]['deathsdailymean7R']).toFixed(2)}</b> deaths per 100,000. In counties with the lowest proportion of Hispanic residents (lowest 20%),
-                      the rate is <b>{(data_index['hispanic']["low20"]['deathsdailymean7R']).toFixed(2)}</b> COVID-19 deaths per 100,000.
+                                                    This chart shows the number of COVID-19 deaths per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by percentage Hispanic population ranking.
+                                                The y-axis displays percentage Hispanic population rankings based on quintiles (groups of 20%). The x-axis displays the average number
+                                                of COVID-19 deaths per 100,000 that occurred in each group of counties ranked by percentage Hispanic.
+                    </Header.Subheader>
+                                            </Header.Content>
+                                        </Header>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                            <center> <Divider id="diabetes" hidden style={{ paddingBottom: 50 }} /> </center>
+
+                            {/* diabetes */}
+                            <Grid id='diabetes' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
+                                <Grid.Row columns={2} style={{ paddingTop: '2em' }}>
+                                    <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
+                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
+                                            <Header.Content>
+                                                COVID-19 case rate by percentage of <br />population with diabetes
+</Header.Content>
+                                        </Header>
+                                        <VictoryChart
+                                            theme={VictoryTheme.material}
+                                            width={500}
+                                            height={220}
+                                            domainPadding={20}
+                                            minDomain={{ y: props.ylog ? 1 : 0 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
+                                            style={{ fontSize: "14pt" }}
+                                            containerComponent={<VictoryContainer responsive={false} />}
+                                        >
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Cases per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
+                                                horizontal
+                                                barRatio={0.7}
+                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
+                                                data={[
+                                                    { key: "Lowest 20%", 'value': data_index['diabetes']["low20"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q2", 'value': data_index['diabetes']["Q2"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q3", 'value': data_index['diabetes']["Q3"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q4", 'value': data_index['diabetes']["Q4"]['casesdailymean7R'] || 0 },
+                                                    { key: "Highest 20%", 'value': data_index['diabetes']["high20"]['casesdailymean7R'] || 0 }
+                                                ]}
+                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
+                                                style={{
+                                                    data: {
+                                                        fill: "#487f84"
+                                                    }
+                                                }}
+                                                x="key"
+                                                y="value"
+                                            />
+                                        </VictoryChart>
+
+                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
+                                            <center>
+                                                <br />
+                                                <b>Average Daily COVID-19 Cases per 100,000</b>
+                                            </center>
+                                        </Header.Content>
+
+                                    </Grid.Column>
+                                    <Grid.Column style={{ paddingTop: 10, paddingBottom: 18 }}>
+                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
+                                            <Header.Content>
+                                                COVID-19 death rate by percentage of <br />population with diabetes
+</Header.Content>
+                                        </Header>
+                                        <VictoryChart
+                                            theme={VictoryTheme.material}
+                                            width={500}
+                                            height={220}
+                                            domainPadding={20}
+                                            minDomain={{ y: props.ylog ? 1 : 0 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
+                                            style={{ fontSize: "14pt" }}
+                                            containerComponent={<VictoryContainer responsive={false} />}
+                                        >
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Deaths per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
+                                                horizontal
+                                                barRatio={0.7}
+                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
+                                                data={[
+                                                    { key: "Lowest 20%", 'value': data_index['diabetes']["low20"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q2", 'value': data_index['diabetes']["Q2"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q3", 'value': data_index['diabetes']["Q3"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q4", 'value': data_index['diabetes']["Q4"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Highest 20%", 'value': data_index['diabetes']["high20"]['deathsdailymean7R'] || 0 }
+                                                ]}
+                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
+                                                style={{
+                                                    data: {
+                                                        fill: mortalityColor[1]
+                                                    }
+                                                }}
+                                                x="key"
+                                                y="value"
+                                            />
+                                        </VictoryChart>
+
+                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
+                                            <center>
+                                                <br />
+                                                <b>Average Daily COVID-19 Deaths per 100,000</b>
+                                            </center>
+                                        </Header.Content>
+
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                            <Grid>
+                                <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
+                                    <Grid.Column>
+                                        <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 132 }}>
+                                            <Header.Content>
+                                                <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
+                                                    This chart shows the number of COVID-19 cases per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by county ranking on percentage of population with diabetes.
+                    The y-axis displays percentage population with diabetes rankings for counties based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each group of counties ranked by percentage population with diabetes.
+  </Header.Subheader>
+                                            </Header.Content>
+                                        </Header>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
+                                            <Header.Content>
+                                                <Header.Subheader style={{ color: '#000000', width: 450, fontSize: "14pt", textAlign: 'justify', lineHeight: "16pt" }}>
+                                                    This chart shows the number of COVID-19 deaths per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by county ranking on percentage of population with diabetes.
+                    The y-axis displays percentage population with diabetes rankings for counties based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 deaths per 100,000 that occurred in each group of counties ranked by percentage population with diabetes.
+</Header.Subheader>
+                                            </Header.Content>
+                                        </Header>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                            <center> <Divider id="age" hidden style={{ paddingBottom: 50 }} /> </center>
+                            {/* age */}
+                            <Grid id='age' style={{ paddingLeft: "7em", paddingRight: "7em" }}>
+                                <Grid.Row columns={2} style={{ paddingTop: 11 }}>
+                                    <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
+                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
+                                            <Header.Content>
+                                                COVID-19 case rate by percentage of <br />population over the age 65 years
+            		</Header.Content>
+                                        </Header>
+
+                                        <VictoryChart
+                                            theme={VictoryTheme.material}
+                                            width={500}
+                                            height={220}
+                                            domainPadding={20}
+                                            minDomain={{ y: props.ylog ? 1 : 0 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
+                                            style={{ fontSize: "14pt" }}
+                                            containerComponent={<VictoryContainer responsive={false} />}
+                                        >
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Cases per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
+                                                horizontal
+                                                barRatio={0.7}
+                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
+                                                data={[
+                                                    { key: "Lowest 20%", 'value': data_index['age65over']["low20"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q2", 'value': data_index['age65over']["Q2"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q3", 'value': data_index['age65over']["Q3"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q4", 'value': data_index['age65over']["Q4"]['casesdailymean7R'] || 0 },
+                                                    { key: "Highest 20%", 'value': data_index['age65over']["high20"]['casesdailymean7R'] || 0 }
+                                                ]}
+                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
+                                                style={{
+                                                    data: {
+                                                        fill: casesColor[1]
+                                                    }
+                                                }}
+                                                x="key"
+                                                y="value"
+                                            />
+                                        </VictoryChart>
+
+                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
+                                            <center>
+                                                <br />
+                                                <b>Average Daily COVID-19 Cases per 100,000</b>
+                                            </center>
+                                        </Header.Content>
+                                    </Grid.Column>
+                                    <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
+                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "18pt" }}>
+                                            <Header.Content>
+                                                COVID-19 death rate by percentage of <br />population over the age 65 years
+                </Header.Content>
+                                        </Header>
+
+                                        <VictoryChart
+                                            theme={VictoryTheme.material}
+                                            width={500}
+                                            height={220}
+                                            domainPadding={20}
+                                            minDomain={{ y: props.ylog ? 1 : 0 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
+                                            style={{ fontSize: "14pt" }}
+                                            containerComponent={<VictoryContainer responsive={false} />}
+                                        >
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Deaths per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
+                                                horizontal
+                                                barRatio={0.7}
+                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
+                                                data={[
+                                                    { key: "Lowest 20%", 'value': data_index['age65over']["low20"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q2", 'value': data_index['age65over']["Q2"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q3", 'value': data_index['age65over']["Q3"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q4", 'value': data_index['age65over']["Q4"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Highest 20%", 'value': data_index['age65over']["high20"]['deathsdailymean7R'] || 0 }
+                                                ]}
+                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
+                                                style={{
+                                                    data: {
+                                                        fill: mortalityColor[1]
+                                                    }
+                                                }}
+                                                x="key"
+                                                y="value"
+                                            />
+                                        </VictoryChart>
+
+                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
+                                            <center>
+                                                <br />
+                                                <b>Average Daily COVID-19 Deaths per 100,000</b>
+                                            </center>
+                                        </Header.Content>
+
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                            <Grid>
+                                <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
+                                    <Grid.Column>
+                                        <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
+                                            <Header.Content style={{ fontSize: "14pt" }}>
+                                                <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
+                                                    This chart shows the number of COVID-19 cases per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by county ranking on percentage of population over 65 years.
+                                                The y-axis displays percentage population over 65 rankings for counties based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each group of counties ranked by percentage population over 65 years.
+					          </Header.Subheader>
+                                            </Header.Content>
+                                        </Header>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
+                                            <Header.Content style={{ fontSize: "14pt" }}>
+                                                <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
+                                                    This chart shows the number of COVID-19 deaths per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by county ranking on percentage of population over 65 years.
+                                                The y-axis displays percentage population over 65 rankings for counties based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 deaths per 100,000 that occurred in each group of counties ranked by percentage population over 65 years.
                     </Header.Subheader>
                                             </Header.Content>
                                         </Header>
@@ -2296,13 +2412,143 @@ export default function StateMap(props) {
                                 </Grid.Row>
                             </Grid>
 
+                            <center> <Divider id='male' hidden style={{ paddingBottom: 50 }} /> </center>
+                            {/* Male */}
+                            <Grid style={{ paddingLeft: "7em", paddingRight: "7em" }}>
+                                <Grid.Row columns={2} style={{ paddingTop: 11 }}>
+                                    <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
+                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
+                                            <Header.Content>
+                                                COVID-19 case rate by percentage of <br /> male population
+            		                        </Header.Content>
+                                        </Header>
 
+                                        <VictoryChart
+                                            theme={VictoryTheme.material}
+                                            width={500}
+                                            height={220}
+                                            domainPadding={20}
+                                            minDomain={{ y: props.ylog ? 1 : 0 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
+                                            style={{ fontSize: "14pt" }}
+                                            containerComponent={<VictoryContainer responsive={false} />}
+                                        >
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Cases per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
+                                                horizontal
+                                                barRatio={0.7}
+                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
+                                                data={[
+                                                    { key: "Lowest 20%", 'value': data_index['male']["low20"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q2", 'value': data_index['male']["Q2"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q3", 'value': data_index['male']["Q3"]['casesdailymean7R'] || 0 },
+                                                    { key: "Q4", 'value': data_index['male']["Q4"]['casesdailymean7R'] || 0 },
+                                                    { key: "Highest 20%", 'value': data_index['male']["high20"]['casesdailymean7R'] || 0 }
+                                                ]}
+                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
+                                                style={{
+                                                    data: {
+                                                        fill: "#487f84"
+                                                    }
+                                                }}
+                                                x="key"
+                                                y="value"
+                                            />
+                                        </VictoryChart>
 
+                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
+                                            <center>
+                                                <br />
+                                                <b>Average Daily COVID-19 Cases per 100,000</b>
+                                            </center>
+                                        </Header.Content>
 
-
-
-
-
+                                    </Grid.Column>
+                                    <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
+                                        <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt" }}>
+                                            <Header.Content>
+                                                COVID-19 death rate by percentage of <br /> male population
+                </Header.Content>
+                                        </Header>
+                                        <VictoryChart
+                                            theme={VictoryTheme.material}
+                                            width={500}
+                                            height={220}
+                                            domainPadding={20}
+                                            minDomain={{ y: props.ylog ? 1 : 0 }}
+                                            padding={{ left: 250, right: 30, top: 30, bottom: 35 }}
+                                            style={{ fontSize: "14pt" }}
+                                            containerComponent={<VictoryContainer responsive={false} />}
+                                        >
+                                            <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
+                                            <VictoryAxis dependentAxis
+                                                label={"COVID-19 Deaths per\n 100,000 Residents"}
+                                                style={{
+                                                    ticks: { stroke: "transparent" }, grid: { stroke: "transparent" }, axis: { stroke: "#000000" }, axisLabel: { fontSize: "14px", fill: '#000000', fontFamily: 'lato' },
+                                                    labels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' }, tickLabels: { fontSize: "0px", fill: '#000000', padding: 10, fontFamily: 'lato' }
+                                                }} />
+                                                <VictoryBar
+                                                horizontal
+                                                barRatio={0.7}
+                                                labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(2))}
+                                                data={[
+                                                    { key: "Lowest 20%", 'value': data_index['male']["low20"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q2", 'value': data_index['male']["Q2"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q3", 'value': data_index['male']["Q3"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Q4", 'value': data_index['male']["Q4"]['deathsdailymean7R'] || 0 },
+                                                    { key: "Highest 20%", 'value': data_index['male']["high20"]['deathsdailymean7R'] || 0 }
+                                                ]}
+                                                labelComponent={<VictoryLabel dx={5} style={{ fontFamily: 'lato', fontSize: "20px", fill: "#000000" }} />}
+                                                style={{
+                                                    data: {
+                                                        fill: mortalityColor[1]
+                                                    }
+                                                }}
+                                                x="key"
+                                                y="value"
+                                            />
+                                        </VictoryChart>
+                                        <Header.Content style={{ fontWeight: 300, paddingBottom: 10, fontSize: "14pt", lineHeight: "18pt" }}>
+                                            <center>
+                                                <br />
+                                                <b>Average Daily COVID-19 Deaths per 100,000</b>
+                                            </center>
+                                        </Header.Content>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                            <Grid>
+                                <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
+                                    <Grid.Column>
+                                        <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
+                                            <Header.Content style={{ fontSize: "14pt" }}>
+                                                <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
+                                                    This chart shows the number of COVID-19 cases per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by percentage male population ranking.
+                                                The y-axis displays percentage male rankings for counties based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 cases per 100,000 that occurred in each group of counties ranked by percentage male.
+					          </Header.Subheader>
+                                            </Header.Content>
+                                        </Header>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 33 }}>
+                                            <Header.Content style={{ fontSize: "14pt" }}>
+                                                <Header.Subheader style={{ color: '#000000', lineHeight: "16pt", width: 450, fontSize: "14pt", textAlign: 'justify' }}>
+                                                    This chart shows the number of COVID-19 deaths per 100,000 residents as of {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                        (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))} by percentage male population ranking.
+                                                The y-axis displays percentage male rankings for counties based on quintiles (groups of 20%). The x-axis displays the average number of COVID-19 deaths per 100,000 that occurred in each group of counties ranked by percentage male.
+                    </Header.Subheader>
+                                            </Header.Content>
+                                        </Header>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
                         </div>
                     }
                     <Notes />
@@ -2318,11 +2564,8 @@ export default function StateMap(props) {
                     <b>Click to see county-level data.</b> </ReactTooltip>
             </div>
         );
-    } else {
+    }
+    else {
         return <Loader active inline='centered' />
     }
-
-
-
-
 }
