@@ -119,11 +119,13 @@ function BarChart(props) {
         <VictoryAxis style={{
           tickLabels: { fontSize: 18, padding: 2 }
         }} />
-        <VictoryAxis dependentAxis style={{
+        <VictoryAxis dependentAxis 
+        domain={[0, 1]}
+        style={{
           tickLabels: { fontSize: 18, padding: 2 }
         }}
-          tickFormat={(y) => (y < 1 ? y*100 : (y / 1000 + 'k'))} />
-          <VictoryLegend x={90} y={40}
+          tickFormat={(y) => (y <= 1 ? y*100 : (y / 1000 + 'k'))} />
+          <VictoryLegend x={80} y={40}
           orientation="horizontal"
           gutter={1}
           // style={{ border: { stroke: "black" } }}
@@ -208,11 +210,13 @@ function BarChart(props) {
         <VictoryAxis style={{
           tickLabels: { fontSize: 18, padding: 2 }
         }} />
-        <VictoryAxis dependentAxis style={{
+        <VictoryAxis dependentAxis 
+        domain={[0, 1]}
+        style={{
           tickLabels: { fontSize: 18, padding: 2 }
         }}
-          tickFormat={(y) => (y < 1 ? y*100  : (y / 1000 + 'k'))} />
-        <VictoryLegend x={90} y={40}
+          tickFormat={(y) => (y <= 1 ? y*100  : (y / 1000 + 'k'))} />
+        <VictoryLegend x={80} y={40}
           orientation="horizontal"
           gutter={1}
           // style={{ border: { stroke: "black" } }}
@@ -1034,7 +1038,7 @@ export default function CountyReport() {
 
                 </Grid.Row>
               </Grid>
-              <Divider horizontal style={{ fontWeight: 600, color: '#232423', fontSize: '16pt', paddingTop: '1em', paddingBottom: "0em" }}>Confirmed cases per capita by demographic group in {countyName}</Divider>
+              <Divider horizontal style={{ fontWeight: 600, color: '#232423', fontSize: '16pt', paddingTop: '1em', paddingBottom: "0em" }}>Percentage of Confirmed Cases by Demographic Group in {countyName}</Divider>
               <Grid style={{ width: "1260px" }}>
                 {datades_cases[stateFips + countyFips]['NObs'] < 50 && datades_cases[stateFips + countyFips]['outcome'] === 'COVID Death' ?
                   <Header as='h2' style={{ fontWeight: 400 }}>
@@ -1092,24 +1096,24 @@ export default function CountyReport() {
                 }
                 {datades_cases[stateFips + countyFips]['NObs'] < 50 && datades_cases[stateFips + countyFips]['outcome'] === 'COVID Death' ? ' ' :
                   <Grid.Row columns={3} style={{ padding: 0 }}>
-                    <Grid.Column style={{ paddingLeft: '3em', paddingRight: '0em' }}>
+                    <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                       <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                        This chart shows the number of total cases per 100,000 residents by age group for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['age4catPmiss'].toFixed(2)}% of confirmed cases who were missing information on age.
+                      This chart shows the percentage of cases and percentage of the population by age for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['age4catPmiss'].toFixed(2)}% of confirmed cases who were missing information on age.
                     </small>
                     </Grid.Column>
-                    <Grid.Column style={{ paddingLeft: '2em', paddingRight: '0em' }}>
+                    <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                       <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                        This chart shows the number of total cases per 100,000 residents by sex for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['femalePmiss'].toFixed(2)}% of confirmed cases who were missing information on sex.
+                      This chart shows the percentage of cases and percentage of the population by sex for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['femalePmiss'].toFixed(2)}% of confirmed cases who were missing information on sex.
                     </small>
                     </Grid.Column>
-                    <Grid.Column style={{ paddingLeft: '2em', paddingRight: '0em' }}>
+                    <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                       <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                        This chart shows the total cases per 100,000 residents by race/ethnicity for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['race_3Pmiss'].toFixed(2)}% of confirmed cases who were missing information on race/ethnicity.                    </small>
+                      This chart shows the percentage of cases and percentage of the population by race and ethnicity for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['race_3Pmiss'].toFixed(2)}% of confirmed cases who were missing information on race/ethnicity.                    </small>
                     </Grid.Column>
                   </Grid.Row>}
               </Grid>
 
-              <Divider horizontal style={{ fontWeight: 600, color: '#232423', fontSize: '16pt', paddingTop: '1em', paddingBottom: "0em" }}>Deaths per capita by demographic group in {countyName}</Divider>
+              <Divider horizontal style={{ fontWeight: 600, color: '#232423', fontSize: '16pt', paddingTop: '1em', paddingBottom: "0em" }}>Percentage of Deaths by Demographic Group in {countyName}</Divider>
               <Grid style={{ width: "1260px" }}>
                 {!(datades_deaths[stateFips + countyFips]) ? <Header as='h2' style={{ fontWeight: 400, paddingTop: '0.5em' }}>
                   <Header.Content>
@@ -1175,19 +1179,19 @@ export default function CountyReport() {
 
                   datades_deaths[stateFips + countyFips]['NObs'] < 50 && datades_deaths[stateFips + countyFips]['outcome'] === 'COVID Death' ? ' ' :
                     <Grid.Row columns={3} style={{ padding: 0 }}>
-                      <Grid.Column style={{ paddingLeft: '3em', paddingRight: '0em' }}>
+                      <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                         <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                          This chart shows the number of total deaths per 100,000 residents by age group for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['age4catPmiss'].toFixed(2)}% of confirmed deaths who were missing information on age.
+                        This chart shows the percentage of deaths and percentage of the population by age group for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['age4catPmiss'].toFixed(2)}% of confirmed deaths who were missing information on age.
                     </small>
                       </Grid.Column>
-                      <Grid.Column style={{ paddingLeft: '2em', paddingRight: '0em' }}>
+                      <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                         <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                          This chart shows the number of total deaths per 100,000 residents by sex for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['femalePmiss'].toFixed(2)}% of confirmed deaths who were missing information on sex.
+                        This chart shows the percentage of deaths and percentage of the population by sex for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['femalePmiss'].toFixed(2)}% of confirmed deaths who were missing information on sex.
                     </small>
                       </Grid.Column>
-                      <Grid.Column style={{ paddingLeft: '2em', paddingRight: '0em' }}>
+                      <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                         <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                          This chart shows the total deaths per 100,000 residents by race/ethnicity for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['race_3Pmiss'].toFixed(2)}% of confirmed deaths who were missing information on race/ethnicity.                    </small>
+                        This chart shows the percentage of deaths and percentage of the population by race and ethnicity for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['race_3Pmiss'].toFixed(2)}% of confirmed deaths who were missing information on race/ethnicity.                    </small>
                       </Grid.Column>
                     </Grid.Row>}
               </Grid>
