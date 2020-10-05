@@ -29,6 +29,8 @@ import fips2county from './fips2county.json'
 
 import configs from "./state_config.json";
 
+import LazyHero from 'react-lazy-hero';
+
 const casesColor = [
     "#72ABB1",
     "#487f84"
@@ -704,7 +706,58 @@ export default function StateMap(props) {
     if (dataTS && dataUs) {
 
         return (
+
             <div>
+                <div>
+                    <LazyHero 
+                    imageSrc={"/Remdesivir-Heparin-Viral-Trap-scaled.jpg"}
+                    color={'#E0F5FF'}
+                    isCentered={true}
+                    opacity={0.8}
+                    parallaxOffset={55}
+                    //chidren={}
+                    style={{
+                        height: "450px"
+                    }}
+                    >
+                        <div>
+                            <Header.Content style={{
+                                height: '10px',
+                                width: '400px',
+                                fontSize: "18pt",
+                                fontWeight: 1000,
+                                color: '#0072AE',
+                                textAlign: "left",
+                                marginTop: '90px',
+                                // lineHeight: "65px"
+                                }}>
+                                    Georgia COVID-19
+                            </Header.Content>
+                            <Header as="h1" style={{
+                                height: '150px',
+                                width: '550px',
+                                marginRight: '400px',
+                                //marginTop: '80px',
+                                fontSize: "44pt",
+                                fontWeight: 1000,
+                                textAlign: "left",
+                                lineHeight: "60px"
+                            }}>
+                                    Health Equity Dashboard
+                            </Header>
+                                {/* <Grid item xs>
+                                    <Header.Content style={{width: 450, color: '#000000', textAlign: 'left', fontSize: "18px", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0, lineHeight: '25px'}}>
+                                        Containment, mitigation, and response to the COVID-19 pandemic require a coordinated and appropriately-resourced effort driven by granular data that attend to the local context. The Georgia Health Equity dashboard is a tool to dynamically track the burden of cases and deaths across the counties in Georgia.
+                                    </Header.Content>
+                                    <Header.Content style={{ width: 450, color: '#000000', textAlign: 'left', fontSize: "18px", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0, lineHeight: '25px'}}>
+                                        We pair data on COVID-19 cases and deaths collected by the Georgia Department of Public Health with county population characteristics to document the differential impact of the epidemic across the state. These data are made available to the public in an effort to inform planning, policy development, and decision making by county health officials and individual residents.
+                                    </Header.Content>
+                                </Grid> */}
+                        </div>
+                        
+                    </LazyHero>
+                    {/* ... */}
+                </div>
                 <AppBar menu='countyReport' />
                 <Container style={{ marginTop: '6em', minWidth: '1260px' }}>
                     {config &&
@@ -851,9 +904,9 @@ export default function StateMap(props) {
                                         min={1}
                                         max={dataTS["13001"].length - 1}
                                         onChange={(e, {value}) => {
-                                                //setData(dataTS)
-                                                //setDateCur(dataTS)
-                                                //setCovidMetric(dataTS[stateFips + countyFips][value]), [stateFips, metric]);
+                                                // setDataUs(dataTS)
+                                                // setDateCur(dataTS)
+                                                // setCovidMetric(dataTS[stateFips + countyFips][value]);
                                             }
                                         }
                                     />
@@ -969,7 +1022,7 @@ export default function StateMap(props) {
                                         >
                                             <VictoryAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { stroke: "transparent" }, labels: { fill: '#000000', fontSize: "20px" }, tickLabels: { fontSize: "20px", fill: '#000000', fontFamily: 'lato' } }} />
                                             <VictoryAxis dependentAxis style={{ ticks: { stroke: "#FFFFFF" }, axis: { stroke: "#000000" }, grid: { stroke: "transparent" }, axis: { labels: { fill: '#000000' } }, tickLabels: { fontSize: "20px", fill: '#000000', padding: 10, fontFamily: 'lato' } }} />
-                                            {/* <VictoryBar
+                                            <VictoryBar
                                                 horizontal
                                                 barRatio={0.75}
                                                 labels={({ datum }) => numberWithCommas(parseFloat(datum.value).toFixed(0))}
@@ -991,7 +1044,7 @@ export default function StateMap(props) {
                                                 }}
                                                 x="key"
                                                 y="value"
-                                            /> */}
+                                            />
                                         </VictoryChart>
 
                                         <Header.Content>
