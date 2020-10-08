@@ -21,6 +21,7 @@ import {
 } from 'victory';
 
 import { useParams, useHistory } from 'react-router-dom';
+
 import Notes from './Notes';
 import ReactTooltip from "react-tooltip";
 import fips2county from './fips2county.json'
@@ -199,8 +200,11 @@ function BarChart(props) {
         width={props.width || 650}
         height={300}
         domainPadding={props.pad || 100}
+
         scale={{ y: props.ylog ? 'log' : 'linear' }}
-        minDomain={{ y: props.ylog ? 1 : 0 }}
+        // minDomain={{ y: props.ylog ? 1 : 0 }}
+        maxDomain={{ y: 1 }}
+        // domain={{ y: [0, 1] }}
         padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
         containerComponent={<VictoryContainer responsive={false} />}
       >
@@ -211,11 +215,12 @@ function BarChart(props) {
           tickLabels: { fontSize: 18, padding: 2 }
         }} />
         <VictoryAxis dependentAxis 
-        domain={[0, 1]}
+        // domain={{x: [0, 1]}}
         style={{
           tickLabels: { fontSize: 18, padding: 2 }
         }}
-          tickFormat={(y) => (y <= 1 ? y*100  : (y / 1000 + 'k'))} />
+          tickFormat={(y) => (y <= 1 ? y*100  : console.log(y))} 
+          />
         <VictoryLegend x={80} y={40}
           orientation="horizontal"
           gutter={1}
@@ -580,6 +585,7 @@ export default function CountyReport() {
 
     return (
       <div>
+       
         <AppBar menu='countyReport' />
         <Container style={{ marginTop: '8em', minWidth: '1260px', paddingRight: 0 }}>
           {configsCounty &&
@@ -1006,10 +1012,10 @@ export default function CountyReport() {
                         style={{ labels: { fill: "white" } }}
                         labelRadius={80}
                         width={400} height={400}
-                        padAngle={1}
+                        padAngle={2}
                         data={[
-                          { x: "Cats", y: 22, label: "22%" },
-                          { x: "Dogs", y: 78, label: "78%" },
+                          { x: 1, y: 100-datades_cases[stateFips + countyFips]['cdc_underlying2Percent'], label: `${100-datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2)}%` },
+                          { x: 2, y: datades_cases[stateFips + countyFips]['cdc_underlying2Percent'], label: `${datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2)}%` },
                         ]}
                       />
                       <VictoryLegend
@@ -1220,7 +1226,7 @@ export default function CountyReport() {
                   {_.map(data[stateFips + countyFips],
                     (v, k) => {
                       var rmList = ["cases", "deaths", "dailycases", "dailydeaths", "mean7daycases", "mean7daydeaths", "covidmortality"
-                        , "caserate", "covidmortality7day", "caserate7day"];
+                        , "caserate", "covidmortality7day", "caserate7day", "_013_Urbanization_Code"];
                       if (!rmList.includes(k)) {
                         return (
                           <Table.Row key={k}>
