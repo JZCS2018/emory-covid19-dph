@@ -112,9 +112,10 @@ const sectionStyle2 = {
 
 function BarChart(props) {
   const colors = {
-    "1": '#024174',
-    '2': "#337fb5"
-  };
+    "3": '#024174',
+    '2': "#99bbcf",
+    '1': '#337fb5'
+};
   if (props.var_num === 4) {
     return (
       <VictoryChart
@@ -157,10 +158,10 @@ function BarChart(props) {
             barWidth={20}
             // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
             labels={({ datum }) => `${props.cate} Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
-            data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': '1' },
-            { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': '1' },
-            { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var[2]] || 0, 'colors': '1' },
-            { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var[3]] || 0, 'colors': '1' }]}
+            data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': props.co },
+            { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': props.co },
+            { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var[2]] || 0, 'colors': props.co },
+            { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var[3]] || 0, 'colors': props.co }]}
             labelComponent={<VictoryTooltip
               orientation="top"
               style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
@@ -251,8 +252,8 @@ function BarChart(props) {
             barWidth={20}
             // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
             labels={({ datum }) => `${props.cate} Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
-            data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': '1' },
-            { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': '1' }]}
+            data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': props.co },
+            { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': props.co }]}
             labelComponent={<VictoryTooltip
               orientation="top"
               style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
@@ -1105,7 +1106,8 @@ export default function CountyReport() {
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
-                        data={data_cases} />
+                        data={data_cases} 
+                        co = '1'/>
 
                     </Grid.Column>
                     <Grid.Column>
@@ -1120,7 +1122,8 @@ export default function CountyReport() {
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
-                        data={data_cases} />
+                        data={data_cases} 
+                        co = '1'/>
                     </Grid.Column>
                     <Grid.Column>
                       <BarChart
@@ -1133,7 +1136,8 @@ export default function CountyReport() {
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
-                        data={data_cases} />
+                        data={data_cases} 
+                        co = '1'/>
                     </Grid.Column>
                   </Grid.Row>
                 }
@@ -1187,7 +1191,8 @@ export default function CountyReport() {
                           width={400}
                           stateFips={stateFips}
                           countyFips={countyFips}
-                          data={data_deaths} />
+                          data={data_deaths} 
+                          co = '3'/>
                       </Grid.Column>
                       <Grid.Column>
                         <BarChart
@@ -1201,7 +1206,8 @@ export default function CountyReport() {
                           pad={80}
                           stateFips={stateFips}
                           countyFips={countyFips}
-                          data={data_deaths} />
+                          data={data_deaths} 
+                          co = '3'/>
                       </Grid.Column>
                       <Grid.Column>
                         <BarChart
@@ -1214,7 +1220,8 @@ export default function CountyReport() {
                           width={400}
                           stateFips={stateFips}
                           countyFips={countyFips}
-                          data={data_deaths} />
+                          data={data_deaths} 
+                          co = '3'/>
                       </Grid.Column>
                     </Grid.Row>}
                 {!(datades_deaths[stateFips + countyFips]) ? ' ' :

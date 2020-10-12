@@ -21,6 +21,7 @@ import {
 } from 'victory';
 import Slider from "@material-ui/core/Slider";
 import LazyHero from 'react-lazy-hero';
+import { Waypoint } from 'react-waypoint'
 // import Background from '/CoronaVirus_LightBlue.jpg';
 
 import { useParams, useHistory } from 'react-router-dom';
@@ -68,6 +69,8 @@ const colorPalette2 = [
 
 const colorOut = '#c6007e';
 const contextRef = createRef()
+const nameList = ['summary', 're', 'cvi', 'si', 'urbanrural', 'poverty', 'black', 'hispanic', 'diabetes', 'age', 'male'];
+var scrollCount = 0;
 
 const countyColor = '#f2a900';
 const stateColor = '#bdbfc1';
@@ -117,8 +120,13 @@ function numberWithCommas(x) {
 }
 
 function StickyExampleAdjacentContext(props) {
-    const [sTate, setsTate] = useState({ activeItem: 'summary' })
+    const [sTate, setsTate] = useState({ activeItem: 'Interactive Map' })
     const { activeItem } = sTate
+    useEffect(() => {
+        setsTate(nameList[scrollCount])
+        console.log('name changed!!!!!!!!')
+    }, [scrollCount])
+    // console.log(props.activeCharacter)
     return (
 
         <div >
@@ -128,34 +136,40 @@ function StickyExampleAdjacentContext(props) {
                         size='small'
                         compact
                         pointing secondary vertical>
-                        <Menu.Item as='a' href="#summary" name='Interactive Map' active={props.activeCharacter == 'summary' || activeItem === 'summary'}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>Interactive Map</Header></Menu.Item>
-                        <Menu.Item as='a' href="#re" name='COVID-19 by Race/Ethnicity' active={activeItem === 'COVID-19 by Race/Ethnicity'}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 by Race/Ethnicity</Header></Menu.Item>
-                        <Menu.Item as='a' href="#age_g" name='COVID-19 by Age' active={activeItem === 'COVID-19 by Age'}
-                        onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 by Age</Header></Menu.Item>
-                        <Menu.Item as='a' href="#sex_g" name='COVID-19 by Sex' active={activeItem === 'COVID-19 by Sex'}
-                        onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 by Sex</Header></Menu.Item>
-                        <Menu.Item as='a' href="#cvi" name='Community Vulnerability Index' active={activeItem === 'Community Vulnerability Index'}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} ><Header as='h4'>Community Vulnerability Index</Header></Menu.Item>
-                        <Menu.Item as='a' href="#si" name='Residential Segregation Index' active={activeItem === 'Residential Segregation Index'}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>Residential Segregation Index</Header></Menu.Item>
-                        <Menu.Item as='a' href="#chara" name='COVID-19 by County Characteristics' active={activeItem === 'COVID-19 by County Characteristics'}
-                        onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 by County Characteristics</Header></Menu.Item>
+                        <Menu.Item as='a' href="#summary" name='Interactive Map' active={props.activeCharacter == 'Interactive Map' || activeItem === 'Interactive Map'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>Georgia Interactive Map</Header></Menu.Item>
+                        <Menu.Item as='a' href="#age_g" name='COVID-19 Demographics' active={props.activeCharacter === 'COVID-19 Demographics' || activeItem === 'COVID-19 Demographics'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 Demographics</Header></Menu.Item>
 
-                        <Menu.Item as='a' style={{paddingLeft:'3em'}} href="#urbanrural" name='Characteristics - Metropolitan Status' active={activeItem === 'Characteristics - Metropolitan Status'}
+                        
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age_g" name='COVID-19 by Age' active={props.activeCharacter === 'COVID-19 by Age' || activeItem === 'COVID-19 by Age'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Age</Menu.Item>
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#sex_g" name='COVID-19 by Sex' active={props.activeCharacter === 'COVID-19 by Sex' || activeItem === 'COVID-19 by Sex'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Sex</Menu.Item>
+                        <Menu.Item style={{ paddingLeft: '3em' }} as='a' href="#re" name='COVID-19 by Race/Ethnicity' active={props.activeCharacter === 'COVID-19 by Race/Ethnicity' || activeItem === 'COVID-19 by Race/Ethnicity'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Race and Ethnicity</Menu.Item>
+
+                        
+                        <Menu.Item as='a' href="#chara" name='COVID-19 by County Characteristics' active={props.activeCharacter === 'COVID-19 by County Characteristics' || activeItem === 'COVID-19 by County Characteristics'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 County Disparities</Header></Menu.Item>
+
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#cvi" name='Community Vulnerability Index' active={props.activeCharacter === 'Community Vulnerability Index' || activeItem === 'Community Vulnerability Index'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} >Community COVID-19 Vulnerability Index</Menu.Item>
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#si" name='Residential Segregation Index' active={props.activeCharacter === 'Residential Segregation Index' || activeItem === 'Residential Segregation Index'}
+                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>County Racial Segregation Index</Menu.Item>
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#urbanrural" name='County Metropolitan Status' active={props.activeCharacter === 'Characteristics - Metropolitan Status' || activeItem === 'Characteristics - Metropolitan Status'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{paddingLeft:'3em'}} href="#poverty" name='Characteristics - Poverty' active={activeItem === 'Characteristics - Poverty'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#poverty" name='County Poverty' active={props.activeCharacter === 'Characteristics - Poverty' || activeItem === 'Characteristics - Poverty'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{paddingLeft:'3em'}} href="#black" name='Characteristics - African American' active={activeItem === 'Characteristics - African American'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#black" name='County African American' active={props.activeCharacter === 'Characteristics - African American' || activeItem === 'Characteristics - African American'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{paddingLeft:'3em'}} href="#hispanic" name='Characteristics - Hispanic' active={activeItem === 'Characteristics - Hispanic'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#hispanic" name='County Hispanic' active={props.activeCharacter === 'Characteristics - Hispanic' || activeItem === 'Characteristics - Hispanic'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{paddingLeft:'3em'}} href="#diabetes" name='Characteristics - Diabetes' active={activeItem === 'Characteristics - Diabetes'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#diabetes" name='County Diabetes' active={props.activeCharacter === 'Characteristics - Diabetes' || activeItem === 'Characteristics - Diabetes'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{paddingLeft:'3em'}} href="#age" name='Characteristics - Age over 65' active={activeItem === 'Characteristics - Age over 65'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age" name='County Age over 65' active={props.activeCharacter === 'Characteristics - Age over 65' || activeItem === 'Characteristics - Age over 65'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{paddingLeft:'3em'}} href="#male" name='Characteristics - Male Percentage' active={activeItem === 'Characteristics - Male Percentage'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#male" name='County Male Percentage' active={props.activeCharacter === 'Characteristics - Male Percentage' || activeItem === 'Characteristics - Male Percentage'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                     </Menu>
                 </Sticky>
@@ -483,8 +497,9 @@ export default function StateMap(props) {
     const [covidMetric, setCovidMetric] = useState({ casesdaily: 'N/A', casesdailymean14: 'N/A', t: 'n/a' });
     const [covidMetric14, setCovidMetric14] = useState({ casesdaily: 'N/A', casesdailymean14: 'N/A', t: 'n/a' });
     const colors = {
-        "1": '#024174',
-        '2': "#337fb5"
+        "3": '#024174',
+        '2': "#99bbcf",
+        '1': '#337fb5'
     };
     const [dataTS, setDataTS] = useState();
     const [tooltipContent, setTooltipContent] = useState('');
@@ -1127,7 +1142,7 @@ export default function StateMap(props) {
                         </Grid>
                     </LazyHero>
                 </div>
-                <AppBar/>
+                <AppBar />
 
                 <Container style={{ marginTop: '6em', minWidth: '1260px' }}>
 
@@ -1140,14 +1155,22 @@ export default function StateMap(props) {
                                 <Breadcrumb.Section active>{stateName}</Breadcrumb.Section>
                                 <Breadcrumb.Divider />
                             </Breadcrumb> */}
-                            <Grid columns={3} style={{minWidth: '1260px'}}>
+                            <Grid columns={3} style={{ width: "100%", height: "100%"}} >
                                 <Grid.Column>
-                                    <StickyExampleAdjacentContext activeCharacter />
+                                    <StickyExampleAdjacentContext activeCharacter={activeCharacter} />
                                 </Grid.Column>
-                                <Grid.Column width={16} style={{minWidth: '1260px'}}>
+                                {/* <center> <Waypoint
+                                    onEnter={() => {
+                                        setActiveCharacter('Interactive Map')
+                                        console.log(activeCharacter)
+                                    }}
+                                    onLeave={() => {
+                                    }}>
+                                </Waypoint> </center> */}
+                                <Grid.Column width={16} style={{ width: "100%", height: "100%"}}>
                                     <Divider id='summary' hidden />
 
-                                    <Grid columns={2} style={{paddingBottom:'3em'}}>
+                                    <Grid columns={2} style={{ paddingBottom: '3em' }}>
                                         <Grid.Row>
                                             <Grid.Column width={16}>
                                                 <Header as='h2' style={{ fontFamily: 'lato', fontSize: "16px", paddingRight: 0, color: '#414042' }}>
@@ -1315,8 +1338,471 @@ export default function StateMap(props) {
                                             </Grid>
                                         </Grid.Column>
                                     </Grid>
-                                                                    
+
+
+
+                                    {/* <center> <Waypoint
+                                        onEnter={() => {
+                                            setActiveCharacter('COVID-19 by Race/Ethnicity')
+                                            console.log(activeCharacter)
+                                        }}
+                                        onLeave={() => {
+                                        }}>
+                                    </Waypoint> </center> */}
+
                                     <Grid >
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('COVID-19 by Age')
+                                                console.log(activeCharacter)
+                                            }}
+                                            onLeave={() => {
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <div id='age_g' style={sectionStyle2}>
+                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
+                                                <Header.Content>
+                                                    COVID-19 by Age
+                                    </Header.Content>
+                                            </Header>
+                                        </div>
+                                        <Grid style={{ paddingLeft: "7em", paddingTop: '0.5em', paddingRight: "7em", width: "100%", height: "100%" }}>
+                                            <Grid.Row columns={2} style={{ paddingTop: 11 }}>
+                                                <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
+                                                    <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
+                                                        <Header.Content>
+                                                            Percentage of COVID-19 Cases and Population by Age in Georgia
+            		                        </Header.Content>
+                                                    </Header>
+                                                    <VictoryChart
+                                                        theme={VictoryTheme.material}
+                                                        width={500}
+                                                        height={300}
+                                                        domainPadding={10}
+                                                        scale={{ y: props.ylog ? 'log' : 'linear' }}
+                                                        minDomain={{ y: props.ylog ? 1 : 0 }}
+                                                        padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
+                                                        containerComponent={<VictoryContainer responsive={false} />}
+                                                    >
+
+                                                        <VictoryAxis style={{
+                                                            tickLabels: { fontSize: 18, padding: 2 }
+                                                        }} />
+                                                        <VictoryAxis dependentAxis
+                                                            domain={[0, 1]}
+                                                            style={{
+                                                                tickLabels: { fontSize: 18, padding: 2 }
+                                                            }}
+                                                            tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
+                                                        <VictoryLegend x={80} y={40}
+                                                            orientation="horizontal"
+                                                            gutter={1}
+                                                            data={[
+                                                                { name: 'Percentage of Cases', symbol: { fill: colors['1'], type: "square" } },
+                                                                { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
+                                                            ]}
+                                                        />
+                                                        <VictoryGroup offset={20}
+                                                            colorScale={"qualitative"}
+                                                        >
+
+                                                            <VictoryBar
+                                                                alignment="start"
+                                                                barWidth={20}
+                                                                labels={({ datum }) => `Percentage of Cases: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
+                                                                data={[{ key: "< 20", 'value': data_cases['13']["019ageC_P"] || 0, 'colors': '1' },
+                                                                { key: "20-44", 'value': data_cases['13']["2044ageC_P"] || 0, 'colors': '1' },
+                                                                { key: "45-64", 'value': data_cases['13']["4564ageC_P"] || 0, 'colors': '1' },
+                                                                { key: "65+", 'value': data_cases['13']["65ageC_P"] || 0, 'colors': '1' }]}
+                                                                labelComponent={<VictoryTooltip
+                                                                    orientation="top"
+                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+                                                                    constrainToVisibleArea
+                                                                    labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
+                                                                    flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                                                />}
+                                                                style={{
+                                                                    data: {
+                                                                        fill: ({ datum }) => colors[datum.colors],
+                                                                        fillOpacity: 2
+                                                                    }
+                                                                }}
+                                                                x="key"
+                                                                y="value"
+                                                            />
+                                                            <VictoryBar
+                                                                alignment="start"
+                                                                barWidth={20}
+                                                                data={[{ key: "< 20", 'value': data_cases['13']["019ageP"] || 0, 'colors': '2' },
+                                                                { key: "20-44", 'value': data_cases['13']["2044ageP"] || 0, 'colors': '2' },
+                                                                { key: "45-64", 'value': data_cases['13']["4564ageP"] || 0, 'colors': '2' },
+                                                                { key: "65+", 'value': data_cases['13']["65ageP"] || 0, 'colors': '2' }]}
+                                                                labels={({ datum }) =>
+                                                                    `Percentage of Population: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
+                                                                }
+                                                                labelComponent={<VictoryTooltip
+                                                                    orientation="top"
+                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+                                                                    constrainToVisibleArea
+                                                                    // labelComponent={<VictoryLabel dx={-50} textAnchor='start' />}
+                                                                    flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                                                />}
+                                                                style={{
+                                                                    data: {
+                                                                        fill: ({ datum }) => colors[datum.colors],
+                                                                        fillOpacity: 0.7
+                                                                    }
+                                                                }}
+                                                                x="key"
+                                                                y="value"
+                                                            />
+                                                        </VictoryGroup>
+                                                    </VictoryChart>
+
+                                                </Grid.Column>
+                                                <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
+                                                    <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
+                                                        <Header.Content>
+                                                            Percentage of COVID-19 Deaths and Population by Age in Georgia
+            		                        </Header.Content>
+                                                    </Header>
+                                                    <VictoryChart
+                                                        theme={VictoryTheme.material}
+                                                        width={500}
+                                                        height={300}
+                                                        domainPadding={10}
+                                                        scale={{ y: props.ylog ? 'log' : 'linear' }}
+                                                        minDomain={{ y: props.ylog ? 1 : 0 }}
+                                                        padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
+                                                        containerComponent={<VictoryContainer responsive={false} />}
+                                                    >
+                                                        <VictoryAxis style={{
+                                                            tickLabels: { fontSize: 18, padding: 2 }
+                                                        }} />
+                                                        <VictoryAxis dependentAxis
+                                                            domain={[0, 1]}
+                                                            style={{
+                                                                tickLabels: { fontSize: 18, padding: 2 }
+                                                            }}
+                                                            tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
+                                                        <VictoryLegend x={80} y={40}
+                                                            orientation="horizontal"
+                                                            gutter={1}
+                                                            data={[
+                                                                { name: 'Percentage of Deaths', symbol: { fill: colors['1'], type: "square" } },
+                                                                { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
+                                                            ]}
+                                                        />
+                                                        <VictoryGroup offset={20}
+                                                            colorScale={"qualitative"}
+                                                        >
+
+                                                            <VictoryBar
+                                                                alignment="start"
+                                                                barWidth={20}
+                                                                // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
+                                                                labels={({ datum }) => `Percentage of Deaths: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
+                                                                data={[{ key: "< 20", 'value': data_deaths['13']["019ageC_P"] || 0, 'colors': '3' },
+                                                                { key: "20-44", 'value': data_deaths['13']["2044ageC_P"] || 0, 'colors': '3' },
+                                                                { key: "45-64", 'value': data_deaths['13']["4564ageC_P"] || 0, 'colors': '3' },
+                                                                { key: "65+", 'value': data_deaths['13']["65ageC_P"] || 0, 'colors': '3' }]}
+                                                                labelComponent={<VictoryTooltip
+                                                                    orientation="top"
+                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+                                                                    constrainToVisibleArea
+                                                                    labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
+                                                                    flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                                                />}
+                                                                style={{
+                                                                    data: {
+                                                                        fill: ({ datum }) => colors[datum.colors],
+                                                                        fillOpacity: 2
+                                                                    }
+                                                                }}
+                                                                x="key"
+                                                                y="value"
+                                                            />
+                                                            <VictoryBar
+                                                                alignment="start"
+                                                                barWidth={20}
+                                                                data={[{ key: "< 20", 'value': data_deaths['13']["019ageP"] || 0, 'colors': '2' },
+                                                                { key: "20-44", 'value': data_deaths['13']["2044ageP"] || 0, 'colors': '2' },
+                                                                { key: "45-64", 'value': data_deaths['13']["4564ageP"] || 0, 'colors': '2' },
+                                                                { key: "65+", 'value': data_deaths['13']["65ageP"] || 0, 'colors': '2' }]}
+                                                                labels={({ datum }) =>
+                                                                    `Percentage of Population: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
+                                                                }
+                                                                labelComponent={<VictoryTooltip
+                                                                    orientation="top"
+                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+                                                                    constrainToVisibleArea
+                                                                    flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                                                />}
+                                                                style={{
+                                                                    data: {
+                                                                        fill: ({ datum }) => colors[datum.colors],
+                                                                        fillOpacity: 0.7
+                                                                    }
+                                                                }}
+                                                                x="key"
+                                                                y="value"
+                                                            />
+                                                        </VictoryGroup>
+                                                    </VictoryChart>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
+                                        <Grid style={{ width: "100%", height: "100%", paddingBottom: '5em' }}>
+                                            <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
+                                                <Grid.Column>
+                                                    <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
+                                                        <Header.Subheader style={{ fontFamily: 'lato', fontSize: 18, color: '#414042', lineHeight: "16pt", width: 450, textAlign: 'left' }}>
+                                                            This chart shows the percentage of cases and percentage of the population by age for <b>Georgia</b>. The chart excludes data from {datades_cases['13']['age4catPmiss'].toFixed(2)}% of confirmed cases who were missing information on age. <b>Data Updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                                (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}</b>
+
+                                                        </Header.Subheader>
+                                                    </Header>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 38 }}>
+                                                        <Header.Subheader style={{ fontFamily: 'lato', fontSize: 18, color: '#414042', lineHeight: "16pt", width: 450, textAlign: 'left' }}>
+                                                            This chart shows the percentage of deaths and percentage of the population by race and ethnicity for <b>Georgia</b>. The chart excludes data from {datades_deaths['13']['age4catPmiss'].toFixed(2)}% of confirmed deaths who were missing information on age. <b>Data Updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                                (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}</b>
+                                                        </Header.Subheader>
+                                                    </Header>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
+
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('COVID-19 by Sex')
+                                                console.log(activeCharacter)
+                                            }}
+                                            onLeave={() => {
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        {/* <center> <Divider id='sex_g' hidden style={{ paddingBottom: 50 }} /> </center>
+                                        <center> <Divider /> </center> */}
+                                        <div id='sex_g' style={sectionStyle2}>
+                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
+                                                <Header.Content>
+                                                    COVID-19 by Sex
+                                    </Header.Content>
+                                            </Header>
+                                        </div>
+                                        <Grid style={{ paddingLeft: "7em", paddingTop: '0.5em', paddingRight: "7em", width: "100%", height: "100%" }}>
+                                            <Grid.Row columns={2} style={{ paddingTop: 11 }}>
+                                                <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
+                                                    <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
+                                                        <Header.Content>
+                                                            Percentage of COVID-19 Cases and Population by Sex in Georgia
+            		                        </Header.Content>
+                                                    </Header>
+                                                    <VictoryChart
+                                                        theme={VictoryTheme.material}
+                                                        width={500}
+                                                        height={300}
+                                                        domainPadding={100}
+                                                        scale={{ y: props.ylog ? 'log' : 'linear' }}
+                                                        // minDomain={{ y: props.ylog ? 1 : 0 }}
+                                                        maxDomain={{ y: 1 }}
+                                                        padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
+                                                        containerComponent={<VictoryContainer responsive={false} />}
+                                                    >
+                                                        {/* <VictoryLabel style={{
+                                                fontSize: 20, paddingBottom: '0.5em'
+                                            }} text={props.title} x={(560) / 2} y={20} textAnchor="middle" /> */}
+                                                        <VictoryAxis style={{
+                                                            tickLabels: { fontSize: 18, padding: 2 }
+                                                        }} />
+                                                        <VictoryAxis dependentAxis
+                                                            domain={[0, 1]}
+                                                            style={{
+                                                                tickLabels: { fontSize: 18, padding: 2 }
+                                                            }}
+                                                            tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
+                                                        <VictoryLegend x={80} y={40}
+                                                            orientation="horizontal"
+                                                            gutter={1}
+                                                            // style={{ border: { stroke: "black" } }}
+                                                            data={[
+                                                                { name: 'Percentage of Cases', symbol: { fill: colors['1'], type: "square" } },
+                                                                { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
+                                                            ]}
+                                                        />
+                                                        <VictoryGroup offset={20}
+                                                            colorScale={"qualitative"}
+                                                        >
+
+                                                            <VictoryBar
+                                                                alignment="start"
+                                                                barWidth={20}
+                                                                // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
+                                                                labels={({ datum }) => `Percentage of Cases: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
+                                                                data={[
+                                                                    { key: "Male", 'value': data_cases['13']["maleC_P"] || 0, 'colors': '1' },
+                                                                    { key: "Female", 'value': data_cases['13']["femaleC_P"] || 0, 'colors': '1' }]}
+                                                                labelComponent={<VictoryTooltip
+                                                                    orientation="top"
+                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+                                                                    constrainToVisibleArea
+                                                                    labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
+                                                                    flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                                                />}
+                                                                style={{
+                                                                    data: {
+                                                                        fill: ({ datum }) => colors[datum.colors],
+                                                                        fillOpacity: 2
+                                                                    }
+                                                                }}
+                                                                x="key"
+                                                                y="value"
+                                                            />
+                                                            <VictoryBar
+                                                                alignment="start"
+                                                                barWidth={20}
+                                                                data={[
+                                                                    { key: "Male", 'value': data_cases['13']["maleP"] || 0, 'colors': '2' },
+                                                                    { key: "Female", 'value': data_cases['13']["femaleP"] || 0, 'colors': '2' }]}
+                                                                labels={({ datum }) =>
+                                                                    `Percentage of Population: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
+                                                                }
+                                                                labelComponent={<VictoryTooltip
+                                                                    orientation="top"
+                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+                                                                    constrainToVisibleArea
+                                                                    flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                                                />}
+                                                                style={{
+                                                                    data: {
+                                                                        fill: ({ datum }) => colors[datum.colors],
+                                                                        fillOpacity: 0.7
+                                                                    }
+                                                                }}
+                                                                x="key"
+                                                                y="value"
+                                                            />
+                                                        </VictoryGroup>
+                                                    </VictoryChart>
+
+                                                </Grid.Column>
+                                                <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
+                                                    <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
+                                                        <Header.Content>
+                                                            Percentage of COVID-19 Deaths and Population by Sex in Georgia
+            		                        </Header.Content>
+                                                    </Header>
+                                                    <VictoryChart
+                                                        theme={VictoryTheme.material}
+                                                        width={500}
+                                                        height={300}
+                                                        domainPadding={100}
+                                                        scale={{ y: props.ylog ? 'log' : 'linear' }}
+                                                        // minDomain={{ y: props.ylog ? 1 : 0 }}
+                                                        maxDomain={{ y: 1 }}
+                                                        padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
+                                                        containerComponent={<VictoryContainer responsive={false} />}
+                                                    >
+                                                        <VictoryAxis style={{
+                                                            tickLabels: { fontSize: 18, padding: 2 }
+                                                        }} />
+                                                        <VictoryAxis dependentAxis
+                                                            domain={[0, 1]}
+                                                            style={{
+                                                                tickLabels: { fontSize: 18, padding: 2 }
+                                                            }}
+                                                            tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
+                                                        <VictoryLegend x={80} y={40}
+                                                            orientation="horizontal"
+                                                            gutter={1}
+                                                            // style={{ border: { stroke: "black" } }}
+                                                            data={[
+                                                                { name: 'Percentage of Deaths', symbol: { fill: colors['1'], type: "square" } },
+                                                                { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
+                                                            ]}
+                                                        />
+                                                        <VictoryGroup offset={20}
+                                                            colorScale={"qualitative"}
+                                                        >
+
+                                                            <VictoryBar
+                                                                alignment="start"
+                                                                barWidth={20}
+                                                                // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
+                                                                labels={({ datum }) => `Percentage of Deaths: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
+                                                                data={[
+                                                                    { key: "Male", 'value': data_deaths['13']["maleC_P"] || 0, 'colors': '3' },
+                                                                    { key: "Female", 'value': data_deaths['13']["femaleC_P"] || 0, 'colors': '3' }]}
+                                                                labelComponent={<VictoryTooltip
+                                                                    orientation="top"
+                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+                                                                    constrainToVisibleArea
+                                                                    labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
+                                                                    flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                                                />}
+                                                                style={{
+                                                                    data: {
+                                                                        fill: ({ datum }) => colors[datum.colors],
+                                                                        fillOpacity: 2
+                                                                    }
+                                                                }}
+                                                                x="key"
+                                                                y="value"
+                                                            />
+                                                            <VictoryBar
+                                                                alignment="start"
+                                                                barWidth={20}
+                                                                data={[
+                                                                    { key: "Male", 'value': data_deaths['13']["maleP"] || 0, 'colors': '2' },
+                                                                    { key: "Female", 'value': data_deaths['13']["femaleP"] || 0, 'colors': '2' }]}
+                                                                labels={({ datum }) =>
+                                                                    `Percentage of Population: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
+                                                                }
+                                                                labelComponent={<VictoryTooltip
+                                                                    orientation="top"
+                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
+                                                                    constrainToVisibleArea
+                                                                    // labelComponent={<VictoryLabel dx={-50} textAnchor='start' />}
+                                                                    flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
+                                                                />}
+                                                                style={{
+                                                                    data: {
+                                                                        fill: ({ datum }) => colors[datum.colors],
+                                                                        fillOpacity: 0.7
+                                                                    }
+                                                                }}
+                                                                x="key"
+                                                                y="value"
+                                                            />
+                                                        </VictoryGroup>
+                                                    </VictoryChart>
+
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
+                                        <Grid style={{ width: "100%", height: "100%",paddingBottom: '5em' }}>
+                                            <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
+                                                <Grid.Column>
+                                                    <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
+                                                        <Header.Subheader style={{ fontFamily: 'lato', fontSize: 18, color: '#414042', lineHeight: "16pt", width: 450, textAlign: 'left' }}>
+                                                            This chart shows the percentage of cases and percentage of the population by sex for <b>Georgia</b>. The chart excludes data from {datades_cases['13']['femalePmiss'].toFixed(2)}% of confirmed cases who were missing information on sex. <b>Data Updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                                (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}</b>
+                                                        </Header.Subheader>
+                                                    </Header>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 38 }}>
+
+                                                        <Header.Subheader style={{ fontFamily: 'lato', fontSize: 18, color: '#414042', lineHeight: "16pt", width: 450, textAlign: 'left' }}>
+                                                            This chart shows the percentage of deaths and percentage of the population by sex for <b>Georgia</b>. The chart excludes data from {datades_deaths['13']['femalePmiss'].toFixed(2)}% of confirmed deaths who were missing information on sex. <b>Data Updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
+                                                                (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}</b>
+                                                        </Header.Subheader>
+                                                    </Header>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
+                                        
                                         <div id='re' style={sectionStyle2}>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                 <Header.Content>
@@ -1325,7 +1811,7 @@ export default function StateMap(props) {
                                             </Header>
                                         </div>
 
-                                        <Grid  style={{ paddingLeft: "7em",paddingTop:'0.5em', paddingRight: "7em", width: "100%", height: "100%" }}>
+                                        <Grid style={{ paddingLeft: "7em", paddingTop: '0.5em', paddingRight: "7em", width: "100%", height: "100%" }}>
                                             <Grid.Row columns={2} style={{ paddingTop: 11 }}>
                                                 <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
                                                     <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
@@ -1469,10 +1955,10 @@ export default function StateMap(props) {
                                                                 barWidth={20}
                                                                 // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
                                                                 labels={({ datum }) => `Percentage of Deaths: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
-                                                                data={[{ key: "White", 'value': data_deaths['13']["whiteC_P"] || 0, 'colors': '1' },
-                                                                { key: "Black", 'value': data_deaths['13']["blackC_P"] || 0, 'colors': '1' },
-                                                                { key: "Hispanic", 'value': data_deaths['13']["hispanicC_P"] || 0, 'colors': '1' },
-                                                                { key: "Other", 'value': data_deaths['13']["otherNHC_P"] || 0, 'colors': '1' }]}
+                                                                data={[{ key: "White", 'value': data_deaths['13']["whiteC_P"] || 0, 'colors': '3' },
+                                                                { key: "Black", 'value': data_deaths['13']["blackC_P"] || 0, 'colors': '3' },
+                                                                { key: "Hispanic", 'value': data_deaths['13']["hispanicC_P"] || 0, 'colors': '3' },
+                                                                { key: "Other", 'value': data_deaths['13']["otherNHC_P"] || 0, 'colors': '3' }]}
                                                                 labelComponent={<VictoryTooltip
                                                                     orientation="top"
                                                                     style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
@@ -1522,7 +2008,7 @@ export default function StateMap(props) {
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
-                                        <Grid style={{ width: "100%", height: "100%", paddingBottom:'3em' }}>
+                                        <Grid style={{ width: "100%", height: "100%", paddingBottom: '3em' }}>
                                             <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
                                                 <Grid.Column>
                                                     <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
@@ -1544,452 +2030,57 @@ export default function StateMap(props) {
                                             </Grid.Row>
                                         </Grid>
 
-                                     
-                                        <div id='age_g' style={sectionStyle2}>
-                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
-                                                <Header.Content>
-                                                COVID-19 by Age
+
+                                        {/* Charactor */}
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('COVID-19 by County Characteristics')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id='chara' style={{ paddingBottom: '2em' }}>
+                                            <Grid.Row>
+                                                <div id='chara' style={sectionStyle2}>
+                                                    <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
+                                                        <Header.Content>
+                                                            COVID-19 by County Characteristics
                                     </Header.Content>
+                                                    </Header>
+                                                </div>
+                                            </Grid.Row>
+                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 0 }}>
+
+                                                <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 10, paddingLeft: 0, paddingRight: 0 }}>
+                                                    {/* <center> <b style={{ fontSize: "18pt" }}>COVID-19 cases per 100,000 across the population characteristics of all the counties in the United States </b> </center> */}
+                                                        COVID-19 affects communities very differently. Underlying medical conditions;
+                                                        racial, gender, and age demographics; income levels; and population density are
+                                                        all contributing factors that determine the rate of COVID-19 in different counties.
+                                                        Some of the many county characteristics that may have a large impact on disparate rates
+                                                        of infection are displayed below, with counties divided into quintiles based on each characteristic,
+                                                        unless otherwise noted.
+                                                        </Header.Subheader>
                                             </Header>
-                                        </div>                                  
-                                        <Grid  style={{ paddingLeft: "7em",paddingTop:'0.5em', paddingRight: "7em", width: "100%", height: "100%" }}>
-                                            <Grid.Row columns={2} style={{ paddingTop: 11 }}>
-                                                <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
-                                                    <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
-                                                        <Header.Content>
-                                                            Percentage of COVID-19 Cases and Population by Age in Georgia
-            		                        </Header.Content>
-                                                    </Header>
-                                                    <VictoryChart
-                                                        theme={VictoryTheme.material}
-                                                        width={500}
-                                                        height={300}
-                                                        domainPadding={10}
-                                                        scale={{ y: props.ylog ? 'log' : 'linear' }}
-                                                        minDomain={{ y: props.ylog ? 1 : 0 }}
-                                                        padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
-                                                        containerComponent={<VictoryContainer responsive={false} />}
-                                                    >
-
-                                                        <VictoryAxis style={{
-                                                            tickLabels: { fontSize: 18, padding: 2 }
-                                                        }} />
-                                                        <VictoryAxis dependentAxis
-                                                            domain={[0, 1]}
-                                                            style={{
-                                                                tickLabels: { fontSize: 18, padding: 2 }
-                                                            }}
-                                                            tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
-                                                        <VictoryLegend x={80} y={40}
-                                                            orientation="horizontal"
-                                                            gutter={1}
-                                                            data={[
-                                                                { name: 'Percentage of Cases', symbol: { fill: colors['1'], type: "square" } },
-                                                                { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
-                                                            ]}
-                                                        />
-                                                        <VictoryGroup offset={20}
-                                                            colorScale={"qualitative"}
-                                                        >
-
-                                                            <VictoryBar
-                                                                alignment="start"
-                                                                barWidth={20}
-                                                                labels={({ datum }) => `Percentage of Cases: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
-                                                                data={[{ key: "< 20", 'value': data_cases['13']["019ageC_P"] || 0, 'colors': '1' },
-                                                                { key: "20-44", 'value': data_cases['13']["2044ageC_P"] || 0, 'colors': '1' },
-                                                                { key: "45-64", 'value': data_cases['13']["4564ageC_P"] || 0, 'colors': '1' },
-                                                                { key: "65+", 'value': data_cases['13']["65ageC_P"] || 0, 'colors': '1' }]}
-                                                                labelComponent={<VictoryTooltip
-                                                                    orientation="top"
-                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
-                                                                    constrainToVisibleArea
-                                                                    labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
-                                                                    flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
-                                                                />}
-                                                                style={{
-                                                                    data: {
-                                                                        fill: ({ datum }) => colors[datum.colors],
-                                                                        fillOpacity: 2
-                                                                    }
-                                                                }}
-                                                                x="key"
-                                                                y="value"
-                                                            />
-                                                            <VictoryBar
-                                                                alignment="start"
-                                                                barWidth={20}
-                                                                data={[{ key: "< 20", 'value': data_cases['13']["019ageP"] || 0, 'colors': '2' },
-                                                                { key: "20-44", 'value': data_cases['13']["2044ageP"] || 0, 'colors': '2' },
-                                                                { key: "45-64", 'value': data_cases['13']["4564ageP"] || 0, 'colors': '2' },
-                                                                { key: "65+", 'value': data_cases['13']["65ageP"] || 0, 'colors': '2' }]}
-                                                                labels={({ datum }) =>
-                                                                    `Percentage of Population: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
-                                                                }
-                                                                labelComponent={<VictoryTooltip
-                                                                    orientation="top"
-                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
-                                                                    constrainToVisibleArea
-                                                                    // labelComponent={<VictoryLabel dx={-50} textAnchor='start' />}
-                                                                    flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
-                                                                />}
-                                                                style={{
-                                                                    data: {
-                                                                        fill: ({ datum }) => colors[datum.colors],
-                                                                        fillOpacity: 0.7
-                                                                    }
-                                                                }}
-                                                                x="key"
-                                                                y="value"
-                                                            />
-                                                        </VictoryGroup>
-                                                    </VictoryChart>
-
-                                                </Grid.Column>
-                                                <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
-                                                    <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
-                                                        <Header.Content>
-                                                            Percentage of COVID-19 Deaths and Population by Age in Georgia
-            		                        </Header.Content>
-                                                    </Header>
-                                                    <VictoryChart
-                                                        theme={VictoryTheme.material}
-                                                        width={500}
-                                                        height={300}
-                                                        domainPadding={10}
-                                                        scale={{ y: props.ylog ? 'log' : 'linear' }}
-                                                        minDomain={{ y: props.ylog ? 1 : 0 }}
-                                                        padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
-                                                        containerComponent={<VictoryContainer responsive={false} />}
-                                                    >
-                                                        <VictoryAxis style={{
-                                                            tickLabels: { fontSize: 18, padding: 2 }
-                                                        }} />
-                                                        <VictoryAxis dependentAxis
-                                                            domain={[0, 1]}
-                                                            style={{
-                                                                tickLabels: { fontSize: 18, padding: 2 }
-                                                            }}
-                                                            tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
-                                                        <VictoryLegend x={80} y={40}
-                                                            orientation="horizontal"
-                                                            gutter={1}
-                                                            data={[
-                                                                { name: 'Percentage of Deaths', symbol: { fill: colors['1'], type: "square" } },
-                                                                { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
-                                                            ]}
-                                                        />
-                                                        <VictoryGroup offset={20}
-                                                            colorScale={"qualitative"}
-                                                        >
-
-                                                            <VictoryBar
-                                                                alignment="start"
-                                                                barWidth={20}
-                                                                // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-                                                                labels={({ datum }) => `Percentage of Deaths: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
-                                                                data={[{ key: "< 20", 'value': data_deaths['13']["019ageC_P"] || 0, 'colors': '1' },
-                                                                { key: "20-44", 'value': data_deaths['13']["2044ageC_P"] || 0, 'colors': '1' },
-                                                                { key: "45-64", 'value': data_deaths['13']["4564ageC_P"] || 0, 'colors': '1' },
-                                                                { key: "65+", 'value': data_deaths['13']["65ageC_P"] || 0, 'colors': '1' }]}
-                                                                labelComponent={<VictoryTooltip
-                                                                    orientation="top"
-                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
-                                                                    constrainToVisibleArea
-                                                                    labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
-                                                                    flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
-                                                                />}
-                                                                style={{
-                                                                    data: {
-                                                                        fill: ({ datum }) => colors[datum.colors],
-                                                                        fillOpacity: 2
-                                                                    }
-                                                                }}
-                                                                x="key"
-                                                                y="value"
-                                                            />
-                                                            <VictoryBar
-                                                                alignment="start"
-                                                                barWidth={20}
-                                                                data={[{ key: "< 20", 'value': data_deaths['13']["019ageP"] || 0, 'colors': '2' },
-                                                                { key: "20-44", 'value': data_deaths['13']["2044ageP"] || 0, 'colors': '2' },
-                                                                { key: "45-64", 'value': data_deaths['13']["4564ageP"] || 0, 'colors': '2' },
-                                                                { key: "65+", 'value': data_deaths['13']["65ageP"] || 0, 'colors': '2' }]}
-                                                                labels={({ datum }) =>
-                                                                    `Percentage of Population: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
-                                                                }
-                                                                labelComponent={<VictoryTooltip
-                                                                    orientation="top"
-                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
-                                                                    constrainToVisibleArea
-                                                                    flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
-                                                                />}
-                                                                style={{
-                                                                    data: {
-                                                                        fill: ({ datum }) => colors[datum.colors],
-                                                                        fillOpacity: 0.7
-                                                                    }
-                                                                }}
-                                                                x="key"
-                                                                y="value"
-                                                            />
-                                                        </VictoryGroup>
-                                                    </VictoryChart>
-                                                </Grid.Column>
-                                            </Grid.Row>
                                         </Grid>
-                                        <Grid style={{ width: "100%", height: "100%" ,paddingBottom:'3em'}}>
-                                            <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
-                                                <Grid.Column>
-                                                    <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
-                                                        <Header.Subheader style={{ fontFamily: 'lato', fontSize: 18, color: '#414042', lineHeight: "16pt", width: 450, textAlign: 'left' }}>
-                                                            This chart shows the percentage of cases and percentage of the population by age for <b>Georgia</b>. The chart excludes data from {datades_cases['13']['age4catPmiss'].toFixed(2)}% of confirmed cases who were missing information on age. <b>Data Updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
-                                                                (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}</b>
-
-                                                        </Header.Subheader>
-                                                    </Header>
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 38 }}>
-                                                        <Header.Subheader style={{ fontFamily: 'lato', fontSize: 18, color: '#414042', lineHeight: "16pt", width: 450, textAlign: 'left' }}>
-                                                            This chart shows the percentage of deaths and percentage of the population by race and ethnicity for <b>Georgia</b>. The chart excludes data from {datades_deaths['13']['age4catPmiss'].toFixed(2)}% of confirmed deaths who were missing information on age. <b>Data Updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
-                                                                (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}</b>
-                                                        </Header.Subheader>
-                                                    </Header>
-                                                </Grid.Column>
-                                            </Grid.Row>
-                                        </Grid>
-
-
-                                        {/* <center> <Divider id='sex_g' hidden style={{ paddingBottom: 50 }} /> </center>
-                                        <center> <Divider /> </center> */}
-                                        <div id='sex_g' style={sectionStyle2}>
-                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
-                                                <Header.Content>
-                                                COVID-19 by Sex
-                                    </Header.Content>
-                                            </Header>
-                                        </div>
-                                        <Grid style={{ paddingLeft: "7em",paddingTop:'0.5em', paddingRight: "7em", width: "100%", height: "100%" }}>
-                                            <Grid.Row columns={2} style={{ paddingTop: 11 }}>
-                                                <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
-                                                    <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
-                                                        <Header.Content>
-                                                            Percentage of COVID-19 Cases and Population by Sex in Georgia
-            		                        </Header.Content>
-                                                    </Header>
-                                                    <VictoryChart
-                                                        theme={VictoryTheme.material}
-                                                        width={500}
-                                                        height={300}
-                                                        domainPadding={100}
-                                                        scale={{ y: props.ylog ? 'log' : 'linear' }}
-                                                        // minDomain={{ y: props.ylog ? 1 : 0 }}
-                                                        maxDomain={{ y: 1 }}
-                                                        padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
-                                                        containerComponent={<VictoryContainer responsive={false} />}
-                                                    >
-                                                        {/* <VictoryLabel style={{
-                                                fontSize: 20, paddingBottom: '0.5em'
-                                            }} text={props.title} x={(560) / 2} y={20} textAnchor="middle" /> */}
-                                                        <VictoryAxis style={{
-                                                            tickLabels: { fontSize: 18, padding: 2 }
-                                                        }} />
-                                                        <VictoryAxis dependentAxis
-                                                            domain={[0, 1]}
-                                                            style={{
-                                                                tickLabels: { fontSize: 18, padding: 2 }
-                                                            }}
-                                                            tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
-                                                        <VictoryLegend x={80} y={40}
-                                                            orientation="horizontal"
-                                                            gutter={1}
-                                                            // style={{ border: { stroke: "black" } }}
-                                                            data={[
-                                                                { name: 'Percentage of Cases', symbol: { fill: colors['1'], type: "square" } },
-                                                                { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
-                                                            ]}
-                                                        />
-                                                        <VictoryGroup offset={20}
-                                                            colorScale={"qualitative"}
-                                                        >
-
-                                                            <VictoryBar
-                                                                alignment="start"
-                                                                barWidth={20}
-                                                                // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-                                                                labels={({ datum }) => `Percentage of Cases: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
-                                                                data={[
-                                                                    { key: "Male", 'value': data_cases['13']["maleC_P"] || 0, 'colors': '1' },
-                                                                    { key: "Female", 'value': data_cases['13']["femaleC_P"] || 0, 'colors': '1' }]}
-                                                                labelComponent={<VictoryTooltip
-                                                                    orientation="top"
-                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
-                                                                    constrainToVisibleArea
-                                                                    labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
-                                                                    flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
-                                                                />}
-                                                                style={{
-                                                                    data: {
-                                                                        fill: ({ datum }) => colors[datum.colors],
-                                                                        fillOpacity: 2
-                                                                    }
-                                                                }}
-                                                                x="key"
-                                                                y="value"
-                                                            />
-                                                            <VictoryBar
-                                                                alignment="start"
-                                                                barWidth={20}
-                                                                data={[
-                                                                    { key: "Male", 'value': data_cases['13']["maleP"] || 0, 'colors': '2' },
-                                                                    { key: "Female", 'value': data_cases['13']["femaleP"] || 0, 'colors': '2' }]}
-                                                                labels={({ datum }) =>
-                                                                    `Percentage of Population: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
-                                                                }
-                                                                labelComponent={<VictoryTooltip
-                                                                    orientation="top"
-                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
-                                                                    constrainToVisibleArea
-                                                                    flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
-                                                                />}
-                                                                style={{
-                                                                    data: {
-                                                                        fill: ({ datum }) => colors[datum.colors],
-                                                                        fillOpacity: 0.7
-                                                                    }
-                                                                }}
-                                                                x="key"
-                                                                y="value"
-                                                            />
-                                                        </VictoryGroup>
-                                                    </VictoryChart>
-
-                                                </Grid.Column>
-                                                <Grid.Column style={{ paddingTop: '1em', paddingBottom: 18 }}>
-                                                    <Header as='h2' style={{ textAlign: 'center', fontSize: "18pt", lineHeight: "16pt", paddingRight: '2em' }}>
-                                                        <Header.Content>
-                                                            Percentage of COVID-19 Deaths and Population by Sex in Georgia
-            		                        </Header.Content>
-                                                    </Header>
-                                                    <VictoryChart
-                                                        theme={VictoryTheme.material}
-                                                        width={500}
-                                                        height={300}
-                                                        domainPadding={100}
-                                                        scale={{ y: props.ylog ? 'log' : 'linear' }}
-                                                        // minDomain={{ y: props.ylog ? 1 : 0 }}
-                                                        maxDomain={{ y: 1 }}
-                                                        padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
-                                                        containerComponent={<VictoryContainer responsive={false} />}
-                                                    >
-                                                        <VictoryAxis style={{
-                                                            tickLabels: { fontSize: 18, padding: 2 }
-                                                        }} />
-                                                        <VictoryAxis dependentAxis
-                                                            domain={[0, 1]}
-                                                            style={{
-                                                                tickLabels: { fontSize: 18, padding: 2 }
-                                                            }}
-                                                            tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
-                                                        <VictoryLegend x={80} y={40}
-                                                            orientation="horizontal"
-                                                            gutter={1}
-                                                            // style={{ border: { stroke: "black" } }}
-                                                            data={[
-                                                                { name: 'Percentage of Deaths', symbol: { fill: colors['1'], type: "square" } },
-                                                                { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
-                                                            ]}
-                                                        />
-                                                        <VictoryGroup offset={20}
-                                                            colorScale={"qualitative"}
-                                                        >
-
-                                                            <VictoryBar
-                                                                alignment="start"
-                                                                barWidth={20}
-                                                                // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-                                                                labels={({ datum }) => `Percentage of Deaths: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
-                                                                data={[
-                                                                    { key: "Male", 'value': data_deaths['13']["maleC_P"] || 0, 'colors': '1' },
-                                                                    { key: "Female", 'value': data_deaths['13']["femaleC_P"] || 0, 'colors': '1' }]}
-                                                                labelComponent={<VictoryTooltip
-                                                                    orientation="top"
-                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
-                                                                    constrainToVisibleArea
-                                                                    labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
-                                                                    flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
-                                                                />}
-                                                                style={{
-                                                                    data: {
-                                                                        fill: ({ datum }) => colors[datum.colors],
-                                                                        fillOpacity: 2
-                                                                    }
-                                                                }}
-                                                                x="key"
-                                                                y="value"
-                                                            />
-                                                            <VictoryBar
-                                                                alignment="start"
-                                                                barWidth={20}
-                                                                data={[
-                                                                    { key: "Male", 'value': data_deaths['13']["maleP"] || 0, 'colors': '2' },
-                                                                    { key: "Female", 'value': data_deaths['13']["femaleP"] || 0, 'colors': '2' }]}
-                                                                labels={({ datum }) =>
-                                                                    `Percentage of Population: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
-                                                                }
-                                                                labelComponent={<VictoryTooltip
-                                                                    orientation="top"
-                                                                    style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
-                                                                    constrainToVisibleArea
-                                                                    // labelComponent={<VictoryLabel dx={-50} textAnchor='start' />}
-                                                                    flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
-                                                                />}
-                                                                style={{
-                                                                    data: {
-                                                                        fill: ({ datum }) => colors[datum.colors],
-                                                                        fillOpacity: 0.7
-                                                                    }
-                                                                }}
-                                                                x="key"
-                                                                y="value"
-                                                            />
-                                                        </VictoryGroup>
-                                                    </VictoryChart>
-
-                                                </Grid.Column>
-                                            </Grid.Row>
-                                        </Grid>
-                                        <Grid style={{ width: "100%", height: "100%" }}>
-                                            <Grid.Row columns={2} style={{ paddingBottom: 7 }}>
-                                                <Grid.Column>
-                                                    <Header as='h2' style={{ fontSize: "14pt", lineHeight: "16pt", width: 450, paddingLeft: 132 }}>
-                                                        <Header.Subheader style={{ fontFamily: 'lato', fontSize: 18, color: '#414042', lineHeight: "16pt", width: 450, textAlign: 'left' }}>
-                                                            This chart shows the percentage of cases and percentage of the population by sex for <b>Georgia</b>. The chart excludes data from {datades_cases['13']['femalePmiss'].toFixed(2)}% of confirmed cases who were missing information on sex. <b>Data Updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
-                                                                (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}</b>
-                                                        </Header.Subheader>
-                                                    </Header>
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    <Header as='h2' style={{ fontWeight: 400, width: 450, paddingLeft: 38 }}>
-
-                                                        <Header.Subheader style={{ fontFamily: 'lato', fontSize: 18, color: '#414042', lineHeight: "16pt", width: 450, textAlign: 'left' }}>
-                                                            This chart shows the percentage of deaths and percentage of the population by sex for <b>Georgia</b>. The chart excludes data from {datades_deaths['13']['femalePmiss'].toFixed(2)}% of confirmed deaths who were missing information on sex. <b>Data Updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' :
-                                                                (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}</b>
-                                                        </Header.Subheader>
-                                                    </Header>
-                                                </Grid.Column>
-                                            </Grid.Row>
-                                        </Grid>
-
+                            
+                                                               
 
                                         {/* cvi */}
-                                        
-                                        <Grid id="cvi" columns={2} style={{ width: "100%", height: "100%", backgroundColor: '#f0fafe' }}>
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Community Vulnerability Index')
+                                                console.log(activeCharacter)
+                                            }}
+                                            onLeave={() => {
+                                                setActiveCharacter('Community Vulnerability Index')
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id="cvi" >
                                             <Grid.Row>
-                                                <Header as='h2' textAlign='center' style={{ color: 'black', fontSize: "22pt", paddingTop: '3em', paddingLeft: '10em' }}>
+                                            <div id='cvi' style={sectionStyle2}>
+                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                     <Header.Content>COVID-19 by Community Vulnerability Index</Header.Content>
                                                 </Header>
+                                                </div>
                                             </Grid.Row>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 10 }}>
                                                 <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0 }}>
@@ -2198,22 +2289,28 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* SI */}
-                                        <Grid id='si' columns={2} style={{ width: "100%", height: "100%"}}>
-                                            <Grid.Row>   
-                                            <div id='si' style={sectionStyle2}>
-                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
-                                                <Header.Content>
-                                                COVID-19 by Residential Segregation Index
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Residential Segregation Index')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id='si' >
+                                            <Grid.Row>
+                                                <div id='si' style={sectionStyle2}>
+                                                <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
+                                                        <Header.Content>
+                                                            COVID-19 by Residential Segregation Index
                                     </Header.Content>
-                                            </Header>
-                                        </div>                                
-                                            {/* <div style={sectionStyle2}>
+                                                    </Header>
+                                                </div>
+                                                {/* <div style={sectionStyle2}>
                                                 <Header as='h2' textAlign='center' style={{ color: 'black', fontSize: "22pt", paddingTop: '3em', paddingBottom:'3em'}}>
                                                     <Header.Content></Header.Content>
                                                 </Header>
                                                 </div> */}
                                             </Grid.Row>
-                                            
+
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 0 }}>
 
                                                 <Header.Subheader style={{ fontFamily: 'lato', color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 0, paddingBottom: 28, paddingLeft: 0, paddingRight: 0 }}>
@@ -2447,37 +2544,21 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                             </Grid.Column>
                                         </Grid>
 
-                                        {/* Charactor */}
-                                        <Grid id='chara' >
-                                        <Grid.Row>
-                                        <div id='chara' style={sectionStyle2}>
-                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
-                                                <Header.Content>
-                                                COVID-19 by County Characteristics
-                                    </Header.Content>
-                                            </Header>
-                                        </div>
-                                            </Grid.Row>
-                                            <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 0 }}>
-
-                                                <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 10, paddingLeft: 0, paddingRight: 0 }}>
-                                                    {/* <center> <b style={{ fontSize: "18pt" }}>COVID-19 cases per 100,000 across the population characteristics of all the counties in the United States </b> </center> */}
-                                                        COVID-19 affects communities very differently. Underlying medical conditions;
-                                                        racial, gender, and age demographics; income levels; and population density are
-                                                        all contributing factors that determine the rate of COVID-19 in different counties.
-                                                        Some of the many county characteristics that may have a large impact on disparate rates
-                                                        of infection are displayed below, with counties divided into quintiles based on each characteristic,
-                                                        unless otherwise noted.
-                                                        </Header.Subheader>
-                                            </Header>
-                                        </Grid>
-
+                                        
                                         {/* urbanrural */}
-                                        <Grid id="urbanrural" columns={2} style={{ width: "100%", height: "100%" }}>
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Metropolitan Status')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id="urbanrural" >
                                             <Grid.Row>
-                                                <Header as='h2'  style={{textAlign:'center', color: 'black', fontSize: "22pt", paddingTop: '2em', paddingLeft: '14em', paddingBottom: '1em' }}>
+                                            <div id='urbanrural' style={sectionStyle2}>
+                                                <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                     <Header.Content>COVID-19 by Metropolitan Status</Header.Content>
                                                 </Header>
+                                                </div>
                                             </Grid.Row>
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
@@ -2716,11 +2797,19 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* poverty */}
-                                        <Grid id="poverty" columns={16} style={{ width: "100%", height: "100%" }}>
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Poverty')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id="poverty" >
                                             <Grid.Row>
-                                                <Header as='h2' style={{textAlign:'center', color: 'black', fontSize: "22pt", paddingTop: '2em', paddingLeft: '14em', paddingBottom: '1em' }}>
+                                            <div id='poverty' style={sectionStyle2}>
+                                                <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                     <Header.Content> COVID-19 by Percentage Population in Poverty</Header.Content>
                                                 </Header>
+                                                </div>
                                             </Grid.Row>
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
@@ -2943,11 +3032,19 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* black */}
-                                        <Grid id="black" columns={16} style={{ width: "100%", height: "100%" }}>
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - African American')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id="black" >
                                             <Grid.Row>
-                                                <Header as='h2' style={{textAlign:'center', color: 'black', fontSize: "22pt", paddingTop: '2em', paddingLeft: '14em', paddingBottom: '1em' }}>
+                                            <div id='black' style={sectionStyle2}>
+                                                <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                     <Header.Content> COVID-19 by Percentage African American Population</Header.Content>
                                                 </Header>
+                                                </div>
                                             </Grid.Row>
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
@@ -3170,11 +3267,19 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* Hispanic */}
-                                        <Grid id="hispanic" columns={16} style={{ width: "100%", height: "100%" }}>
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Hispanic')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id="hispanic" >
                                             <Grid.Row>
-                                                <Header as='h2' style={{textAlign:'center', color: 'black', fontSize: "22pt", paddingTop: '2em', paddingLeft: '14em', paddingBottom: '1em' }}>
+                                            <div id='hispanic' style={sectionStyle2}>
+                                                <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                     <Header.Content> COVID-19 by Percentage Hispanic Population</Header.Content>
                                                 </Header>
+                                                </div>
                                             </Grid.Row>
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
@@ -3396,11 +3501,19 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* diabetes */}
-                                        <Grid id="diabetes" columns={16} style={{ width: "100%", height: "100%" }}>
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Diabetes')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id="diabetes" >
                                             <Grid.Row>
-                                                <Header as='h2' style={{textAlign:'center', color: 'black', fontSize: "22pt", paddingTop: '2em', paddingLeft: '14em', paddingBottom: '1em' }}>
+                                            <div id='diabetes' style={sectionStyle2}>
+                                                <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                     <Header.Content> COVID-19 by Percentage of Population with Diabetes</Header.Content>
                                                 </Header>
+                                            </div>
                                             </Grid.Row>
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
@@ -3622,11 +3735,19 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* age */}
-                                        <Grid id="age" columns={16} style={{ width: "100%", height: "100%" }}>
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Age over 65')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id="age" >
                                             <Grid.Row>
-                                                <Header as='h2' style={{textAlign:'center', color: 'black', fontSize: "22pt", paddingTop: '2em', paddingLeft: '14em', paddingBottom: '1em' }}>
+                                            <div id='age' style={sectionStyle2}>
+                                                <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                     <Header.Content> COVID-19 by Percentage of Population Age Over 65</Header.Content>
                                                 </Header>
+                                                </div>
                                             </Grid.Row>
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
@@ -3848,11 +3969,19 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* Male */}
-                                        <Grid id='male' columns={16} style={{ width: "100%", height: "100%" }}>
+                                        {/* <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Male Percentage')
+                                                console.log(activeCharacter)
+                                            }}>
+                                        </Waypoint> </center> */}
+                                        <Grid id='male' >
                                             <Grid.Row>
-                                                <Header as='h2' style={{textAlign:'center', color: 'black', fontSize: "22pt", paddingTop: '2em', paddingLeft: '14em', paddingBottom: '1em' }}>
+                                            <div id='male' style={sectionStyle2}>
+                                                <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                     <Header.Content> COVID-19 by Percentage of Male</Header.Content>
                                                 </Header>
+                                                </div>
                                             </Grid.Row>
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
