@@ -1155,7 +1155,7 @@ export default function StateMap(props) {
                                 <Breadcrumb.Section active>{stateName}</Breadcrumb.Section>
                                 <Breadcrumb.Divider />
                             </Breadcrumb> */}
-                            <Grid columns={3} style={{ width: "100%", height: "100%"}} >
+                            <Grid stackable columns={3} style={{ width: "100%", height: "100%"}} >
                                 <Grid.Column>
                                     <StickyExampleAdjacentContext activeCharacter={activeCharacter} />
                                 </Grid.Column>
@@ -2084,12 +2084,11 @@ export default function StateMap(props) {
                                             </Grid.Row>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 10 }}>
                                                 <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0 }}>
-                                                    The Georgia Community Vulnerability Index data below are tools to understand which communities are at greater risk of COVID-19. Identifying counties at greater
-                                                    risk of COVID-19 can help inform politics and distribution of resources. The COVID-19 Community vulnerability index (CCVI) was created by Surgo Foundation and
-                                                    builds upon the Centers for Disease Control and Prevention Social Vulnerability Index (SVI). CCVI incorporates 34 county characteristics, stemming from six core
-                                                    themes, that could make a community at greater risk for  COVID-19. These themes include socioeconomic status, household composition and disability, minority status
-                                                    and language, housing type and transportation, epidemiologic factors, healthcare system factors. More information about the COVID-19 Community Vulnerability Index can
-be found <a href="https://precisionforcovid.org/ccvi">here</a>.
+                                                The COVID-19 Community Vulnerability Index measures the expected negative impact that a community may face in the context of the COVID-19 epidemic. 
+                                                Identifying counties at risk for worse COVID-19 health outcomes can help inform politics and distribution of resources. The COVID-19 Community Vulnerability 
+                                                Index (CCVI) was created by Surgo Foundation. CCVI incorporates 34 county characteristics, with six core themes: socioeconomic status, household composition 
+                                                and disability, minority status and language, housing type and transportation, epidemiologic factors, healthcare system factors. More information about the 
+                                                COVID-19 Community Vulnerability Index can be found <a href="https://precisionforcovid.org/ccvi">here</a>.
 
 <br />
                                                     <br />
