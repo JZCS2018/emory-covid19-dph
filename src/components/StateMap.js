@@ -69,7 +69,7 @@ const colorPalette2 = [
 
 const colorOut = '#c6007e';
 const contextRef = createRef()
-const nameList = ['summary', 're', 'cvi', 'si', 'urbanrural', 'poverty', 'black', 'hispanic', 'diabetes', 'age', 'male'];
+// const nameList = ['summary', 're', 'cvi', 'si', 'urbanrural', 'poverty', 'black', 'hispanic', 'diabetes', 'age', 'male'];
 var scrollCount = 0;
 
 const countyColor = '#f2a900';
@@ -120,12 +120,12 @@ function numberWithCommas(x) {
 }
 
 function StickyExampleAdjacentContext(props) {
-    const [sTate, setsTate] = useState({ activeItem: 'Interactive Map' })
+    const [sTate, setsTate] = useState({ activeItem: '' })
     const { activeItem } = sTate
-    useEffect(() => {
-        setsTate(nameList[scrollCount])
-        console.log('name changed!!!!!!!!')
-    }, [scrollCount])
+    // useEffect(() => {
+    //     setsTate(nameList[scrollCount])
+    //     console.log('name changed!!!!!!!!')
+    // }, [scrollCount])
     // console.log(props.activeCharacter)
     return (
 
@@ -1159,14 +1159,12 @@ export default function StateMap(props) {
                                 <Grid.Column>
                                     <StickyExampleAdjacentContext activeCharacter={activeCharacter} />
                                 </Grid.Column>
-                                {/* <center> <Waypoint
+                                <center> <Waypoint
                                     onEnter={() => {
                                         setActiveCharacter('Interactive Map')
                                         console.log(activeCharacter)
-                                    }}
-                                    onLeave={() => {
                                     }}>
-                                </Waypoint> </center> */}
+                                </Waypoint> </center>
                                 <Grid.Column width={16} style={{ width: "100%", height: "100%"}}>
                                     <Divider id='summary' hidden />
 
@@ -1351,14 +1349,13 @@ export default function StateMap(props) {
                                     </Waypoint> </center> */}
 
                                     <Grid >
-                                        {/* <center> <Waypoint
+                                        <center> <Waypoint
                                             onEnter={() => {
-                                                setActiveCharacter('COVID-19 by Age')
+                                                setActiveCharacter('Interactive Map')
                                                 console.log(activeCharacter)
                                             }}
-                                            onLeave={() => {
-                                            }}>
-                                        </Waypoint> </center> */}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <div id='age_g' style={sectionStyle2}>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                 <Header.Content>
@@ -1574,14 +1571,13 @@ export default function StateMap(props) {
                                             </Grid.Row>
                                         </Grid>
 
-                                        {/* <center> <Waypoint
+                                        <center> <Waypoint
                                             onEnter={() => {
-                                                setActiveCharacter('COVID-19 by Sex')
+                                                setActiveCharacter('COVID-19 by Age')
                                                 console.log(activeCharacter)
                                             }}
-                                            onLeave={() => {
-                                            }}>
-                                        </Waypoint> </center> */}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         {/* <center> <Divider id='sex_g' hidden style={{ paddingBottom: 50 }} /> </center>
                                         <center> <Divider /> </center> */}
                                         <div id='sex_g' style={sectionStyle2}>
@@ -1802,7 +1798,12 @@ export default function StateMap(props) {
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
-                                        
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('COVID-19 by Sex')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%"></Waypoint> </center>
                                         <div id='re' style={sectionStyle2}>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                 <Header.Content>
@@ -2032,12 +2033,13 @@ export default function StateMap(props) {
 
 
                                         {/* Charactor */}
-                                        {/* <center> <Waypoint
+                                        <center> <Waypoint
                                             onEnter={() => {
-                                                setActiveCharacter('COVID-19 by County Characteristics')
+                                                setActiveCharacter('COVID-19 by Race/Ethnicity')
                                                 console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id='chara' style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
                                                 <div id='chara' style={sectionStyle2}>
@@ -2074,6 +2076,13 @@ export default function StateMap(props) {
                                                 setActiveCharacter('Community Vulnerability Index')
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('COVID-19 by County Characteristics')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id="cvi" >
                                             <Grid.Row>
                                             <div id='cvi' style={sectionStyle2}>
@@ -2295,6 +2304,13 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 console.log(activeCharacter)
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Community Vulnerability Index')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id='si' >
                                             <Grid.Row>
                                                 <div id='si' style={sectionStyle2}>
@@ -2552,6 +2568,13 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 console.log(activeCharacter)
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Residential Segregation Index')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id="urbanrural" >
                                             <Grid.Row>
                                             <div id='urbanrural' style={sectionStyle2}>
@@ -2803,6 +2826,13 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 console.log(activeCharacter)
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Metropolitan Status')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id="poverty" >
                                             <Grid.Row>
                                             <div id='poverty' style={sectionStyle2}>
@@ -3038,6 +3068,13 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 console.log(activeCharacter)
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Poverty')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id="black" >
                                             <Grid.Row>
                                             <div id='black' style={sectionStyle2}>
@@ -3273,6 +3310,13 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 console.log(activeCharacter)
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - African American')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id="hispanic" >
                                             <Grid.Row>
                                             <div id='hispanic' style={sectionStyle2}>
@@ -3507,6 +3551,13 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 console.log(activeCharacter)
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Hispanic')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id="diabetes" >
                                             <Grid.Row>
                                             <div id='diabetes' style={sectionStyle2}>
@@ -3741,6 +3792,13 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 console.log(activeCharacter)
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Diabetes')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id="age" >
                                             <Grid.Row>
                                             <div id='age' style={sectionStyle2}>
@@ -3975,6 +4033,13 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 console.log(activeCharacter)
                                             }}>
                                         </Waypoint> </center> */}
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Age over 65')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                         <Grid id='male' >
                                             <Grid.Row>
                                             <div id='male' style={sectionStyle2}>
@@ -3988,7 +4053,7 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                     <Header as='h2' style={{ fontWeight: 600, fontSize: "16pt", lineHeight: "16pt" }}>
                                                         <Header.Content>
                                                             Georgia Percentage of Male Map
-                                        </Header.Content>
+                                            </Header.Content>
                                                     </Header>
                                                 </Grid.Row>
                                                 <Grid.Row data-tip='male' data-for='male' style={{ paddingTop: "0", paddingBottom: '1em' }}>
@@ -4202,11 +4267,18 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 </Grid.Row>
                                             </Grid.Column>
                                         </Grid>
+                                        <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('Characteristics - Male Percentage')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                     </Grid>
                                 </Grid.Column>
 
                             </Grid>
-
+                            
                         </div>
                     }
                     <Notes />
