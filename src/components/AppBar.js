@@ -17,12 +17,12 @@ export default function AppBar(props) {
       {/* <Menu borderless inverted fixed='top'
         style={{backgroundImage: 'url("https://www.htmlcsscolor.com/preview/128x128/103052.png")',
                 backgroundSize: 'cover'}}> */}
-        <Container>
-          <Menu.Item as='a' header>
+        <Container style = {{paddingRight: '150em'}}>
+          <Menu.Item as='a' header >
                 <Image size='mini' src='https://dph.georgia.gov/themes/custom/ga_forest/orchard/assets/images/icons/logo/ga-logo--gold.svg' />
           </Menu.Item>
           
-          <Menu.Item as='a' header onClick={() => history.push('/')}>
+          <Menu.Item as='a' header onClick={() => history.push('/13')}>
             <span style={{fontSize: '17px',fontWeight: 400, color: '#fff', lineHeight: 1.3}}>
            <strong>Georgia Department</strong>
            <br></br>
@@ -30,11 +30,11 @@ export default function AppBar(props) {
            <strong>&nbsp;Public Health</strong>
            </span>
           </Menu.Item>
-          <Menu.Item 
+          {/* <Menu.Item 
             active={props.menu==='countyReport'} 
             content='Home'
             onClick={() => history.push('/13')}
-            name='countyReport'/>
+            name='countyReport'/> */}
           {/* <Menu.Item 
             active={props.menu==='countyCompare'} 
             onClick={() => history.push('/compare-counties')}

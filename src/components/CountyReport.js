@@ -21,6 +21,8 @@ import {
 } from 'victory';
 
 import { useParams, useHistory } from 'react-router-dom';
+import LazyHero from 'react-lazy-hero';
+
 import Notes from './Notes';
 import ReactTooltip from "react-tooltip";
 import fips2county from './fips2county.json'
@@ -95,12 +97,25 @@ function numberWithCommas(x) {
     x = x.replace(pattern, "$1,$2");
   return x;
 }
+const sectionStyle1 = {
+  width: "100%",
+  height: "100%",
+  backgroundSize: 'auto auto',
+  backgroundImage: `url("/Emory_COVID_header_LightBlue_original.jpg")`
+};
+const sectionStyle2 = {
+  width: "100%",
+  height: "100%",
+  backgroundSize: 'cover',
+  backgroundImage: `url("/CoronaVirus_LightBlue.jpg")`
+};
 
 function BarChart(props) {
   const colors = {
-    "1": '#024174',
-    '2': 'grey'
-  };
+    "3": '#024174',
+    '2': "#99bbcf",
+    '1': '#337fb5'
+};
   if (props.var_num === 4) {
     return (
       <VictoryChart
@@ -119,34 +134,34 @@ function BarChart(props) {
         <VictoryAxis style={{
           tickLabels: { fontSize: 18, padding: 2 }
         }} />
-        <VictoryAxis dependentAxis 
-        domain={[0, 1]}
-        style={{
-          tickLabels: { fontSize: 18, padding: 2 }
-        }}
-          tickFormat={(y) => (y <= 1 ? y*100 : (y / 1000 + 'k'))} />
-          <VictoryLegend x={80} y={40}
+        <VictoryAxis dependentAxis
+          domain={[0, 1]}
+          style={{
+            tickLabels: { fontSize: 18, padding: 2 }
+          }}
+          tickFormat={(y) => (y <= 1 ? y * 100 : (y / 1000 + 'k'))} />
+        <VictoryLegend x={80} y={40}
           orientation="horizontal"
           gutter={1}
           // style={{ border: { stroke: "black" } }}
           data={[
-            { name:  `Percentage of ${props.cate}`, symbol: { fill: colors['1'], type: "square" } },
-            { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" }},
+            { name: `Percentage of ${props.cate}`, symbol: { fill: colors['1'], type: "square" } },
+            { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
           ]}
         />
         <VictoryGroup offset={20}
           colorScale={"qualitative"}
         >
-          
+
           <VictoryBar
             alignment="start"
             barWidth={20}
             // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-            labels={({ datum }) => `${props.cate} Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2)*100)}%`}
-            data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': '1' },
-            { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': '1' },
-            { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var[2]] || 0, 'colors': '1' },
-            { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var[3]] || 0, 'colors': '1' }]}
+            labels={({ datum }) => `${props.cate} Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
+            data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': props.co },
+            { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': props.co },
+            { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var[2]] || 0, 'colors': props.co },
+            { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var[3]] || 0, 'colors': props.co }]}
             labelComponent={<VictoryTooltip
               orientation="top"
               style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
@@ -171,7 +186,7 @@ function BarChart(props) {
             { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var1[2]] || 0, 'colors': '2' },
             { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var1[3]] || 0, 'colors': '2' }]}
             labels={({ datum }) =>
-              `Population Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2)*100)}%`
+              `Population Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
             }
             labelComponent={<VictoryTooltip
               orientation="top"
@@ -199,8 +214,11 @@ function BarChart(props) {
         width={props.width || 650}
         height={300}
         domainPadding={props.pad || 100}
+
         scale={{ y: props.ylog ? 'log' : 'linear' }}
-        minDomain={{ y: props.ylog ? 1 : 0 }}
+        // minDomain={{ y: props.ylog ? 1 : 0 }}
+        maxDomain={{ y: 1 }}
+        // domain={{ y: [0, 1] }}
         padding={{ left: 79, right: 40, top: 60, bottom: 50 }}
         containerComponent={<VictoryContainer responsive={false} />}
       >
@@ -210,19 +228,20 @@ function BarChart(props) {
         <VictoryAxis style={{
           tickLabels: { fontSize: 18, padding: 2 }
         }} />
-        <VictoryAxis dependentAxis 
-        domain={[0, 1]}
-        style={{
-          tickLabels: { fontSize: 18, padding: 2 }
-        }}
-          tickFormat={(y) => (y <= 1 ? y*100  : (y / 1000 + 'k'))} />
+        <VictoryAxis dependentAxis
+          // domain={{x: [0, 1]}}
+          style={{
+            tickLabels: { fontSize: 18, padding: 2 }
+          }}
+          tickFormat={(y) => (y <= 1 ? y * 100 : console.log(y))}
+        />
         <VictoryLegend x={80} y={40}
           orientation="horizontal"
           gutter={1}
           // style={{ border: { stroke: "black" } }}
           data={[
-            { name:  `Percentage of ${props.cate}`, symbol: { fill: colors['1'], type: "square" } },
-            { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" }},
+            { name: `Percentage of ${props.cate}`, symbol: { fill: colors['1'], type: "square" } },
+            { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
           ]}
         />
         <VictoryGroup offset={20}
@@ -232,9 +251,9 @@ function BarChart(props) {
 
             barWidth={20}
             // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-            labels={({ datum }) => `${props.cate} Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2)*100)}%`}
-            data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': '1' },
-            { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': '1' }]}
+            labels={({ datum }) => `${props.cate} Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
+            data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': props.co },
+            { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': props.co }]}
             labelComponent={<VictoryTooltip
               orientation="top"
               style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
@@ -258,7 +277,7 @@ function BarChart(props) {
             { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var1[1]] || 0, 'colors': '2' }]}
 
             labels={({ datum }) =>
-              `Population Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2)*100)}%`
+              `Population Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
             }
             labelComponent={<VictoryTooltip
               orientation="top"
@@ -580,60 +599,71 @@ export default function CountyReport() {
 
     return (
       <div>
+
         <AppBar menu='countyReport' />
+        <Container fluid style={{ marginTop: '8em' }}>
+          <Breadcrumb style={{ paddingBottom: '2em', paddingLeft: '30em' }}>
+            <Breadcrumb.Section link onClick={() => history.push('/' + stateFips)}>{stateName}</Breadcrumb.Section>
+            <Breadcrumb.Divider />
+            <Breadcrumb.Section active>{countyName}</Breadcrumb.Section>
+            <Breadcrumb.Divider />
+          </Breadcrumb>
+
+          <div style={sectionStyle2}>
+            <Header as='h2' style={{
+              textAlign: 'center', color: 'black', fontSize: "22pt",
+              paddingTop: '3em', paddingBottom: '3em'
+            }}>
+              <Header.Content>
+                Summary of COVID-19 in <b>{countyName}</b>, GA
+              </Header.Content>
+            </Header>
+          </div>
+        </Container>
         <Container style={{ marginTop: '8em', minWidth: '1260px', paddingRight: 0 }}>
           {configsCounty &&
             <div>
-              <Breadcrumb>
-                {/* <Breadcrumb.Section link onClick={() => history.push('/')}>United States</Breadcrumb.Section>
-            <Breadcrumb.Divider /> */}
-                <Breadcrumb.Section link onClick={() => history.push('/' + stateFips)}>{stateName}</Breadcrumb.Section>
-                <Breadcrumb.Divider />
-                <Breadcrumb.Section active>{countyName}</Breadcrumb.Section>
-                <Breadcrumb.Divider />
-              </Breadcrumb>
-              <Header as='h1' style={{ fontWeight: 300 }}>
+              {/* <Header as='h1' style={{ fontWeight: 300 }}>
                 <Header.Content>
-                  {/* Covid-19 Health Equity Report for <span style={{color: countyColor}}>{countyName}</span> */}
-                  {/* <span style={{ color: countyColor }}>{countyName}</span> */}
+                  
                   <b>{countyName}</b>
-                  {/* <Header.Subheader style={{fontWeight: 300}}>
+                  <Header.Subheader style={{fontWeight: 300}}>
               See how health determinants impact COVID-19 outcomes. 
-              </Header.Subheader> */}
+              </Header.Subheader>
                 </Header.Content>
-              </Header>
-              <Divider horizontal style={{ fontWeight: 600, color: '#232423', fontSize: '16pt', paddingTop: '1em' }}>SUMMARY OF COVID-19 IN <b>{countyName}</b>, GEORGIA</Divider>
+              </Header> */}
+              <Divider horizontal style={{ minWidth: '1260px', fontWeight: 600, color: '#232423', fontSize: '18pt', paddingTop: '1em' }}> COVID-19 <b>cases</b> in {countyName}</Divider>
 
-              <Grid style={{ paddingTop: '2em', width: "1260px" }} centered>
-                <Header as='h2' style={{ fontWeight: 300, textAlign: 'center' }} >
+              <Grid style={{ paddingTop: '2em', width: "1260px", paddingLeft: '1.5em' }} centered>
+                {/* <Header as='h2' style={{ fontWeight: 300, textAlign: 'center' }} >
                   <Header.Content>
                     COVID-19 <b>cases</b> in {countyName}
                   </Header.Content>
-                </Header>
+                </Header> */}
                 <Grid.Row style={{ paddingTop: '1em' }}>
                   <Grid.Column width={16} style={{ paddingLeft: '0', paddingRight: '0' }}>
-                    <Table fixed>
-                      <Table.Header>
-                        <Table.Row textAlign='center'>
+                    <Table fixed inverted style={sectionStyle1}>
+                      <Table.Header >
+                        <Table.Row textAlign='center' >
                           <Table.HeaderCell colSpan='1' style={{ width: 150 }}> </Table.HeaderCell>
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 200 }}> ALL CASES TO DATE</Table.HeaderCell>}
+                          <Table.HeaderCell style={{ width: 200 }}> <Popup
+                            trigger={<p style={{ paddingLeft: '4.5em' }}>ALL CASES TO DATE</p>
+                            }
                             content={"All confirmed cases reported to DPH as of " + new Date(dateCur[stateFips + countyFips].todaydat * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' })}
-                            basic />
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 200 }}> CASES IN PAST 14 DAYS</Table.HeaderCell>}
+                            basic /></Table.HeaderCell>
+                          <Table.HeaderCell style={{ width: 200 }}><Popup
+                            trigger={<p style={{ paddingLeft: '3em' }}>CASES IN PAST 14 DAYS</p>
+                            }
                             content={"All confirmed cases reported to DPH during the 14 days preceding the report publication date."}
-                            basic />
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 200 }}> CASES PER 100K (PAST 14 DAYS)</Table.HeaderCell>}
+                            basic /> </Table.HeaderCell>
+                          <Table.HeaderCell style={{ width: 200 }}><Popup
+                            trigger={<p style={{ paddingLeft: '2.5em' }}>CASES PER 100K (PAST 14 DAYS)</p>
+                            }
                             content={"14-day case count/100K residents based on 2020 population projects derived from census data."}
-                            basic />
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 200 }}> 14-DAY RATE CATEGORY</Table.HeaderCell>} flowing hoverable>
+                            basic /> </Table.HeaderCell>
+                          <Table.HeaderCell style={{ width: 200 }}> <Popup
+                            trigger={<p>14-DAY RATE CATEGORY</p>
+                            } flowing hoverable>
                             Based on the 14-day case rate
                           <List as='ul'>
                               <List.Item as='li'>High: {'>'} 100 cases/100K</List.Item>
@@ -642,33 +672,36 @@ export default function CountyReport() {
                               <List.Item as='li'>Low: {">"} 0-10 cases/100K</List.Item>
                               <List.Item as='li'>Less than 5 cases reported, rate not calculated</List.Item>
                             </List>
-                          </Popup>
-
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 200 }}> CHANGE IN LAST 2 WEEKS</Table.HeaderCell>} flowing hoverable>
+                          </Popup></Table.HeaderCell>
+                          <Table.HeaderCell style={{ width: 200 }}> <Popup
+                            trigger={<p>CHANGE IN LAST 2 WEEKS</p>
+                            } flowing hoverable>
                             Change in case count during the previous 14 days, comparing<br></br> the second 7-day period to the first 7-day period.
                           <List as='ul'>
                               <List.Item as='li'>Increasing: 5% or greater change</List.Item>
                               <List.Item as='li'>Decreasing: -5% or less change</List.Item>
                               <List.Item as='li'>Less than 5% change</List.Item>
                             </List>
-                          </Popup>
-                        </Table.Row>
+                          </Popup></Table.HeaderCell>
 
+                        </Table.Row>
+                      </Table.Header>
+                    </Table>
+                    <Table fixed >
+                      <Table.Header >
                         <Table.Row textAlign='center'>
                           <Table.HeaderCell style={{ fontSize: '18px' }}> {countyName} </Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetric.casescum === null || covidMetric.casescum < 0 ? '0' : covidMetric.casescum.toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetric.casescum14day === null || covidMetric.casescum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.casescum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetric.casescum14dayR === null || covidMetric.casescum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.casescum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.casescum === null || covidMetric.casescum < 0 ? '0' : covidMetric.casescum.toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.casescum14day === null || covidMetric.casescum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.casescum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.casescum14dayR === null || covidMetric.casescum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.casescum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>{covidMetric.category14day === null || covidMetric.category14day < 0 ? '0' : covidMetric.category14day}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>{covidMetric.change14day === null ? '0' : covidMetric.change14day}</Table.HeaderCell>
                         </Table.Row>
                         <Table.Row textAlign='center'>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>Georgia</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetricGa.casescum === null || covidMetricGa.casescum < 0 ? '0' : covidMetricGa.casescum.toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetricGa.casescum14day === null || covidMetricGa.casescum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.casescum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetricGa.casescum14dayR === null || covidMetricGa.casescum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.casescum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.casescum === null || covidMetricGa.casescum < 0 ? '0' : covidMetricGa.casescum.toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.casescum14day === null || covidMetricGa.casescum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.casescum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.casescum14dayR === null || covidMetricGa.casescum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.casescum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>{covidMetricGa.category14day === null || covidMetricGa.category14day < 0 ? '0' : covidMetricGa.category14day}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>{covidMetricGa.change14day === null || covidMetricGa.change14day < 0 ? '0' : covidMetricGa.change14day}</Table.HeaderCell>
                         </Table.Row>
@@ -677,56 +710,60 @@ export default function CountyReport() {
                   </Grid.Column>
 
                 </Grid.Row>
+              </Grid>
 
-                <Header as='h2' style={{ fontWeight: 300, textAlign: 'center' }} >
-                  <Header.Content>
-                    COVID-19 <b>deaths</b> in {countyName}
-                  </Header.Content>
-                </Header>
+              <Divider horizontal style={{ fontWeight: 600, color: '#232423', fontSize: '18pt', paddingTop: '1em' }}> COVID-19 <b>deaths</b> in {countyName}</Divider>
+              <Grid style={{ paddingTop: '2em', width: "1260px", paddingLeft: '1.5em' }} centered>
                 <Grid.Row style={{ paddingTop: '1em' }}>
                   <Grid.Column width={16} style={{ paddingLeft: '0', paddingRight: '0' }}>
-
-                    <Table celled fixed singleLine>
-                      <Table.Header>
+                    <Table fixed inverted style={sectionStyle1}>
+                      <Table.Header >
                         <Table.Row textAlign='center'
 
                         >
                           <Table.HeaderCell colSpan='1' style={{ width: 150 }}> </Table.HeaderCell>
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 200 }}> ALL DEATHS TO DATE</Table.HeaderCell>}
+                          <Table.HeaderCell style={{ width: 200 }}><Popup
+                            trigger={<p style={{ paddingLeft: '6.2em' }}>ALL DEATHS TO DATE</p>
+                            }
                             content={"All confirmed deaths reported to DPH as of " + new Date(dateCur.date * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' })}
-                            basic />
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 230 }}> DEATHS IN PAST 14 DAYS</Table.HeaderCell>}
+                            basic /> </Table.HeaderCell>
+                          <Table.HeaderCell style={{ width: 230 }}><Popup
+                            trigger={<p style={{ paddingLeft: '4.2em' }}> DEATHS IN PAST 14 DAYS</p>
+                            }
                             content={"All confirmed deaths reported to DPH during the 14 days preceding the report publication date."}
-                            basic />
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 200 }}> DEATHS PER 100K (PAST 14 DAYS)</Table.HeaderCell>}
+                            basic /></Table.HeaderCell>
+                          <Table.HeaderCell style={{ width: 200 }}><Popup
+                            trigger={<p style={{ paddingLeft: '0.4em' }}> DEATHS PER 100K (PAST 14 DAYS)</p>
+                            }
                             content={"14-day deaths count/100K residents based on 2020 population projects derived from census data."}
-                            basic />
-                          <Popup
-                            trigger={
-                              <Table.HeaderCell style={{ width: 200 }}> CASE FATALITY RATIO (%)</Table.HeaderCell>}
+                            basic /></Table.HeaderCell>
+                          <Table.HeaderCell style={{ width: 200 }}><Popup
+                            trigger={<p>CASE FATALITY RATIO (%)</p>
+                            }
                             content={"The case fatality ratio is the percent of all confirmed cases who have been reported as having died. While this is used as a measure of disease severity, the ratio may also be affected by the level of testing and quality of follow-up data on cases."}
-                            basic />
+                            basic /> </Table.HeaderCell>
+
                         </Table.Row>
+                      </Table.Header>
+                    </Table>
+
+                    <Table celled fixed singleLine>
+                      <Table.Header>
+
 
                         <Table.Row textAlign='center'>
                           <Table.HeaderCell style={{ fontSize: '18px' }}> {countyName} </Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetric.deathscum === null || covidMetric.deathscum < 0 ? '0' : covidMetric.deathscum.toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetric.deathscum14day === null || covidMetric.deathscum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.deathscum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetric.deathscum14dayR === null || covidMetric.deathscum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.deathscum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetric.cfr === null || covidMetric.cfr < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.cfr).toFixed(2)).toLocaleString() + '%'}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.deathscum === null || covidMetric.deathscum < 0 ? '0' : covidMetric.deathscum.toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px' , color: '#337fb5'}}>{covidMetric.deathscum14day === null || covidMetric.deathscum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.deathscum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px' , color: '#337fb5'}}>{covidMetric.deathscum14dayR === null || covidMetric.deathscum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.deathscum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.cfr === null || covidMetric.cfr < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.cfr).toFixed(2)).toLocaleString() + '%'}</Table.HeaderCell>
                         </Table.Row>
                         <Table.Row textAlign='center'>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>Georgia</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetricGa.deathscum === null || covidMetricGa.deathscum < 0 ? '0' : covidMetricGa.deathscum.toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetricGa.deathscum14day === null || covidMetricGa.deathscum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.deathscum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetricGa.deathscum14dayR === null || covidMetricGa.deathscum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.deathscum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px' }}>{covidMetricGa.cfr === null || covidMetricGa.cfr < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.cfr).toFixed(2)).toLocaleString() + '%'}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.deathscum === null || covidMetricGa.deathscum < 0 ? '0' : covidMetricGa.deathscum.toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.deathscum14day === null || covidMetricGa.deathscum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.deathscum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.deathscum14dayR === null || covidMetricGa.deathscum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.deathscum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px' , color: '#337fb5'}}>{covidMetricGa.cfr === null || covidMetricGa.cfr < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.cfr).toFixed(2)).toLocaleString() + '%'}</Table.HeaderCell>
                         </Table.Row>
                       </Table.Header>
                     </Table>
@@ -983,7 +1020,7 @@ export default function CountyReport() {
                   </Grid.Column>
 
                 </Grid.Row>
-                <Grid.Row style={{ paddingTop: 0 }}>
+                <Grid.Row style={{ paddingTop: 0, paddingLeft: '1.5em' }}>
                   <small style={{ fontWeight: 300, color: 'black' }}>
                     Note: Data are provisional and subject to change. Zip codes may cross county boundaries. Zip codes being displayed include the total count of cases for that zip code.
                     </small>
@@ -994,27 +1031,27 @@ export default function CountyReport() {
                 <Grid.Row >
                   <Grid.Column>
                     <svg width="400" height="500" >
-                      <VictoryLabel style={{
+                      {/* <VictoryLabel style={{
                         textAnchor: "start",
                         verticalAnchor: "end", fill: "#000000", fontFamily: "inherit",
                         fontSize: "20px", fontWeight: "bold"
                       }} text="Proportion of cases with a comorbidity
-                  " x={15} y={28} textAnchor="middle" />
+                  " x={15} y={28} textAnchor="middle" /> */}
                       <VictoryPie
-                        colorScale={['Gray', 'GoldenRod']}
+                        colorScale={['#024174', '#337fb5']}
                         standalone={false}
                         style={{ labels: { fill: "white" } }}
                         labelRadius={80}
                         width={400} height={400}
-                        padAngle={1}
+                        padAngle={2}
                         data={[
-                          { x: "Cats", y: 22, label: "22%" },
-                          { x: "Dogs", y: 78, label: "78%" },
+                          { x: 1, y: 100 - datades_cases[stateFips + countyFips]['cdc_underlying2Percent'], label: `${100 - datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2)}%` },
+                          { x: 2, y: datades_cases[stateFips + countyFips]['cdc_underlying2Percent'], label: `${datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2)}%` },
                         ]}
                       />
                       <VictoryLegend
                         standalone={false}
-                        colorScale={['Gray', 'GoldenRod']}
+                        colorScale={['#024174', '#337fb5']}
                         x={150} y={350}
                         data={[{ name: "No underlying conditions", labels: { fontSize: 18 } },
                         { name: "Underlying health condition", labels: { fontSize: 18 } }
@@ -1022,19 +1059,26 @@ export default function CountyReport() {
                       />
                     </svg>
                   </Grid.Column>
-                  <Grid.Column style={{ paddingLeft: '2em', paddingRight: '1em', paddingTop: '8em' }}>
-                    <small style={{ fontWeight: 300, fontSize: 20, color: 'black' }} align="justify">
-                      The pie chart shows the proportion of confirmed COVID-19 cases in <b>{countyName}</b> who
+                  <Grid.Column style={{ paddingLeft: '0em', paddingRight: '1em', paddingTop: '4em' }}>
+                    <Grid.Row style={{ paddingLeft: '1em' }}>
+                      <Header as='h2' style={{ textAlign: 'left', color: 'black', fontSize: "18pt", paddingTop: '0em', paddingBottom: '0em' }}>
+                        <Header.Content>
+                          Proportion of cases with a comorbidity
+                                    </Header.Content>
+                      </Header>
+                    </Grid.Row>
+                    <Divider />
+                    <Grid.Row style={{ paddingLeft: '1em' }}>
+
+                      <small style={{ fontWeight: 300, fontSize: 20, color: 'black' }} align="justify">
+                        The pie chart shows the proportion of confirmed COVID-19 cases in <b>{countyName}</b> who
                   presented with an underlying medical condition. Underlying medical conditions
                   increase the risk of experiencing severe disease which may lead to hospitalization
                   and death. Of the {datades_cases[stateFips + countyFips]['cdc_underlying2_N'] ? datades_cases[stateFips + countyFips]['cdc_underlying2_N'] : "N/A"} confirmed cases with data available, {datades_cases[stateFips + countyFips]['cdc_underlying2Percent'] ? datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2) : "N/A"}% had an underlying medical condition that increases risk of severe outcomes according to the CDC. These underlying medical conditions include: lung disease, diabetes, cardiovascular disease, renal disease, and/or an immunocompromised state. The chart excludes data from {datades_cases[stateFips + countyFips]['cdc_underlying2Pmiss'] ? datades_cases[stateFips + countyFips]['cdc_underlying2Pmiss'].toFixed(2) : "N/A"}% of confirmed COVID-19 cases whose medical history was unknown.
                     </small>
+                    </Grid.Row>
+
                   </Grid.Column>
-                  {/* <Grid.Row style={{ paddingTop: 0 }}>
-                  <small style={{ fontWeight: 300, color: 'black' }}>
-                    Note: For comorbidities, we include lung disease, diabetes, CVD, renal disease, Immunocompromised state. 
-                    </small>
-                </Grid.Row> */}
 
                 </Grid.Row>
               </Grid>
@@ -1062,7 +1106,8 @@ export default function CountyReport() {
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
-                        data={data_cases} />
+                        data={data_cases} 
+                        co = '1'/>
 
                     </Grid.Column>
                     <Grid.Column>
@@ -1077,7 +1122,8 @@ export default function CountyReport() {
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
-                        data={data_cases} />
+                        data={data_cases} 
+                        co = '1'/>
                     </Grid.Column>
                     <Grid.Column>
                       <BarChart
@@ -1090,7 +1136,8 @@ export default function CountyReport() {
                         width={400}
                         stateFips={stateFips}
                         countyFips={countyFips}
-                        data={data_cases} />
+                        data={data_cases} 
+                        co = '1'/>
                     </Grid.Column>
                   </Grid.Row>
                 }
@@ -1098,17 +1145,17 @@ export default function CountyReport() {
                   <Grid.Row columns={3} style={{ padding: 0 }}>
                     <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                       <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                      This chart shows the percentage of cases and percentage of the population by age for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['age4catPmiss'].toFixed(2)}% of confirmed cases who were missing information on age.
+                        This chart shows the percentage of cases and percentage of the population by age for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['age4catPmiss'].toFixed(2)}% of confirmed cases who were missing information on age.
                     </small>
                     </Grid.Column>
                     <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                       <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                      This chart shows the percentage of cases and percentage of the population by sex for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['femalePmiss'].toFixed(2)}% of confirmed cases who were missing information on sex.
+                        This chart shows the percentage of cases and percentage of the population by sex for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['femalePmiss'].toFixed(2)}% of confirmed cases who were missing information on sex.
                     </small>
                     </Grid.Column>
                     <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                       <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                      This chart shows the percentage of cases and percentage of the population by race and ethnicity for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['race_3Pmiss'].toFixed(2)}% of confirmed cases who were missing information on race/ethnicity.                    </small>
+                        This chart shows the percentage of cases and percentage of the population by race and ethnicity for <b>{countyName}</b>. The chart excludes data from {datades_cases[stateFips + countyFips]['race_3Pmiss'].toFixed(2)}% of confirmed cases who were missing information on race/ethnicity.                    </small>
                     </Grid.Column>
                   </Grid.Row>}
               </Grid>
@@ -1144,7 +1191,8 @@ export default function CountyReport() {
                           width={400}
                           stateFips={stateFips}
                           countyFips={countyFips}
-                          data={data_deaths} />
+                          data={data_deaths} 
+                          co = '3'/>
                       </Grid.Column>
                       <Grid.Column>
                         <BarChart
@@ -1158,7 +1206,8 @@ export default function CountyReport() {
                           pad={80}
                           stateFips={stateFips}
                           countyFips={countyFips}
-                          data={data_deaths} />
+                          data={data_deaths} 
+                          co = '3'/>
                       </Grid.Column>
                       <Grid.Column>
                         <BarChart
@@ -1171,7 +1220,8 @@ export default function CountyReport() {
                           width={400}
                           stateFips={stateFips}
                           countyFips={countyFips}
-                          data={data_deaths} />
+                          data={data_deaths} 
+                          co = '3'/>
                       </Grid.Column>
                     </Grid.Row>}
                 {!(datades_deaths[stateFips + countyFips]) ? ' ' :
@@ -1181,17 +1231,17 @@ export default function CountyReport() {
                     <Grid.Row columns={3} style={{ padding: 0 }}>
                       <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                         <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                        This chart shows the percentage of deaths and percentage of the population by age group for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['age4catPmiss'].toFixed(2)}% of confirmed deaths who were missing information on age.
+                          This chart shows the percentage of deaths and percentage of the population by age group for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['age4catPmiss'].toFixed(2)}% of confirmed deaths who were missing information on age.
                     </small>
                       </Grid.Column>
                       <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                         <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                        This chart shows the percentage of deaths and percentage of the population by sex for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['femalePmiss'].toFixed(2)}% of confirmed deaths who were missing information on sex.
+                          This chart shows the percentage of deaths and percentage of the population by sex for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['femalePmiss'].toFixed(2)}% of confirmed deaths who were missing information on sex.
                     </small>
                       </Grid.Column>
                       <Grid.Column style={{ paddingLeft: '4em', paddingRight: '0em' }}>
                         <small style={{ fontWeight: 300, fontSize: 18, color: 'black' }} align="justify">
-                        This chart shows the percentage of deaths and percentage of the population by race and ethnicity for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['race_3Pmiss'].toFixed(2)}% of confirmed deaths who were missing information on race/ethnicity.                    </small>
+                          This chart shows the percentage of deaths and percentage of the population by race and ethnicity for <b>{countyName}</b>. The chart excludes data from {datades_deaths[stateFips + countyFips]['race_3Pmiss'].toFixed(2)}% of confirmed deaths who were missing information on race/ethnicity.                    </small>
                       </Grid.Column>
                     </Grid.Row>}
               </Grid>
@@ -1220,7 +1270,7 @@ export default function CountyReport() {
                   {_.map(data[stateFips + countyFips],
                     (v, k) => {
                       var rmList = ["cases", "deaths", "dailycases", "dailydeaths", "mean7daycases", "mean7daydeaths", "covidmortality"
-                        , "caserate", "covidmortality7day", "caserate7day"];
+                        , "caserate", "covidmortality7day", "caserate7day", "_013_Urbanization_Code"];
                       if (!rmList.includes(k)) {
                         return (
                           <Table.Row key={k}>
