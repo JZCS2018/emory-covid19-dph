@@ -1,6 +1,5 @@
 import React, { useEffect, Component, useState, createRef, useRef, useLayoutEffect} from 'react'
 // import InView, { useInView } from 'react-intersection-observer'
-import { Waypoint } from 'react-waypoint'
 import { Container, Grid, Breadcrumb, Dropdown, Header, Loader, Divider, Rail, Sticky, Popup, Button, Menu } from 'semantic-ui-react'
 import AppBar from './AppBar';
 import Geographies from './Geographies';
@@ -100,7 +99,7 @@ const marks = [
 const sectionStyle1 = {
     width: "100%",
     height: "100%",
-    backgroundColor: '#f0fafe'
+    backgroundColor: '#e5f1f8'
 };
 const sectionStyle2 = {
     width: "100%",
@@ -138,40 +137,55 @@ function StickyExampleAdjacentContext(props) {
                         size='small'
                         compact
                         pointing secondary vertical>
-                        <Menu.Item as='a' href="#summary" name='Interactive Map' active={props.activeCharacter == 'Interactive Map' || activeItem === 'Interactive Map'}
+                        <Menu.Item as='a' href="#summary" name='Interactive Map' color='blue' active={props.activeCharacter == 'Interactive Map' || activeItem === 'Interactive Map'} 
+                            style={{backgroundColor: activeItem === 'Interactive Map' || props.activeCharacter == 'Interactive Map'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>Georgia Interactive Map</Header></Menu.Item>
-                        <Menu.Item as='a' href="#age_g" name='COVID-19 Demographics' active={props.activeCharacter === 'COVID-19 Demographics' || activeItem === 'COVID-19 Demographics'}
+                        <Menu.Item as='a' href="#age_g" name='COVID-19 Demographics' active={props.activeCharacter === 'COVID-19 Demographics' || activeItem === 'COVID-19 Demographics'} 
+                            style={{backgroundColor: activeItem === 'Interactive Map' || props.activeCharacter == 'Interactive Map'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 Demographics</Header></Menu.Item>
-
-                        
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age_g" name='COVID-19 by Age' active={props.activeCharacter === 'COVID-19 by Age' || activeItem === 'COVID-19 by Age'}
+        
+        
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age_g" name='COVID-19 by Age' color='blue' active={props.activeCharacter === 'COVID-19 by Age' || activeItem === 'COVID-19 by Age'} 
+                            style={{backgroundColor: activeItem === 'COVID-19 by Age' || props.activeCharacter == 'COVID-19 by Age'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Age</Menu.Item>
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#sex_g" name='COVID-19 by Sex' active={props.activeCharacter === 'COVID-19 by Sex' || activeItem === 'COVID-19 by Sex'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#sex_g" name='COVID-19 by Sex' color='blue' active={props.activeCharacter === 'COVID-19 by Sex' || activeItem === 'COVID-19 by Sex'} 
+                            style={{backgroundColor: activeItem === 'COVID-19 by Sex' || props.activeCharacter == 'COVID-19 by Sex'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Sex</Menu.Item>
-                        <Menu.Item style={{ paddingLeft: '3em' }} as='a' href="#re" name='COVID-19 by Race/Ethnicity' active={props.activeCharacter === 'COVID-19 by Race/Ethnicity' || activeItem === 'COVID-19 by Race/Ethnicity'}
+                        <Menu.Item style={{ paddingLeft: '3em' }} as='a' href="#re" name='COVID-19 by Race/Ethnicity' color='blue' active={props.activeCharacter === 'COVID-19 by Race/Ethnicity' || activeItem === 'COVID-19 by Race/Ethnicity'} 
+                            style={{backgroundColor: activeItem === 'COVID-19 by Race/Ethnicity' || props.activeCharacter == 'COVID-19 by Race/Ethnicity'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Race and Ethnicity</Menu.Item>
 
                         
-                        <Menu.Item as='a' href="#chara" name='COVID-19 by County Characteristics' active={props.activeCharacter === 'COVID-19 by County Characteristics' || activeItem === 'COVID-19 by County Characteristics'}
+                        <Menu.Item as='a' href="#chara" name='COVID-19 by County Characteristics' color='blue' active={props.activeCharacter === 'COVID-19 by County Characteristics' || activeItem === 'COVID-19 by County Characteristics'} 
+                            style={{backgroundColor: activeItem === 'COVID-19 by County Characteristics' || props.activeCharacter == 'COVID-19 by County Characteristics'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 County Disparities</Header></Menu.Item>
 
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#cvi" name='Community Vulnerability Index' active={props.activeCharacter === 'Community Vulnerability Index' || activeItem === 'Community Vulnerability Index'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#cvi" name='Community Vulnerability Index' color='blue' active={props.activeCharacter === 'Community Vulnerability Index' || activeItem === 'Community Vulnerability Index'} 
+                            style={{backgroundColor: activeItem === 'Community Vulnerability Index' || props.activeCharacter == 'Community Vulnerability Index'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} >Community COVID-19 Vulnerability Index</Menu.Item>
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#si" name='Residential Segregation Index' active={props.activeCharacter === 'Residential Segregation Index' || activeItem === 'Residential Segregation Index'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#si" name='Residential Segregation Index' color='blue' active={props.activeCharacter === 'Residential Segregation Index' || activeItem === 'Residential Segregation Index'} 
+                            style={{backgroundColor: activeItem === 'Residential Segregation Index' || props.activeCharacter == 'Residential Segregation Index'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>County Racial Segregation Index</Menu.Item>
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#urbanrural" name='County Metropolitan Status' active={props.activeCharacter === 'Characteristics - Metropolitan Status' || activeItem === 'Characteristics - Metropolitan Status'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#urbanrural" name='County Metropolitan Status' color='blue' active={props.activeCharacter === 'Characteristics - Metropolitan Status' || activeItem === 'Characteristics - Metropolitan Status'} 
+                            style={{backgroundColor: activeItem === 'Characteristics - Metropolitan Status' || props.activeCharacter == 'Characteristics - Metropolitan Status'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#poverty" name='County Poverty' active={props.activeCharacter === 'Characteristics - Poverty' || activeItem === 'Characteristics - Poverty'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#poverty" name='County Poverty' color='blue' active={props.activeCharacter === 'Characteristics - Poverty' || activeItem === 'Characteristics - Poverty'} 
+                            style={{backgroundColor: activeItem === 'Characteristics - Poverty' || props.activeCharacter == 'Characteristics - Poverty'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#black" name='County African American' active={props.activeCharacter === 'Characteristics - African American' || activeItem === 'Characteristics - African American'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#black" name='County African American' color='blue'active={props.activeCharacter === 'Characteristics - African American' || activeItem === 'Characteristics - African American'} 
+                            style={{backgroundColor: activeItem === 'Characteristics - African American' || props.activeCharacter == 'Characteristics - African American'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#hispanic" name='County Hispanic' active={props.activeCharacter === 'Characteristics - Hispanic' || activeItem === 'Characteristics - Hispanic'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#hispanic" name='County Hispanic' color='blue' active={props.activeCharacter === 'Characteristics - Hispanic' || activeItem === 'Characteristics - Hispanic'} 
+                            style={{backgroundColor: activeItem === 'Characteristics - Hispanic' || props.activeCharacter == 'Characteristics - Hispanic'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#diabetes" name='County Diabetes' active={props.activeCharacter === 'Characteristics - Diabetes' || activeItem === 'Characteristics - Diabetes'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#diabetes" name='County Diabetes' color='blue' active={props.activeCharacter === 'Characteristics - Diabetes' || activeItem === 'Characteristics - Diabetes'} 
+                            style={{backgroundColor: activeItem === 'Characteristics - Diabetes' || props.activeCharacter == 'Characteristics - Diabetes'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age" name='County Age over 65' active={props.activeCharacter === 'Characteristics - Age over 65' || activeItem === 'Characteristics - Age over 65'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age" name='County Age over 65' color='blue' active={props.activeCharacter === 'Characteristics - Age over 65' || activeItem === 'Characteristics - Age over 65'} 
+                            style={{backgroundColor: activeItem === 'Characteristics - Age over 65' || props.activeCharacter == 'Characteristics - Age over 65'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#male" name='County Male Percentage' active={props.activeCharacter === 'Characteristics - Male Percentage' || activeItem === 'Characteristics - Male Percentage'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#male" name='County Male Percentage' color='blue' active={props.activeCharacter === 'Characteristics - Male Percentage' || activeItem === 'Characteristics - Male Percentage'} 
+                            style={{backgroundColor: activeItem === 'Characteristics - Male Percentage' || props.activeCharacter == 'Characteristics - Male Percentage'? '#e5f1f8' : '#ffffff'}}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                     </Menu>
                 </Sticky>
@@ -2044,6 +2058,9 @@ export default function StateMap(props) {
                                                 setActiveCharacter('COVID-19 by Race/Ethnicity')
                                                 console.log(activeCharacter)
                                             }}
+                                            onLeave={() => {
+                                                setActiveCharacter('Community Vulnerability Index')
+                                                console.log(activeCharacter)}}
                                             topOffset="50%">
                                         </Waypoint> </center>
                                         <Grid id='chara' style={{ paddingBottom: '2em' }}>
@@ -2082,13 +2099,7 @@ export default function StateMap(props) {
                                                 setActiveCharacter('Community Vulnerability Index')
                                             }}>
                                         </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('COVID-19 by County Characteristics')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
+                                        
                                         <Grid id="cvi" >
                                             <Grid.Row>
                                             <div id='cvi' style={sectionStyle2}>
@@ -2097,6 +2108,13 @@ export default function StateMap(props) {
                                                 </Header>
                                                 </div>
                                             </Grid.Row>
+                                            <center> <Waypoint
+                                            onEnter={() => {
+                                                setActiveCharacter('COVID-19 by County Characteristics')
+                                                console.log(activeCharacter)
+                                            }}
+                                            topOffset="50%">
+                                        </Waypoint> </center>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 10 }}>
                                                 <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0 }}>
                                                     The Georgia Community Vulnerability Index data below are tools to understand which communities are at greater risk of COVID-19. Identifying counties at greater
@@ -2111,6 +2129,7 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
 
                                                 </Header.Subheader>
                                             </Header>
+                                            
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
                                                     <Header as='h2' style={{ fontWeight: 600, fontSize: "16pt", lineHeight: "16pt" }}>
