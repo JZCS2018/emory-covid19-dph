@@ -22,8 +22,6 @@ import {
 } from 'victory';
 import Slider from "@material-ui/core/Slider";
 import LazyHero from 'react-lazy-hero';
-import { Waypoint } from 'react-waypoint'
-// import Background from '/CoronaVirus_LightBlue.jpg';
 
 import { useParams, useHistory } from 'react-router-dom';
 import Notes from './Notes';
@@ -120,16 +118,138 @@ function numberWithCommas(x) {
     return x;
 }
 
-function StickyExampleAdjacentContext(props) {
-    const [sTate, setsTate] = useState({ activeItem: '' })
-    const { activeItem } = sTate
-    // useEffect(() => {
-    //     setsTate(nameList[scrollCount])
-    //     console.log('name changed!!!!!!!!')
-    // }, [scrollCount])
-    // console.log(props.activeCharacter)
-    return (
+function pos(obj) {
+  var result = { left: 0, top: 0 };
+  while (obj) {
+    result.top += obj.offsetTop;
+    result.left += obj.offsetLeft;
+    obj = obj.offsetParent;
+  }
+  return result;
+}
 
+function $(id) {
+  return document.getElementById(id);
+}
+
+function scrollY() {
+  return document.documentElement.scrollTop || document.body.scrollTop;
+}
+
+function throttle(fn, interval = 100, lock=false){
+  return function(...args) {
+    if(lock) return;
+    lock = true;
+    fn(...args);
+    setTimeout(() => {
+      lock = false
+    }, interval);
+  }
+}
+
+function StickyExampleAdjacentContext(props) {
+
+  const fn = React.useCallback((e, { name }, relatedId) => {
+    props.setActiveCharacter(name);
+
+    document.getElementsByTagName('html')[0].scrollTop = pos($(relatedId)).top - 80;
+  }, []);
+  const [menus, setMenu] = useState([
+    {
+      name:'Georgia Interactive Map',
+      isHeader: true,
+    },
+    {
+      name:'Georgia Interactive Map',
+      relatedId: 'summary'
+    },
+    {
+      isHeader: true,
+      name:'COVID-19 Demographics',
+      relatedId: 'summary'
+    },
+    {
+      name:'Age',
+      relatedId: 'age_g'
+    },
+    {
+      name:'Sex',
+      relatedId: 'sex_g'
+    },
+    {
+      name:'Race and Ethnicity',
+      relatedId: 're'
+    },
+    {
+      name:'COVID-19 by County Characteristics',
+      isHeader: true,
+      relatedId: 'chara'
+    },
+    {
+      name:'Community COVID-19 Vulnerability Index',
+      relatedId: 'cvi'
+    },
+    {
+      name:'County Racial Segreation Index',
+      relatedId: 'si'
+    },
+    {
+      name:'County Metropolitan Status',
+      relatedId: 'urbanrural'
+    },
+    {
+      name:'County Poverty',
+      relatedId: 'poverty'
+    },
+    {
+      name:'County African American',
+      relatedId: 'black'
+    },
+    {
+      name:'County Hispanic',
+      relatedId: 'hispanic'
+    },
+    {
+      name:'County Diabetes',
+      relatedId: 'diabetes'
+    },
+    {
+      name:'County Age Over 65',
+      relatedId: 'age'
+    },
+    {
+      name:'County Male Percentage',
+      relatedId: 'male'
+    },
+  ]);
+
+  useLayoutEffect(() => {
+
+    const infn = () => {
+      const ids = menus.filter((item) => !item.isHeader).map(({ relatedId }) => relatedId);
+      const names = menus.filter((item) => !item.isHeader).map(({ name }) => name);
+
+      document.getElementsByTagName('html')[0].addEventListener("mousewheel", throttle(() => {
+        for (let i = 0; i < ids.length; i++) {
+          const a = pos($(ids[i])).top - 80;
+          const b = pos($(ids[i + 1])).top - 80;
+          const c = pos($(ids[ids.length - 1])).top - 80;
+
+          console.log(a, b, c);
+          if (scrollY() > a && scrollY() < b) {
+            props.setActiveCharacter(names[i]);
+          }
+          if (scrollY() > c) {
+            props.setActiveCharacter(names[i]);
+          }
+        }
+      }), false);
+    };
+
+    infn();
+  }, []);
+
+    return (
         <div >
             <Rail attached size='mini' position='left'>
                 <Sticky offset={150}>
@@ -137,56 +257,17 @@ function StickyExampleAdjacentContext(props) {
                         size='small'
                         compact
                         pointing secondary vertical>
-                        <Menu.Item as='a' href="#summary" name='Interactive Map' color='blue' active={props.activeCharacter == 'Interactive Map' || activeItem === 'Interactive Map'} 
-                            style={{backgroundColor: activeItem === 'Interactive Map' || props.activeCharacter == 'Interactive Map'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>Georgia Interactive Map</Header></Menu.Item>
-                        <Menu.Item as='a' href="#age_g" name='COVID-19 Demographics' active={props.activeCharacter === 'COVID-19 Demographics' || activeItem === 'COVID-19 Demographics'} 
-                            style={{backgroundColor: activeItem === 'Interactive Map' || props.activeCharacter == 'Interactive Map'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 Demographics</Header></Menu.Item>
-        
-        
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age_g" name='COVID-19 by Age' color='blue' active={props.activeCharacter === 'COVID-19 by Age' || activeItem === 'COVID-19 by Age'} 
-                            style={{backgroundColor: activeItem === 'COVID-19 by Age' || props.activeCharacter == 'COVID-19 by Age'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Age</Menu.Item>
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#sex_g" name='COVID-19 by Sex' color='blue' active={props.activeCharacter === 'COVID-19 by Sex' || activeItem === 'COVID-19 by Sex'} 
-                            style={{backgroundColor: activeItem === 'COVID-19 by Sex' || props.activeCharacter == 'COVID-19 by Sex'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Sex</Menu.Item>
-                        <Menu.Item style={{ paddingLeft: '3em' }} as='a' href="#re" name='COVID-19 by Race/Ethnicity' color='blue' active={props.activeCharacter === 'COVID-19 by Race/Ethnicity' || activeItem === 'COVID-19 by Race/Ethnicity'} 
-                            style={{backgroundColor: activeItem === 'COVID-19 by Race/Ethnicity' || props.activeCharacter == 'COVID-19 by Race/Ethnicity'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>Race and Ethnicity</Menu.Item>
+                      {
+                        menus.map(({ name, isHeader = false, relatedId  }) => {
+                          if (isHeader) {
+                            return <Menu.Item header  key={`${name}header`} >{ name }</Menu.Item>
+                          }
 
-                        
-                        <Menu.Item as='a' href="#chara" name='COVID-19 by County Characteristics' color='blue' active={props.activeCharacter === 'COVID-19 by County Characteristics' || activeItem === 'COVID-19 by County Characteristics'} 
-                            style={{backgroundColor: activeItem === 'COVID-19 by County Characteristics' || props.activeCharacter == 'COVID-19 by County Characteristics'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}><Header as='h4'>COVID-19 County Disparities</Header></Menu.Item>
-
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#cvi" name='Community Vulnerability Index' color='blue' active={props.activeCharacter === 'Community Vulnerability Index' || activeItem === 'Community Vulnerability Index'} 
-                            style={{backgroundColor: activeItem === 'Community Vulnerability Index' || props.activeCharacter == 'Community Vulnerability Index'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} >Community COVID-19 Vulnerability Index</Menu.Item>
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#si" name='Residential Segregation Index' color='blue' active={props.activeCharacter === 'Residential Segregation Index' || activeItem === 'Residential Segregation Index'} 
-                            style={{backgroundColor: activeItem === 'Residential Segregation Index' || props.activeCharacter == 'Residential Segregation Index'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>County Racial Segregation Index</Menu.Item>
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#urbanrural" name='County Metropolitan Status' color='blue' active={props.activeCharacter === 'Characteristics - Metropolitan Status' || activeItem === 'Characteristics - Metropolitan Status'} 
-                            style={{backgroundColor: activeItem === 'Characteristics - Metropolitan Status' || props.activeCharacter == 'Characteristics - Metropolitan Status'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#poverty" name='County Poverty' color='blue' active={props.activeCharacter === 'Characteristics - Poverty' || activeItem === 'Characteristics - Poverty'} 
-                            style={{backgroundColor: activeItem === 'Characteristics - Poverty' || props.activeCharacter == 'Characteristics - Poverty'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#black" name='County African American' color='blue'active={props.activeCharacter === 'Characteristics - African American' || activeItem === 'Characteristics - African American'} 
-                            style={{backgroundColor: activeItem === 'Characteristics - African American' || props.activeCharacter == 'Characteristics - African American'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#hispanic" name='County Hispanic' color='blue' active={props.activeCharacter === 'Characteristics - Hispanic' || activeItem === 'Characteristics - Hispanic'} 
-                            style={{backgroundColor: activeItem === 'Characteristics - Hispanic' || props.activeCharacter == 'Characteristics - Hispanic'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#diabetes" name='County Diabetes' color='blue' active={props.activeCharacter === 'Characteristics - Diabetes' || activeItem === 'Characteristics - Diabetes'} 
-                            style={{backgroundColor: activeItem === 'Characteristics - Diabetes' || props.activeCharacter == 'Characteristics - Diabetes'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age" name='County Age over 65' color='blue' active={props.activeCharacter === 'Characteristics - Age over 65' || activeItem === 'Characteristics - Age over 65'} 
-                            style={{backgroundColor: activeItem === 'Characteristics - Age over 65' || props.activeCharacter == 'Characteristics - Age over 65'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#male" name='County Male Percentage' color='blue' active={props.activeCharacter === 'Characteristics - Male Percentage' || activeItem === 'Characteristics - Male Percentage'} 
-                            style={{backgroundColor: activeItem === 'Characteristics - Male Percentage' || props.activeCharacter == 'Characteristics - Male Percentage'? '#e5f1f8' : '#ffffff'}}
-                            onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
+                          return <Menu.Item key={name} style={{ paddingLeft: '3em' }} name={name} color='blue'
+                                            active={props.activeCharacter === name}
+                                            onClick={ (e, { name }) => fn(e, { name }, relatedId)}/>
+                        })
+                      }
                     </Menu>
                 </Sticky>
             </Rail>
@@ -1097,7 +1178,7 @@ export default function StateMap(props) {
     if (dataTS && dataUs) {
 
         return (
-            
+
             <div
                 className={`character-block ${activeClass}`}
                 id="mycontent"
@@ -1177,14 +1258,8 @@ export default function StateMap(props) {
                             </Breadcrumb> */}
                             <Grid columns={3} style={{ width: "100%", height: "100%"}} >
                                 <Grid.Column>
-                                    <StickyExampleAdjacentContext activeCharacter={activeCharacter} />
+                                    <StickyExampleAdjacentContext activeCharacter={activeCharacter} setActiveCharacter={setActiveCharacter} />
                                 </Grid.Column>
-                                <center> <Waypoint
-                                    onEnter={() => {
-                                        setActiveCharacter('Interactive Map')
-                                        console.log(activeCharacter)
-                                    }}>
-                                </Waypoint> </center>
                                 <Grid.Column width={16} style={{ width: "100%", height: "100%"}}>
                                     <Divider id='summary' hidden />
 
@@ -1358,24 +1433,7 @@ export default function StateMap(props) {
                                     </Grid>
 
 
-
-                                    {/* <center> <Waypoint
-                                        onEnter={() => {
-                                            setActiveCharacter('COVID-19 by Race/Ethnicity')
-                                            console.log(activeCharacter)
-                                        }}
-                                        onLeave={() => {
-                                        }}>
-                                    </Waypoint> </center> */}
-
                                     <Grid >
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Interactive Map')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <div id='age_g' style={sectionStyle2}>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                 <Header.Content>
@@ -1591,13 +1649,6 @@ export default function StateMap(props) {
                                             </Grid.Row>
                                         </Grid>
 
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('COVID-19 by Age')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         {/* <center> <Divider id='sex_g' hidden style={{ paddingBottom: 50 }} /> </center>
                                         <center> <Divider /> </center> */}
                                         <div id='sex_g' style={sectionStyle2}>
@@ -1818,12 +1869,6 @@ export default function StateMap(props) {
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('COVID-19 by Sex')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%"></Waypoint> </center>
                                         <div id='re' style={sectionStyle2}>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "22pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                 <Header.Content>
@@ -2053,16 +2098,6 @@ export default function StateMap(props) {
 
 
                                         {/* Charactor */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('COVID-19 by Race/Ethnicity')
-                                                console.log(activeCharacter)
-                                            }}
-                                            onLeave={() => {
-                                                setActiveCharacter('Community Vulnerability Index')
-                                                console.log(activeCharacter)}}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id='chara' style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
                                                 <div id='chara' style={sectionStyle2}>
@@ -2086,20 +2121,7 @@ export default function StateMap(props) {
                                                         </Header.Subheader>
                                             </Header>
                                         </Grid>
-                            
-                                                               
 
-                                        {/* cvi */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Community Vulnerability Index')
-                                                console.log(activeCharacter)
-                                            }}
-                                            onLeave={() => {
-                                                setActiveCharacter('Community Vulnerability Index')
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        
                                         <Grid id="cvi" >
                                             <Grid.Row>
                                             <div id='cvi' style={sectionStyle2}>
@@ -2108,13 +2130,6 @@ export default function StateMap(props) {
                                                 </Header>
                                                 </div>
                                             </Grid.Row>
-                                            <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('COVID-19 by County Characteristics')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                             <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "18pt", paddingTop: 10 }}>
                                                 <Header.Subheader style={{ color: '#000000', textAlign: 'left', fontSize: "16pt", paddingTop: 16, paddingBottom: 28, paddingLeft: 0, paddingRight: 0 }}>
                                                     The Georgia Community Vulnerability Index data below are tools to understand which communities are at greater risk of COVID-19. Identifying counties at greater
@@ -2129,7 +2144,7 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
 
                                                 </Header.Subheader>
                                             </Header>
-                                            
+
                                             <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                                 <Grid.Row style={{ paddingTop: "0" }}>
                                                     <Header as='h2' style={{ fontWeight: 600, fontSize: "16pt", lineHeight: "16pt" }}>
@@ -2322,20 +2337,6 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
 
                                         </Grid>
 
-                                        {/* SI */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Residential Segregation Index')
-                                                console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Community Vulnerability Index')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id='si' >
                                             <Grid.Row>
                                                 <div id='si' style={sectionStyle2}>
@@ -2585,21 +2586,6 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                             </Grid.Column>
                                         </Grid>
 
-                                        
-                                        {/* urbanrural */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Metropolitan Status')
-                                                console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Residential Segregation Index')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id="urbanrural" >
                                             <Grid.Row>
                                             <div id='urbanrural' style={sectionStyle2}>
@@ -2844,20 +2830,6 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                             </Grid.Column>
                                         </Grid>
 
-                                        {/* poverty */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Poverty')
-                                                console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Metropolitan Status')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id="poverty" >
                                             <Grid.Row>
                                             <div id='poverty' style={sectionStyle2}>
@@ -3086,20 +3058,6 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                             </Grid.Column>
                                         </Grid>
 
-                                        {/* black */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - African American')
-                                                console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Poverty')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id="black" >
                                             <Grid.Row>
                                             <div id='black' style={sectionStyle2}>
@@ -3329,19 +3287,6 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* Hispanic */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Hispanic')
-                                                console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - African American')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id="hispanic" >
                                             <Grid.Row>
                                             <div id='hispanic' style={sectionStyle2}>
@@ -3570,19 +3515,6 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* diabetes */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Diabetes')
-                                                console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Hispanic')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id="diabetes" >
                                             <Grid.Row>
                                             <div id='diabetes' style={sectionStyle2}>
@@ -3811,19 +3743,6 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* age */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Age over 65')
-                                                console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Diabetes')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id="age" >
                                             <Grid.Row>
                                             <div id='age' style={sectionStyle2}>
@@ -4052,19 +3971,6 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                         </Grid>
 
                                         {/* Male */}
-                                        {/* <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Male Percentage')
-                                                console.log(activeCharacter)
-                                            }}>
-                                        </Waypoint> </center> */}
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Age over 65')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                         <Grid id='male' >
                                             <Grid.Row>
                                             <div id='male' style={sectionStyle2}>
@@ -4292,23 +4198,16 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                                                 </Grid.Row>
                                             </Grid.Column>
                                         </Grid>
-                                        <center> <Waypoint
-                                            onEnter={() => {
-                                                setActiveCharacter('Characteristics - Male Percentage')
-                                                console.log(activeCharacter)
-                                            }}
-                                            topOffset="50%">
-                                        </Waypoint> </center>
                                     </Grid>
                                 </Grid.Column>
 
                             </Grid>
-                            
+
                         </div>
                     }
                     <Notes />
                 </Container>
-                <ReactTooltip id='cvi'>{tooltipContentcvi}</ReactTooltip>
+{/*                <ReactTooltip id='cvi'>{tooltipContentcvi}</ReactTooltip>
                 <ReactTooltip id='si'>{tooltipContentsi}</ReactTooltip>
                 <ReactTooltip id='urb'>{tooltipContentubr}</ReactTooltip>
                 <ReactTooltip id='black'>{tooltipContentblack}</ReactTooltip>
@@ -4323,7 +4222,7 @@ be found <a href="https://precisionforcovid.org/ccvi">here</a>.
                     <b>Total case per 100k</b>: {data[stateFips + countyFips]['casescumR'] >= 0 ? data[stateFips + countyFips]['casescumR'].toFixed(0) : "N/A"} <br />
                     <b>Total Deaths per 100k</b>: {data[stateFips + countyFips]['deathscumR'] >= 0 ? data[stateFips + countyFips]['deathscumR'].toFixed(0) : 'N/A'} <br />
                     <b>Last 14-day Cases per 100k</b>: {data[stateFips + countyFips]['casescum14dayR'] >= 0 ? data[stateFips + countyFips]['casescum14dayR'].toFixed(0) : "N/A"} <br />
-                    <b>Click to see county-level data.</b> </ReactTooltip>
+                    <b>Click to see county-level data.</b> </ReactTooltip>*/}
             </div>
         );
     }
