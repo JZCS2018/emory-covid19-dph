@@ -116,6 +116,13 @@ function BarChart(props) {
     '2': "#99bbcf",
     '1': '#337fb5'
 };
+var numm
+if (props.cate==='Cases'){
+  numm = '1'
+}
+else{
+  numm = '3'
+}
   if (props.var_num === 4) {
     return (
       <VictoryChart
@@ -145,7 +152,7 @@ function BarChart(props) {
           gutter={1}
           // style={{ border: { stroke: "black" } }}
           data={[
-            { name: `Percentage of ${props.cate}`, symbol: { fill: colors['1'], type: "square" } },
+            { name: `Percentage of ${props.cate}`, symbol: { fill: colors[numm], type: "square" } },
             { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
           ]}
         />
@@ -157,7 +164,7 @@ function BarChart(props) {
             alignment="start"
             barWidth={20}
             // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-            labels={({ datum }) => `${props.cate} Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
+            labels={({ datum }) => `${props.cate} Percent: ${(datum.value* 100).toFixed(0)}%`}
             data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': props.co },
             { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': props.co },
             { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var[2]] || 0, 'colors': props.co },
@@ -166,7 +173,7 @@ function BarChart(props) {
               orientation="top"
               style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
               constrainToVisibleArea
-              labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
+              // labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
               flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
             />}
             style={{
@@ -186,7 +193,7 @@ function BarChart(props) {
             { key: props.keyv[2], 'value': props.data[props.stateFips + props.countyFips][props.var1[2]] || 0, 'colors': '2' },
             { key: props.keyv[3], 'value': props.data[props.stateFips + props.countyFips][props.var1[3]] || 0, 'colors': '2' }]}
             labels={({ datum }) =>
-              `Population Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
+              `Population Percent: ${(datum.value* 100).toFixed(0)}%`
             }
             labelComponent={<VictoryTooltip
               orientation="top"
@@ -240,7 +247,7 @@ function BarChart(props) {
           gutter={1}
           // style={{ border: { stroke: "black" } }}
           data={[
-            { name: `Percentage of ${props.cate}`, symbol: { fill: colors['1'], type: "square" } },
+            { name: `Percentage of ${props.cate}`, symbol: { fill: colors[numm], type: "square" } },
             { name: "Percentage of Population", symbol: { fill: colors['2'], type: "square" } },
           ]}
         />
@@ -251,14 +258,14 @@ function BarChart(props) {
 
             barWidth={20}
             // labels={({ datum }) => (Math.round(datum.value * 100) / 100)}
-            labels={({ datum }) => `${props.cate} Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`}
+            labels={({ datum }) => `${props.cate} Percent: ${(parseFloat(datum.value)* 100).toFixed(0) }%`}
             data={[{ key: props.keyv[0], 'value': props.data[props.stateFips + props.countyFips][props.var[0]] || 0, 'colors': props.co },
             { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var[1]] || 0, 'colors': props.co }]}
             labelComponent={<VictoryTooltip
               orientation="top"
               style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
               constrainToVisibleArea
-              labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
+              // labelComponent={<VictoryLabel dx={-60} textAnchor='start' />}
               flyoutStyle={{ fill: colors['1'], fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
             />}
             style={{
@@ -277,13 +284,13 @@ function BarChart(props) {
             { key: props.keyv[1], 'value': props.data[props.stateFips + props.countyFips][props.var1[1]] || 0, 'colors': '2' }]}
 
             labels={({ datum }) =>
-              `Population Percent: ${numberWithCommas(parseFloat(datum.value).toFixed(2) * 100)}%`
+              `Population Percent: ${numberWithCommas(parseFloat(datum.value* 100).toFixed(0) )}%`
             }
             labelComponent={<VictoryTooltip
               orientation="top"
               style={{ fontWeight: 600, fontFamily: 'lato', fontSize: 14, fill: 'black' }}
               constrainToVisibleArea
-              labelComponent={<VictoryLabel dx={-70} textAnchor='start' />}
+              // labelComponent={<VictoryLabel dx={-70} textAnchor='start' />}
               flyoutStyle={{ fill: "grey", fillOpacity: 0.75, stroke: "#FFFFFF", strokeWidth: 0 }}
             />}
             style={{
@@ -642,26 +649,27 @@ export default function CountyReport() {
                 </Header> */}
                 <Grid.Row style={{ paddingTop: '1em' }}>
                   <Grid.Column width={16} style={{ paddingLeft: '0', paddingRight: '0' }}>
-                    <Table fixed inverted style={sectionStyle1}>
+
+                    <Table celled fixed >
                       <Table.Header >
-                        <Table.Row textAlign='center' >
-                          <Table.HeaderCell colSpan='1' style={{ width: 150 }}> </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 200 }}> <Popup
-                            trigger={<p style={{ paddingLeft: '4.5em' }}>ALL CASES TO DATE</p>
+                      <tr textAlign = "center" colSpan = "6" style={sectionStyle1}>
+                      <td colSpan='1' style={{width:150}}> </td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}> <Popup
+                            trigger={<p>ALL CASES TO DATE</p>
                             }
                             content={"All confirmed cases reported to DPH as of " + new Date(dateCur[stateFips + countyFips].todaydat * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' })}
-                            basic /></Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 200 }}><Popup
-                            trigger={<p style={{ paddingLeft: '3em' }}>CASES IN PAST 14 DAYS</p>
+                            basic /></td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}> <Popup
+                            trigger={<p>CASES IN PAST 14 DAYS</p>
                             }
                             content={"All confirmed cases reported to DPH during the 14 days preceding the report publication date."}
-                            basic /> </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 200 }}><Popup
-                            trigger={<p style={{ paddingLeft: '2.5em' }}>CASES PER 100K (PAST 14 DAYS)</p>
+                            basic /></td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}> <Popup
+                            trigger={<p >CASES PER 100K (PAST 14 DAYS)</p>
                             }
                             content={"14-day case count/100K residents based on 2020 population projects derived from census data."}
-                            basic /> </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 200 }}> <Popup
+                            basic /></td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}><Popup
                             trigger={<p>14-DAY RATE CATEGORY</p>
                             } flowing hoverable>
                             Based on the 14-day case rate
@@ -672,8 +680,8 @@ export default function CountyReport() {
                               <List.Item as='li'>Low: {">"} 0-10 cases/100K</List.Item>
                               <List.Item as='li'>Less than 5 cases reported, rate not calculated</List.Item>
                             </List>
-                          </Popup></Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 200 }}> <Popup
+                          </Popup></td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}> <Popup
                             trigger={<p>CHANGE IN LAST 2 WEEKS</p>
                             } flowing hoverable>
                             Change in case count during the previous 14 days, comparing<br></br> the second 7-day period to the first 7-day period.
@@ -682,18 +690,13 @@ export default function CountyReport() {
                               <List.Item as='li'>Decreasing: -5% or less change</List.Item>
                               <List.Item as='li'>Less than 5% change</List.Item>
                             </List>
-                          </Popup></Table.HeaderCell>
-
-                        </Table.Row>
-                      </Table.Header>
-                    </Table>
-                    <Table fixed >
-                      <Table.Header >
+                          </Popup></td>
+                  </tr>
                         <Table.Row textAlign='center'>
                           <Table.HeaderCell style={{ fontSize: '18px' }}> {countyName} </Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.casescum === null || covidMetric.casescum < 0 ? '0' : covidMetric.casescum.toLocaleString()}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.casescum14day === null || covidMetric.casescum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.casescum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.casescum14dayR === null || covidMetric.casescum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.casescum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetric.casescum14dayR === null || covidMetric.casescum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetric.casescum14dayR).toFixed(0)).toLocaleString()}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>{covidMetric.category14day === null || covidMetric.category14day < 0 ? '0' : covidMetric.category14day}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>{covidMetric.change14day === null ? '0' : covidMetric.change14day}</Table.HeaderCell>
                         </Table.Row>
@@ -701,7 +704,7 @@ export default function CountyReport() {
                           <Table.HeaderCell style={{ fontSize: '18px' }}>Georgia</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.casescum === null || covidMetricGa.casescum < 0 ? '0' : covidMetricGa.casescum.toLocaleString()}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.casescum14day === null || covidMetricGa.casescum14day < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.casescum14day).toFixed(0)).toLocaleString()}</Table.HeaderCell>
-                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.casescum14dayR === null || covidMetricGa.casescum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.casescum14dayR).toFixed(2)).toLocaleString()}</Table.HeaderCell>
+                          <Table.HeaderCell style={{ fontSize: '27px', color: '#337fb5' }}>{covidMetricGa.casescum14dayR === null || covidMetricGa.casescum14dayR < 0 ? '0' : numberWithCommas(parseFloat(covidMetricGa.casescum14dayR).toFixed(0)).toLocaleString()}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>{covidMetricGa.category14day === null || covidMetricGa.category14day < 0 ? '0' : covidMetricGa.category14day}</Table.HeaderCell>
                           <Table.HeaderCell style={{ fontSize: '18px' }}>{covidMetricGa.change14day === null || covidMetricGa.change14day < 0 ? '0' : covidMetricGa.change14day}</Table.HeaderCell>
                         </Table.Row>
@@ -716,40 +719,33 @@ export default function CountyReport() {
               <Grid style={{ paddingTop: '2em', width: "1260px", paddingLeft: '1.5em' }} centered>
                 <Grid.Row style={{ paddingTop: '1em' }}>
                   <Grid.Column width={16} style={{ paddingLeft: '0', paddingRight: '0' }}>
-                    <Table fixed inverted style={sectionStyle1}>
-                      <Table.Header >
-                        <Table.Row textAlign='center'
-
-                        >
-                          <Table.HeaderCell colSpan='1' style={{ width: 150 }}> </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 200 }}><Popup
-                            trigger={<p style={{ paddingLeft: '6.2em' }}>ALL DEATHS TO DATE</p>
+                
+                    <Table celled fixed singleLine>
+                      <Table.Header>
+                      <tr textAlign = "center" colSpan = "5" style={sectionStyle1}>
+                      <td colSpan='1' style={{width:150}}> </td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}> <Popup
+                            trigger={<p>ALL DEATHS TO DATE</p>
                             }
                             content={"All confirmed deaths reported to DPH as of " + new Date(dateCur.date * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' })}
-                            basic /> </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 230 }}><Popup
-                            trigger={<p style={{ paddingLeft: '4.2em' }}> DEATHS IN PAST 14 DAYS</p>
+                            basic /></td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}> <Popup
+                            trigger={<p > DEATHS IN PAST 14 DAYS</p>
                             }
                             content={"All confirmed deaths reported to DPH during the 14 days preceding the report publication date."}
-                            basic /></Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 200 }}><Popup
-                            trigger={<p style={{ paddingLeft: '0.4em' }}> DEATHS PER 100K (PAST 14 DAYS)</p>
+                            basic /></td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}> <Popup
+                            trigger={<p > DEATHS PER 100K (PAST 14 DAYS)</p>
                             }
                             content={"14-day deaths count/100K residents based on 2020 population projects derived from census data."}
-                            basic /></Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 200 }}><Popup
+                            basic /></td>
+                      <td colSpan='1' style={{width:200, fontSize: '14px', textAlign : "center", font: "lato", fontWeight: 600, color: "#FFFFFF"}}><Popup
                             trigger={<p>CASE FATALITY RATIO (%)</p>
                             }
                             content={"The case fatality ratio is the percent of all confirmed cases who have been reported as having died. While this is used as a measure of disease severity, the ratio may also be affected by the level of testing and quality of follow-up data on cases."}
-                            basic /> </Table.HeaderCell>
-
-                        </Table.Row>
-                      </Table.Header>
-                    </Table>
-
-                    <Table celled fixed singleLine>
-                      <Table.Header>
-
+                            basic /></td>
+                     
+                  </tr>    
 
                         <Table.Row textAlign='center'>
                           <Table.HeaderCell style={{ fontSize: '18px' }}> {countyName} </Table.HeaderCell>
@@ -819,11 +815,15 @@ export default function CountyReport() {
                         tickValues={[
                           // 1583035200, 1585713600, 1588305600, 1590984000, 1593576000
                           dataTS['13001'][0].t,
-                          dataTS["13001"][32].t,
-                          dataTS["13001"][62].t,
-                          dataTS["13001"][93].t,
-                          dataTS["13001"][123].t,
-                          dataTS["13001"][154].t,
+                          dataTS["13001"][31].t,
+                          dataTS["13001"][61].t,
+                          dataTS["13001"][92].t,
+                          dataTS["13001"][122].t,
+                          dataTS["13001"][153].t,
+                          dataTS["13001"][184].t,
+                          dataTS["13001"][214].t,
+                        dataTS["13001"][245].t,
+                          
                           dataTS["13001"][dataTS["13001"].length - 1].t
                         ]}
                       />
@@ -889,11 +889,15 @@ export default function CountyReport() {
                         tickFormat={(t) => new Date(t * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
                         tickValues={[
                           dataTS['13001'][0].t,
-                          dataTS["13001"][32].t,
-                          dataTS["13001"][62].t,
-                          dataTS["13001"][93].t,
-                          dataTS["13001"][123].t,
-                          dataTS["13001"][154].t,
+                          dataTS["13001"][31].t,
+                          dataTS["13001"][61].t,
+                          dataTS["13001"][92].t,
+                          dataTS["13001"][122].t,
+                          dataTS["13001"][153].t,
+                          dataTS["13001"][184].t,
+                          dataTS["13001"][214].t,
+                        dataTS["13001"][245].t,
+                          
                           dataTS["13001"][dataTS["13001"].length - 1].t
                         ]}
                       />
@@ -1045,7 +1049,7 @@ export default function CountyReport() {
                         width={400} height={400}
                         padAngle={2}
                         data={[
-                          { x: 1, y: 100 - datades_cases[stateFips + countyFips]['cdc_underlying2Percent'], label: `${100 - datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2)}%` },
+                          { x: 1, y: 100 - datades_cases[stateFips + countyFips]['cdc_underlying2Percent'], label: `${(100 - datades_cases[stateFips + countyFips]['cdc_underlying2Percent']).toFixed(2)}%` },
                           { x: 2, y: datades_cases[stateFips + countyFips]['cdc_underlying2Percent'], label: `${datades_cases[stateFips + countyFips]['cdc_underlying2Percent'].toFixed(2)}%` },
                         ]}
                       />
