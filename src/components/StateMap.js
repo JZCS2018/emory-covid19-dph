@@ -56,7 +56,7 @@ const colorPalette1 = [
     "#6B2A4D",
     "#70213B",
     "#74182A",
-    '#7d0707'
+    '#c6007e'
 ];
 const colorPalette2 = [
     "#e1dce2",
@@ -158,19 +158,19 @@ function StickyExampleAdjacentContext(props) {
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} >Community COVID-19 Vulnerability Index</Menu.Item>
                         <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#si" name='Residential Segregation Index' active={props.activeCharacter === 'Residential Segregation Index' || activeItem === 'Residential Segregation Index'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }}>County Racial Segregation Index</Menu.Item>
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#urbanrural" name='County Metropolitan Status' active={props.activeCharacter === 'Characteristics - Metropolitan Status' || activeItem === 'Characteristics - Metropolitan Status'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#urbanrural" name='County Metropolitan Status' active={props.activeCharacter === 'County Metropolitan Status' || activeItem === 'County Metropolitan Status'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#poverty" name='County Poverty' active={props.activeCharacter === 'Characteristics - Poverty' || activeItem === 'Characteristics - Poverty'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#poverty" name='County Poverty' active={props.activeCharacter === 'County Povertyy' || activeItem === 'County Poverty'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#black" name='County African American' active={props.activeCharacter === 'Characteristics - African American' || activeItem === 'Characteristics - African American'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#black" name='County African American' active={props.activeCharacter === 'County African American' || activeItem === 'County African American'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#hispanic" name='County Hispanic' active={props.activeCharacter === 'Characteristics - Hispanic' || activeItem === 'Characteristics - Hispanic'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#hispanic" name='County Hispanic' active={props.activeCharacter === 'County Hispanic' || activeItem === 'County Hispanic'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#diabetes" name='County Diabetes' active={props.activeCharacter === 'Characteristics - Diabetes' || activeItem === 'Characteristics - Diabetes'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#diabetes" name='County Diabetes' active={props.activeCharacter === 'County Diabetes' || activeItem === 'County Diabetes'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age" name='County Age over 65' active={props.activeCharacter === 'Characteristics - Age over 65' || activeItem === 'Characteristics - Age over 65'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#age" name='County Age over 65' active={props.activeCharacter === 'County Age over 65' || activeItem === 'County Age over 65'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
-                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#male" name='County Male Percentage' active={props.activeCharacter === 'Characteristics - Male Percentage' || activeItem === 'Characteristics - Male Percentage'}
+                        <Menu.Item as='a' style={{ paddingLeft: '3em' }} href="#male" name='County Male Percentage' active={props.activeCharacter === 'County Male Percentage' || activeItem === 'County Male Percentage'}
                             onClick={(e, { name }) => { setsTate({ activeItem: name }) }} />
                     </Menu>
                 </Sticky>
@@ -195,24 +195,25 @@ function SvgMap(props) {
                 {/* <rect x={180} y={20} width="25" height="20" style={{ fill: colorOut, strokeWidth: 1, stroke: colorOut }} /> */}
                 <text x={50} y={52} style={{ fontSize: '0.8em' }}>Low</text>
                 <text x={300} y={52} style={{ fontSize: '0.8em' }}>High</text>
-                {_.map(props.legendSplit, (splitpoint, i) => {
-                    if (props.legendSplit[i] < 1) {
-                        return <text key={i} x={57 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit[i].toFixed(1)}</text>
+                {_.map(props.legendSplit['thr'][props.name], (splitpoint, i) => {
+                    if (props.legendSplit['thr'][props.name][i] < 1) {
+                        return <text key={i} x={57 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit['thr'][props.name][i].toFixed(1)}</text>
                     }
-                    if (props.legendSplit[i] >= 1000) {
-                        return <text key={i} x={70 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {(props.legendSplit[i] / 1000).toFixed(1) + "K"}</text>
+                    if (props.legendSplit['thr'][props.name][i] >= 1000) {
+                        return <text key={i} x={70 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {(props.legendSplit['thr'][props.name][i] / 1000).toFixed(1) + "K"}</text>
                     }
-                    return <text key={i} x={70 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit[i].toFixed(0)}</text>
+                    return <text key={i} x={70 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit['thr'][props.name][i].toFixed(0)}</text>
                 })}
 
-                {_.map(props.legendSplit1, (splitpoint, i) => {
-                    if (props.legendSplit1[i] >= 1000) {
-                        return <text key={i} x={220 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {(props.legendSplit1[i] / 1000).toFixed(1) + "K"}</text>
+                {_.map(props.legendSplit['thr1'], (splitpoint, i) => {
+                    if (props.legendSplit['thr1'][i] >= 1000) {
+                        return <text key={i} x={220 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {(props.legendSplit['thr1'][i] / 1000).toFixed(1) + "K"}</text>
                     }
-                    return <text key={i} x={220 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit1[i].toFixed(0)}</text>
+                    return <text key={i} x={220 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit['thr1'][i].toFixed(0)}</text>
                 })}
-                <text x={325} y={15} style={{ fontSize: '0.7em' }}>{props.legendMax}</text>
-                <text x={50} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin / 100).toFixed(0)} </text>
+                <text x={325} y={15} style={{ fontSize: '0.7em' }}>{props.legendMax[props.name]>999?(props.legendMax[props.name]/1000).toFixed(0) + "K"
+                :props.legendMax[props.name].toFixed(0)}</text>
+                <text x={50} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin[props.name] / 100).toFixed(0)} </text>
                 <rect x={5} y={20} width="25" height="20" style={{ fill: "#FFFFFF", strokeWidth: 0.5, stroke: "#000000" }} />
                 <text x={8} y={52} style={{ fontSize: '0.7em' }}> N/A </text>
             </svg>
@@ -229,24 +230,24 @@ function SvgMap(props) {
                 <rect x={230} y={20} width="25" height="20" style={{ fill: colorOut, strokeWidth: 1, stroke: colorOut }} />
                 <text x={55} y={52} style={{ fontSize: '0.8em' }}>Low</text>
                 <text x={230} y={52} style={{ fontSize: '0.8em' }}>High</text>
-                {_.map(props.legendSplit, (splitpoint, i) => {
-                    if (props.legendSplit[i] < 1) {
-                        return <text key={i} x={62 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit[i].toFixed(1)}</text>
+                {_.map(props.legendSplit['thr'][props.name], (splitpoint, i) => {
+                    if (props.legendSplit['thr'][props.name][i] < 1) {
+                        return <text key={i} x={62 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit['thr'][props.name][i].toFixed(1)}</text>
                     }
-                    if (props.legendSplit[i] >= 1000) {
-                        return <text key={i} x={72 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {(props.legendSplit[i] / 1000).toFixed(1) + "K"}</text>
+                    if (props.legendSplit['thr'][props.name][i] >= 1000) {
+                        return <text key={i} x={72 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {(props.legendSplit['thr'][props.name][i] / 1000).toFixed(1) + "K"}</text>
                     }
-                    return <text key={i} x={72 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit[i].toFixed(0)}</text>
+                    return <text key={i} x={72 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit['thr'][props.name][i].toFixed(0)}</text>
                 })}
-                {props.legendMin < 100 ? <text x={55} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin / 1).toFixed(0)} </text> :
-                    <text x={47} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin / 1).toFixed(0)} </text>
+                {props.legendMin[props.name] < 100 ? <text x={55} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin[props.name] / 1).toFixed(0)} </text> :
+                    <text x={47} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin[props.name] / 1).toFixed(0)} </text>
                 }
 
 
 
-                <text x={224} y={15} style={{ fontSize: '0.7em' }}>{props.legendSplit[colorPalette.length - 1] < 1 ? props.legendSplit[colorPalette.length - 1].toFixed(1)
-                    : props.legendSplit[colorPalette.length - 1] > 1000 ?
-                        (props.legendSplit[colorPalette.length - 1] / 1000).toFixed(1) + "K" : props.legendSplit[colorPalette.length - 1].toFixed(0)
+                <text x={224} y={15} style={{ fontSize: '0.7em' }}>{props.legendSplit['thr'][props.name][colorPalette.length - 1] < 1 ? props.legendSplit['thr'][props.name][colorPalette.length - 1].toFixed(1)
+                    : props.legendSplit['thr'][props.name][colorPalette.length - 1] > 1000 ?
+                        (props.legendSplit['thr'][props.name][colorPalette.length - 1] / 1000).toFixed(1) + "K" : props.legendSplit['thr'][props.name][colorPalette.length - 1].toFixed(0)
                 }</text>
                 {/* <text x={251} y={15} style={{ fontSize: '0.7em' }}>{props.legendMax}</text> */}
                 <rect x={5} y={20} width="25" height="20" style={{ fill: "#FFFFFF", strokeWidth: 0.5, stroke: "#000000" }} />
@@ -268,26 +269,27 @@ function SvgMap(props) {
                 <rect x={230} y={20} width="25" height="20" style={{ fill: colorOut, strokeWidth: 1, stroke: colorOut }} />
                 <text x={55} y={52} style={{ fontSize: '0.8em' }}>Low</text>
                 <text x={230} y={52} style={{ fontSize: '0.8em' }}>High</text>
-                {_.map(props.legendSplit, (splitpoint, i) => {
-                    if (props.legendSplit[i] < 1) {
-                        return <text key={i} x={62 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit[i].toFixed(1)}</text>
+                {_.map(props.legendSplit['thr'][props.name], (splitpoint, i) => {
+                    if (props.legendSplit['thr'][props.name][i] < 1) {
+                        return <text key={i} x={62 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit['thr'][props.name][i].toFixed(1)}</text>
                     }
-                    if (props.legendSplit[i] >= 1000) {
-                        return <text key={i} x={72 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {(props.legendSplit[i] / 1000).toFixed(1) + "K"}</text>
+                    if (props.legendSplit['thr'][props.name][i] >= 1000) {
+                        return <text key={i} x={72 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {(props.legendSplit['thr'][props.name][i] / 1000).toFixed(1) + "K"}</text>
                     }
-                    return <text key={i} x={72 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit[i].toFixed(0)}</text>
+                    return <text key={i} x={72 + 25 * (i)} y={15} style={{ fontSize: '0.7em' }}> {props.legendSplit['thr'][props.name][i].toFixed(0)}</text>
                 })}
-                {props.legendMin < 100 ? <text x={55} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin / 1).toFixed(0)} </text> :
-                    <text x={47} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin / 1).toFixed(0)} </text>
+                {props.legendMin[props.name] < 100 && props.legendMin[props.name]<props.legendSplit['thr'][props.name][0] ? <text x={55} y={15} style={{ fontSize: '0.7em' }}> {(props.legendMin[props.name] / 1).toFixed(0)} </text> :
+                    <text x={55} y={15} style={{ fontSize: '0.7em' }}> {0} </text>
                 }
 
 
 
-                <text x={224} y={15} style={{ fontSize: '0.7em' }}>{props.legendSplit[colorPalette.length - 1] < 1 ? props.legendSplit[colorPalette.length - 1].toFixed(1)
-                    : props.legendSplit[colorPalette.length - 1] > 1000 ?
-                        (props.legendSplit[colorPalette.length - 1] / 1000).toFixed(1) + "K" : props.legendSplit[colorPalette.length - 1].toFixed(0)
+                <text x={224} y={15} style={{ fontSize: '0.7em' }}>{props.legendSplit['thr'][props.name][colorPalette.length - 1] < 1 ? props.legendSplit['thr'][props.name][colorPalette.length - 1].toFixed(1)
+                    : props.legendSplit['thr'][props.name][colorPalette.length - 1] > 1000 ?
+                        (props.legendSplit['thr'][props.name][colorPalette.length - 1] / 1000).toFixed(1) + "K" : props.legendSplit['thr'][props.name][colorPalette.length - 1].toFixed(0)
                 }</text>
-                <text x={251} y={15} style={{ fontSize: '0.7em' }}>{props.legendMax}</text>
+                <text x={251} y={15} style={{ fontSize: '0.7em' }}>{props.legendMax[props.name]>999?(props.legendMax[props.name]/1000).toFixed(0) + "K"
+                :props.legendMax[props.name].toFixed(0)}</text>
                 <rect x={5} y={20} width="25" height="20" style={{ fill: "#FFFFFF", strokeWidth: 0.5, stroke: "#000000" }} />
                 <text x={8} y={52} style={{ fontSize: '0.7em' }}> N/A </text>
 
@@ -303,13 +305,14 @@ function SvgMap(props) {
 function ChartGraph(props) {
     var varGraphPair = props.name;
     var dataTS;
+    var dataTS1;
     var metric = props.metric;
     var stateFips = props.stateFips;
     var countyFips = props.countyFips;
     var countyname = props.countyname;
 
     if (props.metric === "casescum14dayR") {
-        dataTS = props.data1;
+        dataTS = _.takeRight(props.data2[stateFips + countyFips], 14);
 
         return (
             <VictoryChart theme={VictoryTheme.material}
@@ -324,7 +327,7 @@ function ChartGraph(props) {
                 padding={{ left: 55, right: 70, top: 10, bottom: 50 }}>
                 <VictoryAxis
                     style={{
-                        tickLabels: { fontSize: 25, padding: 5 }
+                        tickLabels: { fontSize: 23, padding: 5 }
                     }}
                     tickFormat={(t) => new Date(t * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
 
@@ -404,7 +407,7 @@ function ChartGraph(props) {
                 padding={{ left: 55, right: 70, top: 10, bottom: 50 }}>
                 <VictoryAxis
                     style={{
-                        tickLabels: { fontSize: 25, padding: 5 }
+                        tickLabels: { fontSize: 23, padding: 5 }
                     }}
                     tickFormat={(t) => new Date(t * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
                     tickValues={[
@@ -518,9 +521,13 @@ function ChartGraph(props) {
                             }
                         />
                     )}
-
-            </VictoryChart>)
+                
+            </VictoryChart>
+            
+            )
+            
     }
+    
 }
 // ["casescum",
 // "deathscum",
@@ -684,12 +691,15 @@ function DiscrpChart(props) {
 export default function StateMap(props) {
 
     // let { stateFips } = useParams();
-    const hig = '80';
     const stateFips = '13';
     const [config, setConfig] = useState();
-    const [stateName, setStateName] = useState('');
-
-    const [countyFips, setCountyFips] = useState('');
+    // const [stateName, setStateName] = useState('');
+    const countyFips1 = useRef('');
+    const countyName1 = useRef('Georgia');
+    var [countyFips, setCountyFips] = useState(() => {
+        const initialState ='';
+        return initialState;
+      });
     const [countyFipscvi, setCountyFipscvi] = useState('');
     const [countyFipssi, setCountyFipssi] = useState('');
     const [countyFipsubr, setCountyFipsubr] = useState('');
@@ -711,15 +721,11 @@ export default function StateMap(props) {
     const [countyNamemale, setCountyNamemale] = useState('Fulton County');
 
     const history = useHistory();
-    const [fips, setFips] = useState('13');
+    // const [fips, setFips] = useState('13');
     const [activeCharacter, setActiveCharacter] = useState('')
     const activeClass = 'character-block--active';
     const characterRef = createRef();
-    // const [dataFltrd, setDataFltrd] = useState();
-    // const [dataFltrdUs, setDataFltrdUs] = useState();
-
-    // const [dataStateFltrd, setDataStateFltrd] = useState();
-    // const [dataState, setDataState] = useState();
+    
 
     const [data, setData] = useState();
     const [dataUs, setDataUs] = useState();
@@ -736,26 +742,17 @@ export default function StateMap(props) {
     const [colorDia, setColorDia] = useState();
     const [colorA65, setColorA65] = useState();
     const [colorMale, setColorMale] = useState();
-    // const [stateLabels, setStateLabels] = useState();
     const [covidMetric, setCovidMetric] = useState({ casesdaily: 'N/A', casesdailymean14: 'N/A', t: 'n/a' });
     const [covidMetric14, setCovidMetric14] = useState({ casesdaily: 'N/A', casesdailymean14: 'N/A', t: 'n/a' });
+    const covidMetric141 = useRef({ casesdaily: 'N/A', casesdailymean14: 'N/A', t: 'n/a' });
     const colors = {
         "3": '#024174',
         '2': "#99bbcf",
         '1': '#337fb5'
     };
     const [dataTS, setDataTS] = useState();
-    const [tooltipContent, setTooltipContent] = useState('');
-    const [tooltipContentcvi, setTooltipContentcvi] = useState('');
-    const [tooltipContentsi, setTooltipContentsi] = useState('');
-    const [tooltipContentubr, setTooltipContentubr] = useState('');
-    const [tooltipContentblack, setTooltipContentblack] = useState('');
-    const [tooltipContenthis, setTooltipContenthis] = useState('');
-    const [tooltipContentpov, setTooltipContentpov] = useState('');
-    const [tooltipContentdia, setTooltipContentdia] = useState('');
-    const [tooltipContenta65, setTooltipContenta65] = useState('');
-    const [tooltipContentmale, setTooltipContentmale] = useState('');
-
+  
+    const [tooltipContent, setTooltipContent] = useState('')
     const [colorScale, setColorScale] = useState();
     const [data_cases, setDataCG] = useState();
     const [data_deaths, setDataDG] = useState();
@@ -835,7 +832,7 @@ export default function StateMap(props) {
 
 
     useEffect(() => {
-
+        
         const configMatched = configs.find(s => s.fips === stateFips);
         // console.log(configMatched.fips);
         if (!configMatched) {
@@ -844,7 +841,6 @@ export default function StateMap(props) {
 
             setConfig(configMatched);
             // console.log(countyFips);
-            setStateName(configMatched.name);
             fetch('/data/data_cases_ga.json').then(res => res.json())
                 .then(x => setDataCG(x)
                 );
@@ -858,269 +854,6 @@ export default function StateMap(props) {
                 .then(x => {
                     setData(x);
                     setDataUs(x);
-                    if (metric === 'casescum') {
-
-                        _.map(x, (d, k) => {
-                            d.fips = k
-                            return d
-                        });
-                        var temp_Data_metric = [];
-                        // retrieve metric data as list
-                        _.each(x, d => {
-                            if (d.fips.length === 5 && d.fips[0] === '1' && d.fips[1] === '3') {
-                                temp_Data_metric.push(d[metric]);
-                            }
-                        });
-
-                        temp_Data_metric.sort(function (a, b) {
-                            return a - b;
-                        });
-                        var countIqr = 3 * quantile(temp_Data_metric, 0.75) - 2 * quantile(temp_Data_metric, 0.25);
-                        // console.log(temp_Data_metric);
-                        //   var top10 = _.takeRight(temp_Data_metric,10)[0];
-
-                        //   var belowIqr = _.map(_.filter(temp_Data_metric,
-                        //     d => (d<top10
-                        //       )),
-                        //     d => d);
-                        // console.log(belowTop)
-                        var belowIqr = _.map(_.filter(temp_Data_metric,
-                            d => (d < countIqr
-                            )),
-                            d => d);
-
-                        var upIqr = _.map(_.filter(temp_Data_metric,
-                            d => (d >= countIqr
-                            )),
-                            d => d);
-
-                        var split = scaleQuantile()
-                            .domain(belowIqr).range(colorPalette);
-                        var split1 = scaleQuantile()
-                            .domain(upIqr).range(colorPalette1);
-                        // console.log(split.quantiles())
-                        // console.log(split1.quantiles())
-
-
-                        var thr = [];
-                        var thr1 = [];
-                        for (i = 0; i < split1.quantiles().length; i++) {
-                            thr1[i] = split1.quantiles()[i];
-                        }
-                        thr1.push(_.takeRight(temp_Data_metric)[0]);
-
-                        for (i = 0; i < split.quantiles().length; i++) {
-                            thr[i] = split.quantiles()[i];
-                        }
-                        thr.push(Math.round(countIqr / 100) * 100);
-
-                        // console.log(thr1);
-                        var i;
-                        for (i = 0; i < thr.length; i++) {
-                            if (thr[i] < 100) {
-                                thr[i] = Math.round(thr[i] / 10) * 10;
-                            }
-                            else {
-                                thr[i] = Math.round(thr[i] / 100) * 100;
-                            }
-                        }
-                        for (i = 0; i < thr1.length; i++) {
-                            if (thr1[i] < 100) {
-                                thr1[i] = Math.floor(thr1[i] / 10) * 10;
-                            }
-                            else {
-                                thr1[i] = Math.floor(thr1[i] / 100) * 100;
-                            }
-
-                        }
-                        // console.log(thr1)
-
-                        const csUs = {};
-                        var indexColor;
-                        _.map(belowIqr, d => {
-                            if (d >= 0 && d <= thr[0]) {
-                                csUs[d] = colorPalette[0];
-                            };
-                            if (d > thr[0] && d <= thr[1]) {
-                                csUs[d] = colorPalette[1];
-                            }
-                            if (d > thr[1] && d <= thr[2]) {
-                                csUs[d] = colorPalette[2];
-                            }
-                            if (d > thr[2] && d <= thr[3]) {
-                                csUs[d] = colorPalette[3];
-                            }
-                            if (d > thr[3] && d <= thr[4]) {
-                                csUs[d] = colorPalette[4];
-                            }
-                            if (d > thr[4] && d <= thr[5]) {
-                                csUs[d] = colorPalette[5];
-                            }
-                        });
-
-                        _.map(upIqr, d => {
-                            if (d > thr[5] && d <= thr1[0]) {
-                                csUs[d] = colorPalette1[0];
-                            }
-                            if (d > thr1[0] && d <= thr1[1]) {
-                                csUs[d] = colorPalette1[1];
-                            }
-                            if (d > thr1[1] && d <= thr1[2]) {
-                                csUs[d] = colorPalette1[2];
-                            }
-                            if (d > thr1[2] && d <= thr1[3]) {
-                                csUs[d] = colorPalette1[3];
-                            }
-                            if (d > thr1[3] && d <= thr1[4]) {
-                                csUs[d] = colorPalette1[4];
-                            }
-                        })
-                        let scaleMap = csUs;
-
-                        setColorScale(scaleMap);
-
-                        var max = _.takeRight(temp_Data_metric)[0];
-                        var min = temp_Data_metric[0];
-                        // console.log(max);
-                        if (max > 999) {
-                            max = (max / 1000).toFixed(0) + "K";
-                            // console.log(max);
-                            setLegendMax(max);
-                        } else {
-                            setLegendMax(max.toFixed(0));
-
-                        }
-                        setLegendMin(min.toFixed(0));
-
-                        setLegendSplit(thr);
-                        // console.log(thr1[4])
-                        setLegendSplit1(thr1.slice(0, 4));
-                        setLegendMax1(thr1[4]);
-
-                    }
-                    else {
-                        _.map(x, (d, k) => {
-                            d.fips = k
-                            return d
-                        });
-
-                        var temp_Data = {};
-                        var temp_Data_metric = [];
-                        // retrieve metric data as list
-                        _.each(x, d => {
-                            if (d.fips.length === 5 && d.fips[0] === '1' && d.fips[1] === '3') {
-                                temp_Data_metric.push(d[metric]);
-                            }
-                        });
-                        temp_Data[metric] = temp_Data_metric;
-
-                        temp_Data_metric.sort(function (a, b) {
-                            return a - b;
-                        });
-                        // console.log(temp_Data_metric);
-                        //   console.log(quantile(temp_Data_metric, 0.75));
-                        //   console.log(quantile(temp_Data_metric, 0.25));
-                        //   console.log(3*quantile(temp_Data_metric, 0.75)-2*quantile(temp_Data_metric, 0.25));
-                        // console.log(6*quantile(temp_Data_metric, 0.75)-5*quantile(temp_Data_metric, 0.25))
-                        var countIqr = 6 * quantile(temp_Data_metric, 0.75) - 5 * quantile(temp_Data_metric, 0.25);
-                        var rateIqr = 3 * quantile(temp_Data_metric, 0.75) - 2 * quantile(temp_Data_metric, 0.25);
-                        var IQR3 = _.map(_.filter(_.map(x, (d, k) => {
-                            d.fips = k
-                            return d
-                        }),
-                            d => (metric === 'casescumR' || metric === 'deathscumR' ? d[metric] > 0 && d[metric] < rateIqr &&
-                                d.fips.length === 5
-                                : d[metric] > 0 && d[metric] < countIqr &&
-                                d.fips.length === 5
-                            )),
-                            d => d[metric]);
-
-                        // console.log(rateIqr);
-
-                        const csUs = {};
-                        var indexColor;
-                        _.map(IQR3, d => {
-                            if (metric === 'casescumR' || metric === 'deathscumR' || metric == 'casescum14dayR') { var interV = (rateIqr.toFixed(0)) / colorPalette.length }
-                            else { var interV = (countIqr.toFixed(0)) / colorPalette.length }
-
-                            if (metric === 'deathscum' || metric === 'deathscumR') {
-                                indexColor = Math.round(interV / 10) * 10;
-                            }
-                            else {
-                                indexColor = Math.round(interV / 100) * 100;
-                            }
-                            // console.log(indexColor);
-                            csUs[d] = colorPalette[Math.floor(d / indexColor)];
-                        })
-                        // console.log(csUs);
-
-                        _.map(x, d => {
-                            if (d[metric] > indexColor * colorPalette.length) {
-                                csUs[d[metric]] = colorOut;
-                            }
-                            if (d[metric] < indexColor * colorPalette.length && d[metric] > 3 * quantile(temp_Data_metric, 0.75) - 2 * quantile(temp_Data_metric, 0.25).toFixed(0)) {
-                                csUs[d[metric]] = colorPalette[colorPalette.length - 1];
-                            }
-                        })
-                        let scaleMap = csUs;
-
-                        setColorScale(scaleMap);
-
-                        var max = _.takeRight(temp_Data_metric)[0];
-                        var min
-                        if (temp_Data_metric[0] > indexColor) {
-                            min = 0
-                        }
-                        else {
-                            min = temp_Data_metric[0]
-                        }
-
-                        // console.log(temp_Data_metric);
-                        if (max > 999) {
-                            max = (max / 1000).toFixed(0) + "K";
-                            // console.log(max);
-                            setLegendMax(max);
-                        } else {
-                            setLegendMax(max.toFixed(0));
-
-                        }
-                        setLegendMin(min.toFixed(0));
-                        var split = [];
-                        var i = 0;
-                        for (i = 0; i < colorPalette.length; i++) {
-                            split.push((i + 1) * indexColor);
-                        }
-
-                        setLegendSplit(split);
-                        // console.log(split);
-
-                    }
-                });
-
-            // fetch('/data/timeseries13' + '.json').then(res => res.json())
-            //   .then(x => setDataTS(x));
-            fetch('/data/timeseries13' + '.json').then(res => res.json())
-                .then(
-                    x => {
-                        setDataTS(x);
-                        // var max = 0
-                        var dicto = {}
-                        for (var key in x) {
-                            var max = 0
-                            _.each(x[key], m => {
-                                if (m[varGraphPair[metric]['name'][0]] > max) {
-                                    max = m[varGraphPair[metric]['name'][0]];
-                                }
-                            });
-                            dicto[key] = max;
-                            // console.log(varNameMap['cacum'].text);
-                        }
-                        // console.log(dicto);
-                        setLegendMaxGraph(dicto);
-                    });
-
-            fetch('/data/data.json').then(res => res.json())
-                .then(x => {
                     setDateCur(x)
 
                     const cs = scaleQuantile()
@@ -1160,8 +893,28 @@ export default function StateMap(props) {
                     });
 
                     setColorSI(scaleMapsi);
-
                 });
+
+            fetch('/data/timeseries13' + '.json').then(res => res.json())
+                .then(
+                    x => {
+                        setDataTS(x);
+                        // var max = 0
+                        var dicto = {}
+                        for (var key in x) {
+                            var max = 0
+                            _.each(x[key], m => {
+                                if (m[varGraphPair[metric]['name'][0]] > max) {
+                                    max = m[varGraphPair[metric]['name'][0]];
+                                }
+                            });
+                            dicto[key] = max;
+                            // console.log(varNameMap['cacum'].text);
+                        }
+                        // console.log(dicto);
+                        setLegendMaxGraph(dicto);
+                    });
+                    
             fetch('/data/index_data.json').then(res => res.json())
                 .then(x => {
                     setIndexData(x)
@@ -1194,9 +947,7 @@ export default function StateMap(props) {
 
                 }
                 );
-
-
-
+               
             fetch('/data/data_us.json').then(res => res.json())
                 .then(x => {
                     setDataCha(x)
@@ -1327,18 +1078,31 @@ export default function StateMap(props) {
                     });
                     setColorMale(scaleMap_male);
                 });
+                
         }
-    }, [stateFips, metric]);
 
+        fetch('data/casescum.json').then(res=>res.json())
+        .then(x=>{
+            setColorScale(x['csUs']);
+            setLegendMax(x['max']);
+            setLegendMin(x['min']);
+            setLegendSplit({'thr':x['thr'],'thr1':x['thr1'].slice(0, 4)})
+        });
+        
+    }, []);
 
+    // useEffect(() => { setCountyFips(countyFips) }, [countyName])
+    // useEffect(() => { console.log(countyFips) }, [countyName])
 
-    useEffect(() => {
-        if (dataTS && dataTS[stateFips + countyFips]) {
-            setCovidMetric(_.takeRight(dataTS[stateFips + countyFips])[0]);
-            setCovidMetric14(_.takeRight(dataTS[stateFips + countyFips], 14));
+    // useEffect(() => {
+    //     if (dataTS && dataTS[stateFips + countyFips1.current]) {
+    //         setCovidMetric(_.takeRight(dataTS[stateFips + countyFips1.current])[0]);
+    //         setCovidMetric14(_.takeRight(dataTS[stateFips + countyFips1.current], 14));
+        
 
-        }
-    }, [dataTS, countyFips])
+    //         // console.log(countyFips)
+    //     }
+    // }, [countyFips1.current])
 
     if (dataTS && dataUs) {
 
@@ -1455,32 +1219,24 @@ export default function StateMap(props) {
                                         </Grid.Row>
                                         <Grid.Column width={7} style={{ paddingLeft: "2", paddingLeft: "1" }}>
                                             <Header as='h2' style={{ fontWeight: 600 }}>
-                                                <Header.Content>
+                                                <Header.Content style={{ paddingTop:'-1'}}>
                                                     <Dropdown
                                                         style={{
-                                                            background: '#fff',
+                                                            paddingBottom:'1em',
                                                             fontSize: "17pt",
                                                             fontWeight: 600,
-                                                            theme: '#000000',
                                                             width: '520px',
-                                                            top: '0em',
-                                                            left: '0em',
-                                                            text: "Select",
-                                                            borderTop: 'none',
-                                                            borderLeft: '1px solid #FFFFFF',
-                                                            borderRight: 'none',
-                                                            borderBottom: '0.9px solid #bdbfc1',
+                                                            borderTop: '1px solid #bdbfc1',
+                                                            borderLeft: '1px solid #bdbfc1',
+                                                            borderRight: '1px solid #bdbfc1',
+                                                            borderBottom: '1px solid #bdbfc1',
                                                             borderRadius: 0,
-                                                            minHeight: '1.0em',
-                                                            paddingBottom: '0.2em'
+                                                            // minHeight: '1.0em',
+                                                            // paddingBottom: '0.2em'
                                                         }}
                                                         text={metricName}
-                                                        inline
                                                         search
-                                                        fluid
-
-
-                                                        pointing='top'
+                                                        selection
                                                         options={metricOptions1}
                                                         onChange={(e, { value }) => {
                                                             setMetric(value);
@@ -1527,28 +1283,36 @@ export default function StateMap(props) {
                                                                 }
                                                             }}
                                                             onMouseEnter={() => {
-                                                                setDelayHandler(setTimeout(() => {
-                                                                    setCountyFips(geo.properties.COUNTYFP);
-                                                                    setCountyName(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                    // setTooltipContent('Click to see more county data');
-                                                                }, 0))
+                                                               
+                                                                countyFips1.current = geo.properties.COUNTYFP
+                                                                countyName1.current = fips2county[stateFips + geo.properties.COUNTYFP]
+                                                                
+                                                                    // setDelayHandler(setTimeout(() => {
+                                                                    //     setCountyFips(geo.properties.COUNTYFP);
+                                                                        setCountyName(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                                    //     // setTooltipContent('Click to see more county data');
+                                                                    // }, 0.1))
+                                                                
+                                                                
                                                             }}
                                                             onMouseLeave={() => {
-                                                                clearTimeout(delayHandler)
+                                                                // countyFips1.current = ''
+                                                                // countyName1.current = 'Georgia'
+                                                                // console.log(countyFips1.current)
+                                                                // clearTimeout(delayHandler)
                                                                 setTooltipContent("")
                                                             }}
-                                                            fill={countyFips === geo.properties.COUNTYFP ? countyColor :
-                                                                ((colorScale && dataUs[stateFips + geo.properties.COUNTYFP] &&
-                                                                    dataUs[stateFips + geo.properties.COUNTYFP][metric] && dataUs[stateFips + geo.properties.COUNTYFP][metric] > 0) ?
-                                                                    colorScale[dataUs[stateFips + geo.properties.COUNTYFP][metric]] :
-                                                                    (colorScale && dataUs[stateFips + geo.properties.COUNTYFP] && dataUs[stateFips + geo.properties.COUNTYFP][metric] === 0) ? '#e1dce2' : '#FFFFFF')}
+                                                            fill={countyFips1.current === geo.properties.COUNTYFP ? countyColor :
+                                                                ((dataUs[stateFips + geo.properties.COUNTYFP][metric] >=0) ?
+                                                                    colorScale[stateFips + geo.properties.COUNTYFP][metric] :
+                                                                    (dataUs[stateFips + geo.properties.COUNTYFP] && dataUs[stateFips + geo.properties.COUNTYFP][metric] === 0) ? '#e1dce2' : '#FFFFFF')}
                                                         />
                                                     )}
                                                 </Geographies>
                                             </ComposableMap>
 
                                             <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingLeft: '0.3em', paddingTop: '0.5em', paddingRight: '2em' }} >
-                                                Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                             </Grid.Row>
                                             <Grid.Row>
                                                 <Accordion defaultActiveIndex={1} panels={[
@@ -1574,10 +1338,10 @@ export default function StateMap(props) {
 
                                         </Grid.Column>
                                         <Grid.Column width={9} style={{ paddingLeft: "2", paddingLeft: "1" }}>
-                                            <Header as='h2' style={{ fontWeight: 400, paddingLeft: "1em" }}>
+                                            <Header as='h2' style={{ fontWeight: 400, paddingLeft: "1em", paddingTop:'0.7em' }}>
                                                 <Header.Content>
                                                     {/* {varGraphPair[metric]['legend'][0]} for <span style={{ color: countyColor }}>{countyName}</span> */}
-                                                    {varGraphPair[metric]['legend'][0]} for <b>{countyName}</b>
+                                                    {varGraphPair[metric]['legend'][0]} for <b>{countyName1.current}</b>
                                                     <Header.Subheader style={{ fontWeight: 300 }}>
                                                     </Header.Subheader>
                                                 </Header.Content>
@@ -1587,9 +1351,9 @@ export default function StateMap(props) {
                                                     <Grid.Row style={{ paddingLeft: "1.5", paddingTop: "1", paddingBottom: 0 }} centered>
 
                                                         <svg width="630" height='80'>
-                                                            {countyName === 'Georgia' ? <text x={75} y={20} style={{ fontSize: 16 }}></text> : <text x={75} y={20} style={{ fontSize: 16 }}>7-day rolling average in {countyName}</text>}
-                                                            {countyName === 'Georgia' ? <rect x={50} y={12} width="0" height="0" /> : <rect x={50} y={12} width="15" height="2" style={{ fill: countyColor, strokeWidth: 1, stroke: countyColor }} />}
-                                                            {/* {console.log(countyFips)} */}
+                                                            {countyName1.current === 'Georgia' ? <text x={75} y={20} style={{ fontSize: 16 }}></text> : <text x={75} y={20} style={{ fontSize: 16 }}>7-day rolling average in {countyName1.current}</text>}
+                                                            {countyName1.current === 'Georgia' ? <rect x={50} y={12} width="0" height="0" /> : <rect x={50} y={12} width="15" height="2" style={{ fill: countyColor, strokeWidth: 1, stroke: countyColor }} />}
+                                                            {console.log(countyName1.current)}
 
 
                                                             {varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
@@ -1600,7 +1364,7 @@ export default function StateMap(props) {
                                                                 <text x={75} y={52} style={{ fontSize: 16 }}> {varGraphPair[metric]['legend'][0]} </text> :
                                                                 <rect x={50} y={35} width="15" height="1" style={{ fill: '#007dba', strokeWidth: 1, stroke: '#007dba' }} />}
 
-                                                            {countyName === 'Georgia' ? (varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
+                                                            {countyName1.current === 'Georgia' ? (varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
                                                                 <text x={75} y={20} style={{ fontSize: 16 }}>7-day rolling average in Georgia</text> :
                                                                 <text x={75} y={43} style={{ fontSize: 16 }}>7-day rolling average in Georgia</text>) :
 
@@ -1608,7 +1372,7 @@ export default function StateMap(props) {
                                                                     <text x={250} y={12} style={{ fontSize: 0 }}></text> :
                                                                     <text x={75} y={43} style={{ fontSize: 16 }}>7-day rolling average in Georgia</text>)}
 
-                                                            {countyName === 'Georgia' ? (varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
+                                                            {countyName1.current === 'Georgia' ? (varGraphPair[metric]['name'][1] === 'casesdailymean7' || varGraphPair[metric]['name'][1] === 'deathsdailymean7' ?
                                                                 <rect x={50} y={12} width="15" height="1" style={{ fill: '#007dba', strokeWidth: 1, stroke: '#007dba' }} /> :
                                                                 <rect x={50} y={55} width="15" height="15" style={{ fill: stateColor, strokeWidth: 1, stroke: stateColor }} />)
                                                                 :
@@ -1621,20 +1385,21 @@ export default function StateMap(props) {
                                                                 <text x={75} y={68} style={{ fontSize: 16 }}> {varGraphPair[metric]['legend'][0]} </text>}
 
                                                         </svg>
-
+                                                        {console.log(countyFips1.current)}
                                                         <ChartGraph
                                                             name={varGraphPair}
                                                             metric={metric}
                                                             stateFips={stateFips}
-                                                            countyFips={countyFips}
-                                                            data1={covidMetric14}
+                                                            countyFips={countyFips1.current}
+                                                            // data1={ _.takeRight(dataTS[stateFips + countyFips1.current], 14)}
                                                             data2={dataTS}
-                                                            countyname={countyName}
+                                                            
+                                                            countyname={countyName1.current}
                                                         />
                                                     </Grid.Row>
-                                                    <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2em', paddingLeft: '2.9em', paddingRight: '2.9em' }} centered>
+                                                    <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2.5em', paddingLeft: '2.9em', paddingRight: '2.9em' }} centered>
                                                         {/* <p style ={{fontFamily: 'lato', fontSize: 18, color:dataupColor, paddingLeft:'0.5em'}}> */}
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                         {/* </p> */}
                                                     </Grid.Row>
                                                     <Grid.Row style={{ paddingLeft: '3.4em', paddingRight: '2.9em' }} centered>
@@ -1781,7 +1546,7 @@ export default function StateMap(props) {
                                                         </VictoryGroup>
                                                     </VictoryChart>
                                                     <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -1901,7 +1666,7 @@ export default function StateMap(props) {
                                                         </VictoryGroup>
                                                     </VictoryChart>
                                                     <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -2045,7 +1810,7 @@ export default function StateMap(props) {
                                                         </VictoryGroup>
                                                     </VictoryChart>
                                                     <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -2165,7 +1930,7 @@ export default function StateMap(props) {
                                                         </VictoryGroup>
                                                     </VictoryChart>
                                                     <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -2309,7 +2074,7 @@ export default function StateMap(props) {
                                                         </VictoryGroup>
                                                     </VictoryChart>
                                                     <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -2435,7 +2200,7 @@ export default function StateMap(props) {
                                                         </VictoryGroup>
                                                     </VictoryChart>
                                                     <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -2522,7 +2287,7 @@ export default function StateMap(props) {
                                                     Identifying counties at risk for worse COVID-19 health outcomes can help inform politics and distribution of resources. The COVID-19 Community Vulnerability
                                                     Index (CCVI) was created by Surgo Foundation. CCVI incorporates 34 county characteristics, with six core themes: socioeconomic status, household composition
                                                     and disability, minority status and language, housing type and transportation, epidemiologic factors, healthcare system factors. More information about the
-                                                COVID-19 Community Vulnerability Index can be found <a href="https://precisionforcovid.org/ccvi">here</a>.
+                                                COVID-19 Community Vulnerability Index can be found <a href="https://precisionforcovid.org/us" target="_blank">here</a>.
 
 <br />
                                                     <br />
@@ -2578,11 +2343,11 @@ export default function StateMap(props) {
 
                                                                         setCountyFipscvi(geo.properties.COUNTYFP);
                                                                         setCountyNamecvi(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContentcvi(fips2county[stateFips + geo.properties.COUNTYFP] + "'s CCVI: " + dataUs[stateFips + geo.properties.COUNTYFP]['cvi'].toFixed(2));
+                                                                        // setTooltipContentcvi(fips2county[stateFips + geo.properties.COUNTYFP] + "'s CCVI: " + dataUs[stateFips + geo.properties.COUNTYFP]['cvi'].toFixed(2));
 
                                                                     }}
                                                                     onMouseLeave={() => {
-                                                                        setTooltipContent("")
+                                                                        // setTooltipContent("")
                                                                     }}
                                                                     fill={countyFipscvi === geo.properties.COUNTYFP ? countyColor :
                                                                         ((colorCVI && dataUs[stateFips + geo.properties.COUNTYFP] &&
@@ -2610,7 +2375,7 @@ export default function StateMap(props) {
                                                     </svg> */}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -2739,7 +2504,7 @@ export default function StateMap(props) {
                                                 </Grid.Row>
 
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2.8em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -2825,9 +2590,9 @@ export default function StateMap(props) {
                                                         {_.map(colorPalette2, (color, i) => {
                                                             return <rect key={i} x={110 + 40 * i} y={40} width="40" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
                                                         })}
-                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
+                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least segregated</text>
                                                         <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest segregated</text>
                                                         <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
                                                         {_.map(thresh_chara['si'], (splitpoint, i) => {
                                                             return <text key={i} x={105 + 40 * (i)} y={35} style={{ fontSize: '0.7em' }}> {thresh_chara['si'][i]}</text>
@@ -2861,7 +2626,7 @@ export default function StateMap(props) {
 
                                                                         setCountyFipssi(geo.properties.COUNTYFP);
                                                                         setCountyNamesi(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContentsi(fips2county[stateFips + geo.properties.COUNTYFP] + "'s SI: " + dataUs[stateFips + geo.properties.COUNTYFP]['si'].toFixed(0));
+                                                                        // setTooltipContentsi(fips2county[stateFips + geo.properties.COUNTYFP] + "'s SI: " + dataUs[stateFips + geo.properties.COUNTYFP]['si'].toFixed(0));
 
                                                                     }}
                                                                     onMouseLeave={() => {
@@ -2893,7 +2658,7 @@ export default function StateMap(props) {
                                                     </svg> */}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -3047,7 +2812,7 @@ export default function StateMap(props) {
                                                     </Grid.Column>
                                                 </Grid.Row>
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '3.9em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                         </Grid.Row>
                                                         <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -3091,7 +2856,7 @@ export default function StateMap(props) {
 
                                         <Grid id="urbanrural" style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
-                                                <div id='urbanrural' style={{ width: "100%", height: "100%" }}>
+                                                <div  style={{ width: "100%", height: "100%" }}>
                                                     <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                         <Header.Content>COVID-19 by Metropolitan Status</Header.Content>
                                                     </Header>
@@ -3134,7 +2899,7 @@ export default function StateMap(props) {
 
                                                                         setCountyFipsubr(geo.properties.COUNTYFP);
                                                                         setCountyNameubr(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContentubr(fips2county[stateFips + geo.properties.COUNTYFP] + "'s status: " + dataCha[stateFips + geo.properties.COUNTYFP]['_013_Urbanization']);
+                                                                        // setTooltipContentubr(fips2county[stateFips + geo.properties.COUNTYFP] + "'s status: " + dataCha[stateFips + geo.properties.COUNTYFP]['_013_Urbanization']);
 
                                                                     }}
                                                                     onMouseLeave={() => {
@@ -3166,7 +2931,7 @@ export default function StateMap(props) {
                                                     </svg>
                                                 </Grid.Row>
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                         </Grid.Row>
                                                         <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -3332,7 +3097,7 @@ export default function StateMap(props) {
                                                 </Grid.Row>
 
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2.4em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
 </Grid.Row>
 <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
 <Accordion defaultActiveIndex={1} panels={[
@@ -3373,7 +3138,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
 
                                         <Grid id="poverty" style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
-                                                <div id='poverty' style={{ width: "100%", height: "100%" }}>
+                                                <div  style={{ width: "100%", height: "100%" }}>
                                                     <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                         <Header.Content> COVID-19 by Percentage Population in Poverty</Header.Content>
                                                     </Header>
@@ -3392,9 +3157,9 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                         {_.map(colorPalette2, (color, i) => {
                                                             return <rect key={i} x={110 + 40 * i} y={40} width="40" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
                                                         })}
-                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
+                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least poverty</text>
                                                         <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest poverty</text>
                                                         <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
                                                         {_.map(thresh_chara['poverty'], (splitpoint, i) => {
                                                             return <text key={i} x={105 + 40 * (i)} y={35} style={{ fontSize: '0.7em' }}> {thresh_chara['poverty'][i]}</text>
@@ -3428,7 +3193,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
 
                                                                         setCountyFipspov(geo.properties.COUNTYFP);
                                                                         setCountyNamepov(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContentpov(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                                        // setTooltipContentpov(fips2county[stateFips + geo.properties.COUNTYFP]);
 
                                                                     }}
                                                                     onMouseLeave={() => {
@@ -3459,7 +3224,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                     </svg> */}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -3616,7 +3381,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                 </Grid.Row>
 
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2.4em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -3656,7 +3421,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                         />
                                         <Grid id="black" style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
-                                                <div id='black' style={{ width: "100%", height: "100%" }}>
+                                                <div  style={{ width: "100%", height: "100%" }}>
                                                     <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                         <Header.Content> COVID-19 by Percentage African American Population</Header.Content>
                                                     </Header>
@@ -3675,10 +3440,10 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                         {_.map(colorPalette2, (color, i) => {
                                                             return <rect key={i} x={110 + 40 * i} y={40} width="40" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
                                                         })}
-                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
-                                                        <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
+                                                        <text x={18} y={50} style={{ fontSize: '0.8em' }}>Least African</text>
+                                                        <text x={18} y={59} style={{ fontSize: '0.8em' }}>American counties</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest African</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>American counties</text>
                                                         {_.map(thresh_chara['black'], (splitpoint, i) => {
                                                             return <text key={i} x={105 + 40 * (i)} y={35} style={{ fontSize: '0.7em' }}> {thresh_chara['black'][i]}</text>
                                                         })}
@@ -3711,7 +3476,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
 
                                                                         setCountyFipsblack(geo.properties.COUNTYFP);
                                                                         setCountyNameblack(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContentblack(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                                        // setTooltipContentblack(fips2county[stateFips + geo.properties.COUNTYFP]);
 
                                                                     }}
                                                                     onMouseLeave={() => {
@@ -3729,7 +3494,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
 
                                                 </Grid.Row>
                                                 <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -3886,7 +3651,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                 </Grid.Row>
 
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2.4em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -3927,7 +3692,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                         />
                                         <Grid id="hispanic" style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
-                                                <div id='hispanic' style={{ width: "100%", height: "100%" }}>
+                                                <div  style={{ width: "100%", height: "100%" }}>
                                                     <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                         <Header.Content> COVID-19 by Percentage Hispanic Population</Header.Content>
                                                     </Header>
@@ -3946,10 +3711,10 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                         {_.map(colorPalette2, (color, i) => {
                                                             return <rect key={i} x={110 + 40 * i} y={40} width="40" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
                                                         })}
-                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
-                                                        <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
+                                                        <text x={12} y={50} style={{ fontSize: '0.8em' }}>Least Hispanic</text>
+                                                        <text x={12} y={59} style={{ fontSize: '0.8em' }}>population counties</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest Hispanic</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>population counties</text>
                                                         {_.map(thresh_chara['hispanic'], (splitpoint, i) => {
                                                             return <text key={i} x={105 + 40 * (i)} y={35} style={{ fontSize: '0.7em' }}> {thresh_chara['hispanic'][i]}</text>
                                                         })}
@@ -3982,7 +3747,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
 
                                                                         setCountyFipshis(geo.properties.COUNTYFP);
                                                                         setCountyNamehis(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContenthis(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                                        // setTooltipContenthis(fips2county[stateFips + geo.properties.COUNTYFP]);
 
                                                                     }}
                                                                     onMouseLeave={() => {
@@ -4013,7 +3778,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                     </svg> */}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -4171,7 +3936,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                 </Grid.Row>
 
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2.4em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
 </Grid.Row>
 <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
 <Accordion defaultActiveIndex={1} panels={[
@@ -4212,7 +3977,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                         />
                                         <Grid id="diabetes" style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
-                                                <div id='diabetes' style={{ width: "100%", height: "100%" }}>
+                                                <div  style={{ width: "100%", height: "100%" }}>
                                                     <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                         <Header.Content> COVID-19 by Percentage of Population with Diabetes</Header.Content>
                                                     </Header>
@@ -4231,10 +3996,10 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                         {_.map(colorPalette2, (color, i) => {
                                                             return <rect key={i} x={110 + 40 * i} y={40} width="40" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
                                                         })}
-                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
-                                                        <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
+                                                        <text x={5} y={50} style={{ fontSize: '0.8em' }}>Least population with </text>
+                                                        <text x={5} y={59} style={{ fontSize: '0.8em' }}>diabetes counties</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest population with</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>diabetes counties</text>
                                                         {_.map(thresh_chara['diabetes'], (splitpoint, i) => {
                                                             return <text key={i} x={105 + 40 * (i)} y={35} style={{ fontSize: '0.7em' }}> {thresh_chara['diabetes'][i]}</text>
                                                         })}
@@ -4267,7 +4032,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
 
                                                                         setCountyFipsdia(geo.properties.COUNTYFP);
                                                                         setCountyNamedia(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContentdia(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                                        // setTooltipContentdia(fips2county[stateFips + geo.properties.COUNTYFP]);
 
                                                                     }}
                                                                     onMouseLeave={() => {
@@ -4298,7 +4063,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                     </svg> */}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -4456,7 +4221,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                 </Grid.Row>
 
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2.4em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
 </Grid.Row>
 <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
 <Accordion defaultActiveIndex={1} panels={[
@@ -4497,7 +4262,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                         />
                                         <Grid id="age" style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
-                                                <div id='age' style={{ width: "100%", height: "100%" }}>
+                                                <div style={{ width: "100%", height: "100%" }}>
                                                     <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                         <Header.Content> COVID-19 by Percentage of Population Age Over 65</Header.Content>
                                                     </Header>
@@ -4516,9 +4281,9 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                         {_.map(colorPalette2, (color, i) => {
                                                             return <rect key={i} x={110 + 40 * i} y={40} width="40" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
                                                         })}
-                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
+                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Low percentage</text>
                                                         <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>High percentage</text>
                                                         <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
                                                         {_.map(thresh_chara['age65over'], (splitpoint, i) => {
                                                             return <text key={i} x={105 + 40 * (i)} y={35} style={{ fontSize: '0.7em' }}> {thresh_chara['age65over'][i]}</text>
@@ -4552,7 +4317,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
 
                                                                         setCountyFipsa65(geo.properties.COUNTYFP);
                                                                         setCountyNamea65(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContenta65(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                                        // setTooltipContenta65(fips2county[stateFips + geo.properties.COUNTYFP]);
 
                                                                     }}
                                                                     onMouseLeave={() => {
@@ -4583,7 +4348,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                     </svg> */}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -4741,7 +4506,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                 </Grid.Row>
 
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '1.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                     </Grid.Row>
                                                     <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -4783,7 +4548,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                         />
                                         <Grid id='male' style={{ paddingBottom: '2em' }}>
                                             <Grid.Row>
-                                                <div id='male' style={{ width: "100%", height: "100%" }}>
+                                                <div  style={{ width: "100%", height: "100%" }}>
                                                     <Header as='h2' style={{ textAlign: 'center', color: 'black', fontSize: "19pt", paddingTop: '1em', paddingBottom: '1em' }}>
                                                         <Header.Content> COVID-19 by Percentage of Male</Header.Content>
                                                     </Header>
@@ -4802,9 +4567,9 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                         {_.map(colorPalette2, (color, i) => {
                                                             return <rect key={i} x={110 + 40 * i} y={40} width="40" height="20" style={{ fill: color, strokeWidth: 1, stroke: color }} />
                                                         })}
-                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Least vulnerable</text>
+                                                        <text x={20} y={50} style={{ fontSize: '0.8em' }}>Low percentage</text>
                                                         <text x={20} y={59} style={{ fontSize: '0.8em' }}>counties</text>
-                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>Highest vulnerable</text>
+                                                        <text x={160 + 40 * (colorPalette2.length - 1)} y={50} style={{ fontSize: '0.8em' }}>High percentage</text>
                                                         <text x={160 + 40 * (colorPalette2.length - 1)} y={59} style={{ fontSize: '0.8em' }}>counties</text>
                                                         {_.map(thresh_chara['male'], (splitpoint, i) => {
                                                             return <text key={i} x={105 + 40 * (i)} y={35} style={{ fontSize: '0.7em' }}> {thresh_chara['male'][i]}</text>
@@ -4838,7 +4603,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
 
                                                                         setCountyFipsmale(geo.properties.COUNTYFP);
                                                                         setCountyNamemale(fips2county[stateFips + geo.properties.COUNTYFP]);
-                                                                        setTooltipContentmale(fips2county[stateFips + geo.properties.COUNTYFP]);
+                                                                        // setTooltipContentmale(fips2county[stateFips + geo.properties.COUNTYFP]);
 
                                                                     }}
                                                                     onMouseLeave={() => {
@@ -4869,7 +4634,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                     </svg> */}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '0.5em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                    Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                    Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                 </Grid.Row>
                                                 <Grid.Row style={{ paddingTop: '0em', paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                     <Accordion defaultActiveIndex={1} panels={[
@@ -5027,7 +4792,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                                                 </Grid.Row>
 
                                                 <Grid.Row style={{fontFamily: 'lato', fontSize: 18, color: dataupColor, paddingTop: '2.4em', paddingLeft: '4em', paddingRight: '2em' }} centered>
-                                                        Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips + countyFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
+                                                        Data updated: {dateCur[stateFips].todaydate === 'n/a' ? 'N/A' : (new Date(dateCur[stateFips].todaydate * 1000).toLocaleDateString('en-Us', { month: 'short', day: 'numeric', year: 'numeric' }))}
                                                         </Grid.Row>
                                                         <Grid.Row style={{paddingLeft: '4.9em', paddingRight: '2em' }}>
                                                         <Accordion defaultActiveIndex={1} panels={[
@@ -5067,6 +4832,14 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                     }
                     <Notes />
                 </Container>
+                <ReactTooltip id='ga'> <font size="+2"><b >{countyName1.current}</b> </font> <br />
+                    <b>Total Cases</b>: {data[stateFips + countyFips1.current]['casescum'] >= 0 ? data[stateFips + countyFips1.current]['casescum'].toFixed(0) : "N/A"} <br />
+                    <b>Total Deaths</b>: {data[stateFips + countyFips1.current]['deathscum'] >= 0 ? data[stateFips + countyFips1.current]['deathscum'].toFixed(0) : "N/A"} <br />
+                    <b>Total case per 100k</b>: {data[stateFips + countyFips1.current]['casescumR'] >= 0 ? data[stateFips + countyFips]['casescumR'].toFixed(0) : "N/A"} <br />
+                    <b>Total Deaths per 100k</b>: {data[stateFips + countyFips1.current]['deathscumR'] >= 0 ? data[stateFips + countyFips1.current]['deathscumR'].toFixed(0) : 'N/A'} <br />
+                    <b>Last 14-day Cases per 100k</b>: {data[stateFips + countyFips1.current]['casescum14dayR'] >= 0 ? data[stateFips + countyFips1.current]['casescum14dayR'].toFixed(0) : "N/A"} <br />
+                    <b>Click to see county-level data.</b> </ReactTooltip>
+
                 <ReactTooltip id='cvi'><font size="+2"><b >{countyNamecvi}</b> </font> <br />
                     <b>CCVI</b>: {dataUs[stateFips + countyFipscvi]['cvi'].toFixed(2)} <br />
                     <b>Total Cases</b>: {data[stateFips + countyFipscvi]['casescum'] >= 0 ? data[stateFips + countyFipscvi]['casescum'].toFixed(0) : "N/A"} <br />
@@ -5116,13 +4889,7 @@ Data updated: {dateCur[stateFips + countyFips].todaydate === 'n/a' ? 'N/A' : (ne
                     <b>Total Cases</b>: {data[stateFips + countyFipsmale]['casescum'] >= 0 ? data[stateFips + countyFipsmale]['casescum'].toFixed(0) : "N/A"} <br />
                     <b>Total Deaths</b>: {data[stateFips + countyFipsmale]['deathscum'] >= 0 ? data[stateFips + countyFipsmale]['deathscum'].toFixed(0) : "N/A"} <br />
                 </ReactTooltip>
-                <ReactTooltip id='ga'> <font size="+2"><b >{countyName}</b> </font> <br />
-                    <b>Total Cases</b>: {data[stateFips + countyFips]['casescum'] >= 0 ? data[stateFips + countyFips]['casescum'].toFixed(0) : "N/A"} <br />
-                    <b>Total Deaths</b>: {data[stateFips + countyFips]['deathscum'] >= 0 ? data[stateFips + countyFips]['deathscum'].toFixed(0) : "N/A"} <br />
-                    <b>Total case per 100k</b>: {data[stateFips + countyFips]['casescumR'] >= 0 ? data[stateFips + countyFips]['casescumR'].toFixed(0) : "N/A"} <br />
-                    <b>Total Deaths per 100k</b>: {data[stateFips + countyFips]['deathscumR'] >= 0 ? data[stateFips + countyFips]['deathscumR'].toFixed(0) : 'N/A'} <br />
-                    <b>Last 14-day Cases per 100k</b>: {data[stateFips + countyFips]['casescum14dayR'] >= 0 ? data[stateFips + countyFips]['casescum14dayR'].toFixed(0) : "N/A"} <br />
-                    <b>Click to see county-level data.</b> </ReactTooltip>
+                
             </div>
         );
     }
